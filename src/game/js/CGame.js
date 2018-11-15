@@ -1,4 +1,24 @@
-function CGame(oData){
+import $ from 'jquery'
+
+import createjs from './createjs.js'
+import {
+    createBitmap,
+    setVolume,
+ } from './ctl_utils.js'
+ import {
+    mainInstance,
+} from './CMain.js'
+import CSpriteLibrary from './sprite_lib.js'
+import CCell from './CCell.js'
+import CBallGenerator from './CBallGenerator.js'
+import CInsertTubeController from './CInsertTubeController.js'
+import CScoreBasketController from './CScoreBasketController.js'
+import CEndPanel from './CEndPanel.js'
+import CGridMapping from './CGridMapping.js'
+import CInterface from './CInterface.js'
+import settings from './settings.js'
+
+function CGame(oData) {
     var _bStartGame;
 
     var _iColToLaunchBall;
@@ -25,45 +45,45 @@ function CGame(oData){
         
         _bStartGame=true;
 
-        _iNumBallRemaining = NUM_BALL;
+        _iNumBallRemaining = settings.NUM_BALL;
         
-        var oBg = createBitmap(s_oSpriteLibrary.getSprite('bg_game'));
-        s_oStage.addChild(oBg);
+        var oBg = createBitmap(CSpriteLibrary.getSprite('bg_game'));
+        mainInstance().getStage().addChild(oBg);
 
-        var oSprite = s_oSpriteLibrary.getSprite('logo_game');
+        var oSprite = CSpriteLibrary.getSprite('logo_game');
         var oLogo = createBitmap(oSprite);
-        oLogo.regX = oSprite.width/2;
-        oLogo.regY = oSprite.height/2;
-        oLogo.x = CANVAS_WIDTH/2;
+        oLogo.regX = oSprite.width / 2;
+        oLogo.regY = oSprite.height / 2;
+        oLogo.x = settings.CANVAS_WIDTH / 2;
         oLogo.y = 250;
 
         _oBgContainer = new createjs.Container();
-        s_oStage.addChild(_oBgContainer);
+        mainInstance().getStage().addChild(_oBgContainer);
 
         _oBoardContainer = new createjs.Container();
-        s_oStage.addChild(_oBoardContainer);
+        mainInstance().getStage().addChild(_oBoardContainer);
 
         _oMidContainer = new createjs.Container();
-        s_oStage.addChild(_oMidContainer);
+        mainInstance().getStage().addChild(_oMidContainer);
 
         _oForegroundContainer = new createjs.Container();
-        s_oStage.addChild(_oForegroundContainer);
+        mainInstance().getStage().addChild(_oForegroundContainer);
 
         this._setBoard();
-        NUM_INSERT_TUBE = _aBoard[0].length;
+        settings.NUM_INSERT_TUBE = _aBoard[0].length;
 
-        var oSprite = s_oSpriteLibrary.getSprite('side_left');
+        var oSprite = CSpriteLibrary.getSprite('side_left');
         var oSideLeft = createBitmap(oSprite);
         oSideLeft.x = 100;
         _oForegroundContainer.addChild(oSideLeft);
 
-        var oSprite = s_oSpriteLibrary.getSprite('side_right');
+        var oSprite = CSpriteLibrary.getSprite('side_right');
         var oSideRight = createBitmap(oSprite);
         oSideRight.regX = oSprite.width;
-        oSideRight.x = CANVAS_WIDTH-100;
+        oSideRight.x = settings.CANVAS_WIDTH - 100;
         _oForegroundContainer.addChild(oSideRight);
 
-        BALL_RADIUS = s_oSpriteLibrary.getSprite('ball').height/2;
+        settings.BALL_RADIUS = CSpriteLibrary.getSprite('ball').height / 2;
         _oBallGenerator = new CBallGenerator(_oMidContainer);
         
         _oInsertTubeController = new CInsertTubeController(_oMidContainer);
@@ -74,32 +94,32 @@ function CGame(oData){
         this._initProbability();
 
 
-        _oInterface = new CInterface(_oBgContainer);
+        _oInterface = new CInterface(true, _oBgContainer);
 
         _oInsertTubeController.showSlots();
 
-        $(s_oMain).trigger("start_level",1);
+        $(mainInstance()).trigger("start_level",1);
 
     };
     
     this._setBoard = function(){
-        var iRow = BOARD_ROW;
-        var iCol = BOARD_COL;
-        _aBoard = new Array();
+        var iRow = settings.BOARD_ROW;
+        var iCol = settings.BOARD_COL;
+        _aBoard = [];
         for(var i=0; i<iRow; i++){
-            _aBoard[i] = new Array();
+            _aBoard[i] = [];
             for(var j=0; j<iCol-((i+1)%2); j++){
                 var iX;
                 if(i%2 === 0){
-                    iX = j*CELL_SIZE;
+                    iX = j * settings.CELL_SIZE;
                 } else {
-                    iX = -CELL_SIZE/2 +j*CELL_SIZE;
+                    iX = -(settings.CELL_SIZE / 2) + (j * settings.CELL_SIZE);
                 }
-                var iY = i*CELL_SIZE/2;
+                var iY = i * settings.CELL_SIZE / 2;
                 _aBoard[i][j] = new CCell(iX, iY, _oBoardContainer, i, j/*, _oActionContainer*/);
                 
                 ////REMOVE STAKE
-                if(i === BOARD_ROW-1 || (i%2 === 1 && (j===0 || j === BOARD_COL-1) )){
+                if(i === settings.BOARD_ROW-1 || (i%2 === 1 && (j===0 || j === settings.BOARD_COL-1) )){
                     _aBoard[i][j].removeStake();
                 }
             }
@@ -107,23 +127,23 @@ function CGame(oData){
 
         _oBoardContainer.regX = (_oBoardContainer.getBounds().x) + _oBoardContainer.getBounds().width/2;
         _oBoardContainer.regY = (_oBoardContainer.getBounds().y) + _oBoardContainer.getBounds().height/2;
-        _oBoardContainer.x = CANVAS_WIDTH/2;
-        _oBoardContainer.y = CANVAS_HEIGHT/2-29;
+        _oBoardContainer.x = settings.CANVAS_WIDTH / 2;
+        _oBoardContainer.y = (settings.CANVAS_HEIGHT / 2) - 29;
 
         new CGridMapping(_aBoard);
     };
     
     this._initProbability = function(){
         _aProbability = new Array();
-        for(var i=0; i<PRIZE.length; i++){
-            var iProbability = PRIZE[i].win_occurrence;
+        for(let i=0; i < settings.PRIZE.length; i += 1){
+            var iProbability = settings.PRIZE[i].win_occurrence;
             for(var j=0; j<iProbability; j++){
                 _aProbability.push(i);
             }            
         }            
     };
     
-    this.launch = function(iStartCol){
+    this.launch = (iStartCol) => {
         _iColToLaunchBall = iStartCol;
         _iNumBallRemaining--;
         
@@ -132,18 +152,18 @@ function CGame(oData){
         _oInsertTubeController.hideSlots();
         _oBallGenerator.shiftBallAnimation();
 
-        var oDestBall = s_oGame.getBallPivotCellPos(0, iStartCol);
+        var oDestBall = this.getBallPivotCellPos(0, iStartCol);
         _oCurBall.launchAnim(oDestBall);
         
         _oInterface.refreshBallNum(_iNumBallRemaining);
         _oInterface.hideControls();
     };
     
-    this.setBall = function(){
+    this.setBall = function() {
         _oCurBall = _oBallGenerator.getNextBall();
 
         var oCurBallPos = _oCurBall.getPos();
-        var oNewPos = _oBoardContainer.globalToLocal(oCurBallPos.x*s_iScaleFactor, oCurBallPos.y*s_iScaleFactor);
+        var oNewPos = _oBoardContainer.globalToLocal(oCurBallPos.x * s_iScaleFactor, oCurBallPos.y * s_iScaleFactor);
 
         _oBoardContainer.addChild(_oCurBall.getSprite());
         _oCurBall.setPos(oNewPos);
@@ -167,9 +187,9 @@ function CGame(oData){
     this.ballArrived = function(iDestCol){
 
         var iPrizeWin = iDestCol;
-        var bHasWin = PRIZE[iDestCol].prizewinning;
+        var bHasWin = settings.PRIZE[iDestCol].prizewinning;
 
-        $(s_oMain).trigger("save_score",[iPrizeWin]);
+        $(mainInstance()).trigger("save_score",[iPrizeWin]);
 
         _oInsertTubeController.showSlots();
         
@@ -222,7 +242,7 @@ function CGame(oData){
     };
    
     this.restartGame = function () {
-        $(s_oMain).trigger("show_interlevel_ad");
+        $(mainInstance()).trigger("show_interlevel_ad");
 
         _oInterface.showControls();
     };        
@@ -235,17 +255,17 @@ function CGame(oData){
         _oScoreBasketController.unload();
         
         createjs.Tween.removeAllTweens();
-        s_oStage.removeAllChildren();
+        mainInstance().getStage().removeAllChildren();
     };
  
-    this.onExit = function(){
+    this.onExit = () => {
         setVolume("soundtrack", 1);
         
-        $(s_oMain).trigger("end_session");
-        $(s_oMain).trigger("end_level",1);
+        $(this).trigger("end_session");
+        $(this).trigger("end_level",1);
         
-        s_oGame.unload();
-        s_oMain.gotoMenu();
+        this.unload();
+        this.gotoMenu();
     };
     
     this._onExitHelp = function () {
@@ -273,16 +293,42 @@ function CGame(oData){
         _oBoardContainer.sortChildren(this.sortChildren);
     };
 
-    s_oGame=this;
+    // s_oGame=this;
     
-    NUM_BALL = oData.num_ball;
+    settings.NUM_BALL = oData.num_ball;
 
-    PRIZE = oData.prize_settings;
+    settings.PRIZE = oData.prize_settings;
     
-    AD_SHOW_COUNTER = oData.ad_show_counter;
+    settings.AD_SHOW_COUNTER = oData.ad_show_counter;
     
     _oParent=this;
     this._init();
 }
 
-var s_oGame;
+
+const Singleton = (() => {
+    let instance;
+    function createInstance(data) {
+        return new CGame(data);
+    }
+  
+    return {
+      getInstance: (isConstructor = false, data) => {
+        if (isConstructor) {
+            instance = createInstance(data);
+        } else if (!isConstructor && !instance) {
+            instance = createInstance(data);
+        }
+        return instance;
+      },
+    };
+})();
+const gameInstance = () => Singleton.getInstance(false)
+
+// Need Instance & constructor
+export default Singleton.getInstance;
+export {
+    gameInstance
+}
+
+// var s_oGame;

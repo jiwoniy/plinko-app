@@ -1,4 +1,12 @@
-function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
+import $ from 'jquery'
+import createjs from './createjs.js'
+
+import {
+    playSound,
+ } from './ctl_utils.js'
+ import settings from './settings.js'
+
+function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
     
     var _bDisabled;
     
@@ -21,8 +29,8 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
         
         _iScaleFactor = 1;
         
-        _aCbCompleted=new Array();
-        _aCbOwner =new Array();
+        _aCbCompleted = [];
+        _aCbOwner = [];
         
         _oButton = new createjs.Container();
         _oButton.x = iXPos;
@@ -39,7 +47,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
     };
     
     this.unload = function(){
-        if(s_bMobile){
+        if($.browser.mobile){
             _oButton.off("mousedown", _oListenerMouseDown);
             _oButton.off("pressup" , _oListenerMouseUp);
         } else {
@@ -62,7 +70,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
     };
     
     this._initListener = function(){
-        if(s_bMobile){
+        if($.browser.mobile){
             _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
             _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
         } else {
@@ -90,8 +98,8 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
         _oButton.scaleX = _iScaleFactor;
         _oButton.scaleY = _iScaleFactor;
 
-        if(_aCbCompleted[ON_MOUSE_UP]){
-            _aCbCompleted[ON_MOUSE_UP].call(_aCbOwner[ON_MOUSE_UP], _aParams);
+        if(_aCbCompleted[settings.ON_MOUSE_UP]){
+            _aCbCompleted[settings.ON_MOUSE_UP].call(_aCbOwner[settings.ON_MOUSE_UP], _aParams);
         }
     };
     
@@ -99,18 +107,18 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
         if(_bDisabled){
             return;
         }
-        _oButton.scaleX = _iScaleFactor*0.9;
-        _oButton.scaleY = _iScaleFactor*0.9;
+        _oButton.scaleX = _iScaleFactor * 0.9;
+        _oButton.scaleY = _iScaleFactor * 0.9;
 
-        playSound("click",1,false);
+        playSound("click", 1, false);
 
-       if(_aCbCompleted[ON_MOUSE_DOWN]){
-           _aCbCompleted[ON_MOUSE_DOWN].call(_aCbOwner[ON_MOUSE_DOWN], _aParams);
+       if(_aCbCompleted[settings.ON_MOUSE_DOWN]) {
+           _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN], _aParams);
        }
     };
     
     this.buttonOver = function(evt){
-        if(!s_bMobile){
+        if(!$.browser.mobile){
             if(_bDisabled){
                 return;
             }
@@ -119,7 +127,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
     };
     
     this.addText = function(szText){
-        var oScoreText = new createjs.Text(szText," 50px "+PRIMARY_FONT, "#ffffff");
+        var oScoreText = new createjs.Text(szText," 50px "+ settings.PRIMARY_FONT, "#ffffff");
         oScoreText.textAlign = "center";
         oScoreText.textBaseline = "middle";
         oScoreText.lineWidth = 200;
@@ -138,37 +146,39 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer){
         });
     };
     
-    this.setPosition = function(iXPos,iYPos){
+    this.setPosition = function(iXPos,iYPos) {
          _oButton.x = iXPos;
          _oButton.y = iYPos;
     };
     
-    this.setX = function(iXPos){
+    this.setX = function(iXPos) {
          _oButton.x = iXPos;
     };
     
-    this.setY = function(iYPos){
+    this.setY = function(iYPos) {
          _oButton.y = iYPos;
     };
     
-    this.getButtonImage = function(){
+    this.getButtonImage = function() {
         return _oButton;
     };
 
-    this.getX = function(){
+    this.getX = function() {
         return _oButton.x;
     };
     
-    this.getY = function(){
+    this.getY = function() {
         return _oButton.y;
     };
         
-    this.getPos = function(){
+    this.getPos = function() {
         return {x: _oButton.x, y: _oButton.y};
     };
         
     _oParent = this;
     this._init(iXPos,iYPos, oParentContainer);
     
-    return this;
+    // return this;
 }
+
+export default CSlot;

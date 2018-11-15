@@ -1,4 +1,12 @@
-function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite){
+import createjs from './createjs.js'
+import {
+    createBitmap,
+    createSprite,
+ } from './ctl_utils.js'
+ import CSpriteLibrary from './sprite_lib.js'
+ import settings from './settings.js'
+
+function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite) {
     var _iStartSize;
     
     var _oParent;
@@ -15,7 +23,7 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
         var oBasketSprite = createSprite(oSpriteSheet, "state_off",iWidth/2, iHeight/2, iWidth, iHeight);
         _oBasket.addChild(oBasketSprite);
         
-        var oSprite = s_oSpriteLibrary.getSprite(oPrizeSprite);
+        var oSprite = CSpriteLibrary.getSprite(oPrizeSprite);
         var oBg = createBitmap(oSprite);
         oBg.regX = oSprite.width/2;
         oBg.regY = oSprite.height/2;
@@ -39,7 +47,7 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
         
         while(_oText.getBounds().height>iHeight-iSize){
             iNewSize--;
-            _oText.font = " "+iNewSize+"px "+PRIMARY_FONT;
+            _oText.font = " "+iNewSize+"px "+ settings.PRIMARY_FONT;
 
         };
         var iOffset = 10;
@@ -68,7 +76,7 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
             _oHighlight.gotoAndPlay("state_red");
         }
        
-        _oParent._recursiveLit(BASKET_LIT_ITERATION);
+        _oParent._recursiveLit(settings.BASKET_LIT_ITERATION);
     };
     
     this._recursiveLit = function(iLitIteration){
@@ -84,7 +92,7 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
     
     _oParent = this;
     this._init(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite);
-    
 }
 
+export default CBasket;
 

@@ -180,3 +180,5 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
     
     return this;
 }
+
+export default CGfxButton;

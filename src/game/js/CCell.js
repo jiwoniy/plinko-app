@@ -1,4 +1,12 @@
-function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer){
+import createjs from './createjs.js'
+
+import {
+    createBitmap,
+ } from './ctl_utils.js'
+import CSpriteLibrary from './sprite_lib.js'
+import settings from './settings.js'
+
+function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer) {
     
     var _oParent;
     var _oCell;
@@ -21,7 +29,7 @@ function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer){
         _oDebugHighlight.rotation = 45;
         _oCell.addChild(_oDebugHighlight);
         
-        var oSprite = s_oSpriteLibrary.getSprite('stake');
+        var oSprite = CSpriteLibrary.getSprite('stake');
         _oStake = createBitmap(oSprite);
         _oStake.regX = oSprite.width/2;
         _oStake.x = iX;
@@ -41,17 +49,17 @@ function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer){
     };
     
     this.getPivotPos = function(){
-        return {x: iX, y:iY + CELL_PIVOT_FROM_CENTER};
+        return {x: iX, y:iY + settings.CELL_PIVOT_FROM_CENTER};
     };
     
     this.getCenterOfBallOnPivot = function(){
-        return {x: iX, y:iY + CELL_PIVOT_FROM_CENTER - BALL_RADIUS};
+        return {x: iX, y:iY + settings.CELL_PIVOT_FROM_CENTER - settings.BALL_RADIUS};
     };
     
     this.checkBallOverlap = function(oPos){
         var iXDiff = oPos.x - iX;
         var iYDiff = oPos.y - iY;
-        var iBallRad = BALL_RADIUS*BALL_RADIUS;
+        var iBallRad = settings.BALL_RADIUS * settings.BALL_RADIUS;
         
         return (iXDiff*iXDiff + iYDiff*iYDiff < iBallRad);
         //return _oCell.hitTest(oPos.x, oPos.y);
@@ -87,4 +95,4 @@ function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer){
     this._init(iX, iY, oParentContainer, iRow, iCol, oStakeContainer);
 }
 
-
+export default CCell;

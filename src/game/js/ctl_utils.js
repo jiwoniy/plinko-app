@@ -3,6 +3,9 @@ import createjs from './createjs.js'
 
 import screenfull from './screenfull.js'
 import settings from './settings.js'
+import {
+    mainInstance,
+} from './CMain.js'
 
 var s_iScaleFactor = 1;
 var s_iOffsetX;
@@ -196,7 +199,7 @@ function sizeHandler() {
         canvas.style.width = destW+"px";
         canvas.style.height = destH+"px";
         var iScale = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
-        s_iScaleFactor = iScale*2;
+        s_iScaleFactor = iScale * 2;
         s_oStage.scaleX = s_oStage.scaleY = s_iScaleFactor;  
     }else if($.browser.mobile || isChrome()) {
         $("#canvas").css("width",destW+"px");
@@ -722,9 +725,11 @@ function fullscreenHandler(){
     }
 	
     if(screen.height < window.innerHeight+3 && screen.height > window.innerHeight-3){
-        s_bFullscreen = true;
+        // s_bFullscreen = true;
+        mainInstance().setFullScreen(true)
     }else{
-        s_bFullscreen = false;
+        // s_bFullscreen = false;
+        mainInstance().setFullScreen(false)
     }
 
     if (s_oInterface !== null){
@@ -739,7 +744,7 @@ function fullscreenHandler(){
 
 if (screenfull.enabled) {
     screenfull.on('change', function(){
-        s_bFullscreen = screenfull.isFullscreen;
+        mainInstance().setFullScreen(screenfull.isFullscreen)
 
         if (s_oInterface !== null){
             s_oInterface.resetFullscreenBut();
@@ -757,10 +762,12 @@ export {
     shuffle,
     createBitmap,
     playSound,
+    setVolume,
     createSprite,
     sizeHandler,
     s_iOffsetX,
     s_iOffsetY,
     s_iScaleFactor,
+    rotateVector2D,
     isIOS
 }

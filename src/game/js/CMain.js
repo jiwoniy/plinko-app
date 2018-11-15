@@ -7,6 +7,7 @@ import { playSound } from './ctl_utils.js'
 import CPreloader from './CPreloader.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CMenu from './CMenu.js'
+import CGame from './CGame.js'
 import settings from './settings.js'
 
 function CMain(oData) {
@@ -22,21 +23,38 @@ function CMain(oData) {
     var _oHelp;
     var _oGame;
 
-    this.initContainer = function(){
+    this.oStage = null
+
+    this.state = {
+        // initData: oData || {},
+        // loadResources: 0,
+        // audioActive: true,
+        audioActive: true,
+        fullScreen: false,
+        // bUpdate: null,
+        // status: settings.STATE_LOADING,
+        // sounds: [],
+        // menu: null,
+        // soundsLoadedCnt: 0,
+        // imagesLoadedCnt: 0,
+        // game: null
+    }
+
+    this.initContainer = () => {
         s_oCanvas = document.getElementById("canvas");
-        s_oStage = new createjs.Stage(s_oCanvas);
-        s_oStage.preventSelection = true;
-        createjs.Touch.enable(s_oStage);
+        this.oStage = new createjs.Stage(s_oCanvas);
+        this.oStage.preventSelection = true;
+        createjs.Touch.enable(this.oStage);
 		
-	s_bMobile = $.browser.mobile;
-        if(s_bMobile === false){
-            s_oStage.enableMouseOver(settings.FPS);  
+	    // s_bMobile = $.browser.mobile;
+        if($.browser.mobile === false) {
+            this.oStage.enableMouseOver(settings.FPS);  
             $('body').on('contextmenu', '#canvas', function(e){ return false; });
         }
 		
         s_iPrevTime = new Date().getTime();
 
-	createjs.Ticker.addEventListener("tick", this._update);
+	    createjs.Ticker.addEventListener("tick", this._update);
         createjs.Ticker.framerate = settings.FPS;
         
         if(navigator.userAgent.match(/Windows Phone/i)) {
@@ -49,8 +67,28 @@ function CMain(oData) {
         _oPreloader = new CPreloader();
 
     };
+
+    this.getStage = function () {
+        return this.oStage;
+    }
+
+    this.getFullscreen = function () {
+        return this.state.fullScreen
+    }
+
+    this.setFullScreen = function (value) {
+        this.state.fullScreen = value
+    }
+
+    this.getAudioActive = function () {
+        return this.state.audioActive
+    }
+
+    this.setAudioActive = function (value) {
+        this.state.audioActive = value
+    }
     
-    this.preloaderReady = function(){
+    this.preloaderReady = function() {
         if(settings.DISABLE_SOUND_MOBILE === false || s_bMobile === false){
             this._initSounds();
         }
@@ -59,15 +97,15 @@ function CMain(oData) {
         _bUpdate = true;
     };
     
-    this.soundLoaded = function(){
+    this.soundLoaded = function() {
         _iCurResource++;
         var iPerc = Math.floor(_iCurResource/RESOURCE_TO_LOAD *100);
         _oPreloader.refreshLoader(iPerc);
     };
     
-    this._initSounds = function(){
+    this._initSounds = function() {
         
-        var aSoundsInfo = new Array();
+        var aSoundsInfo = [];
         
         aSoundsInfo.push({path: './sounds/',filename:'soundtrack',loop:true,volume:1, ingamename: 'soundtrack'});
         aSoundsInfo.push({path: './sounds/',filename:'press_button',loop:false,volume:1, ingamename: 'click'});
@@ -78,16 +116,16 @@ function CMain(oData) {
 
         RESOURCE_TO_LOAD += aSoundsInfo.length;
 
-        s_aSounds = new Array();
-        for(var i=0; i<aSoundsInfo.length; i++){
+        s_aSounds = [];
+        for(var i=0; i<aSoundsInfo.length; i++) {
             s_aSounds[aSoundsInfo[i].ingamename] = new Howl({ 
-                                                            src: [aSoundsInfo[i].path+aSoundsInfo[i].filename+'.mp3', aSoundsInfo[i].path+aSoundsInfo[i].filename+'.ogg'],
-                                                            autoplay: false,
-                                                            preload: true,
-                                                            loop: aSoundsInfo[i].loop, 
-                                                            volume: aSoundsInfo[i].volume,
-                                                            onload: s_oMain.soundLoaded
-                                                        });
+                src: [aSoundsInfo[i].path+aSoundsInfo[i].filename+'.mp3', aSoundsInfo[i].path+aSoundsInfo[i].filename+'.ogg'],
+                autoplay: false,
+                preload: true,
+                loop: aSoundsInfo[i].loop, 
+                volume: aSoundsInfo[i].volume,
+                onload: this.soundLoaded
+            });
         }
 
     };
@@ -170,10 +208,10 @@ function CMain(oData) {
         _iState = settings.STATE_GAME;
     };
     
-    this.gotoHelp = function(){
-        _oHelp = new CHelp();
-        _iState = settings.STATE_HELP;
-    };
+    // this.gotoHelp = function() {
+    //     _oHelp = new CHelp();
+    //     _iState = settings.STATE_HELP;
+    // };
 	
     this.stopUpdate = function(){
         _bUpdate = false;
@@ -182,19 +220,19 @@ function CMain(oData) {
         Howler.mute(true);
      };
 
-    this.startUpdate = function(){
+    this.startUpdate = () => {
         s_iPrevTime = new Date().getTime();
         _bUpdate = true;
         createjs.Ticker.paused = false;
         $("#block_game").css("display","none");
 
-        if(s_bAudioActive){
-                Howler.mute(false);
+        if (this.state.audioActive) {
+            Howler.mute(false);
         }
     };
     
-    this._update = function(event){
-		if(_bUpdate === false){
+    this._update = (event) => {
+		if(_bUpdate === false) {
 			return;
 		}
         var iCurTime = new Date().getTime();
@@ -213,11 +251,11 @@ function CMain(oData) {
             _oGame.update();
         }
         
-        s_oStage.update(event);
+        this.oStage.update(event);
 
     };
     
-    s_oMain = this;
+    // s_oMain = this;
     
     _oData = oData;
     
@@ -230,18 +268,18 @@ function CMain(oData) {
     this.initContainer();
 }
 var s_bMobile;
-var s_bAudioActive = true;
+// var s_bAudioActive = true;
 var s_iCntTime = 0;
 var s_iTimeElaps = 0;
 var s_iPrevTime = 0;
 var s_iCntFps = 0;
 var s_iCurFps = 0;
-var s_bFullscreen = false;
+// var s_bFullscreen = false;
 var s_aSounds = new Array();
 
 var s_oDrawLayer;
-var s_oStage;
-var s_oMain;
+// var s_oStage;
+// var s_oMain;
 var s_oSpriteLibrary;
 var s_oSoundtrack;
 var s_oCanvas;

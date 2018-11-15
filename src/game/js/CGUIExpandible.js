@@ -1,4 +1,8 @@
-function CGUIExpandible(iX, iY, oSprite, oParentContainer){
+import createjs from './createjs.js'
+import CGfxButton from './CGfxButton.js'
+import settings from './settings.js'
+
+function CGUIExpandible(iX, iY, oSprite, oParentContainer) {
     var _bExpanded;
     
     var _aButtons;
@@ -14,7 +18,7 @@ function CGUIExpandible(iX, iY, oSprite, oParentContainer){
     
     this._init = function(iX, iY, oSprite, oParentContainer){
         
-        _aButtons = new Array();
+        _aButtons = [];
         
         _pStartPos = {x: iX, y: iY};
         _oGUIContainer = new createjs.Container();
@@ -30,7 +34,7 @@ function CGUIExpandible(iX, iY, oSprite, oParentContainer){
         
         _bExpanded = false;
         _oMenuBut = new CGfxButton(0,0,oSprite, _oFrontContainer);
-        _oMenuBut.addEventListener(ON_MOUSE_UP, this._onMenu, this);
+        _oMenuBut.addEventListener(settings.ON_MOUSE_UP, this._onMenu, this);
         
         var oStart = {x: 0, y: 120};
         _oExpandedPos = {start: oStart, offset: 120};
@@ -94,5 +98,7 @@ function CGUIExpandible(iX, iY, oSprite, oParentContainer){
     _oParent = this;
     this._init(iX, iY, oSprite, oParentContainer);
 }
+
+export default CGUIExpandible;
 
 

@@ -1,4 +1,13 @@
-function CBallGenerator(oParentContainer){
+import createjs from './createjs.js'
+import settings from './settings.js'
+import {
+    createBitmap,
+ } from './ctl_utils.js'
+import CBall from './CBall.js'
+import CSpriteLibrary from './sprite_lib.js'
+
+
+function CBallGenerator(oParentContainer) {
     
     var _iBallInTube;
     var _iBallInAnimation;
@@ -21,15 +30,15 @@ function CBallGenerator(oParentContainer){
         oParentContainer.addChild(_oFrontContainer)
         
         _iBallInTube = 3;
-        _iOffsetFromBall = BALL_RADIUS*2-20;
+        _iOffsetFromBall = (settings.BALL_RADIUS * 2) - 20;
         _pStartPoint = {x: 182, y: 264};
-        _aBall = new Array();
+        _aBall = [];
         for(var i=0; i<_iBallInTube; i++){
             var oBallPos = {x: _pStartPoint.x - i*_iOffsetFromBall, y: _pStartPoint.y};
             _aBall[i] = new CBall(oBallPos, _oGeneratorContainer);
         }
         
-        var oSprite = s_oSpriteLibrary.getSprite('ball_generator');
+        var oSprite = CSpriteLibrary.getSprite('ball_generator');
         var oGenerator = createBitmap(oSprite);
         oGenerator.x = 0;
         oGenerator.y = 196;
@@ -63,7 +72,8 @@ function CBallGenerator(oParentContainer){
     
     _oParent = this;
     this._init(oParentContainer);
-    
 }
+
+export default CBallGenerator;
 
 

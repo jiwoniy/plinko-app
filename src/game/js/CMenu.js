@@ -8,7 +8,12 @@ import {
     createBitmap,
     sizeHandler
 } from './ctl_utils.js'
+import {
+    mainInstance,
+} from './CMain.js'
 import CSpriteLibrary from './sprite_lib.js'
+import CGfxButton from './CGfxButton.js'
+import CCreditsPanel from './CCreditsPanel.js'
 import CToggle from './CToggle.js'
 import settings from './settings.js'
 import screenfull from './screenfull.js'
@@ -30,7 +35,7 @@ function CMenu() {
     
     this._init = function(){
         _oBg = createBitmap(CSpriteLibrary.getSprite('bg_menu'));
-        s_oStage.addChild(_oBg);
+        mainInstance().getStage().addChild(_oBg);
 
         var oSprite = CSpriteLibrary.getSprite('logo_menu');
         var oLogo = createBitmap(oSprite);
@@ -38,10 +43,10 @@ function CMenu() {
         oLogo.regY = oSprite.height/2;
         oLogo.x = settings.CANVAS_WIDTH / 2
         oLogo.y = 500;
-        s_oStage.addChild(oLogo);
+        mainInstance().getStage().addChild(oLogo);
 
         var oSprite = CSpriteLibrary.getSprite('but_play');
-        _oButPlay = new CGfxButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT - 540,oSprite, s_oStage);
+        _oButPlay = new CGfxButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT - 540,oSprite, mainInstance().getStage());
         _oButPlay.addEventListener(settings.ON_MOUSE_UP, this._onButPlayRelease, this);
         _oButPlay.pulseAnimation();
      
@@ -50,14 +55,14 @@ function CMenu() {
         var pSecondPos = {x:pFirstPos.x + oSprite.width + 10,y:oSprite.height/2 + 10};
         _pStartPosCredits = {x: pFirstPos.x, y: pFirstPos.y};
         if(settings.ENABLE_CREDITS){
-            _oCreditsBut = new CGfxButton(_pStartPosCredits.x,_pStartPosCredits.y,oSprite, s_oStage);
+            _oCreditsBut = new CGfxButton(_pStartPosCredits.x,_pStartPosCredits.y,oSprite, mainInstance().getStage());
             _oCreditsBut.addEventListener(settings.ON_MOUSE_UP, this._onCreditsBut, this);
         }
      
         if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
             var oSprite = CSpriteLibrary.getSprite('audio_icon');
             _pStartPosAudio = {x: settings.CANVAS_WIDTH - (oSprite.width/4)- 10, y: (oSprite.height/2) + 10};            
-            _oAudioToggle = new CToggle(_pStartPosAudio.x,_pStartPosAudio.y,oSprite,s_bAudioActive, s_oStage);
+            _oAudioToggle = new CToggle(_pStartPosAudio.x,_pStartPosAudio.y,oSprite, mainInstance().getAudioActive(), mainInstance().getStage());
             _oAudioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
         }
 
@@ -80,14 +85,14 @@ function CMenu() {
             
             oSprite = CSpriteLibrary.getSprite("but_fullscreen")
             //_pStartPosFullscreen = {x:_pStartPosCredits.x + oSprite.width/2 + 10,y:(oSprite.height/2) + 10};
-            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, oSprite, s_bFullscreen, s_oStage);
+            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, oSprite, mainInstance().getFullscreen(), mainInstance().getStage());
             _oButFullscreen.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
         }
 
         _oFade = new createjs.Shape();
         _oFade.graphics.beginFill("black").drawRect(0,0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
         
-        s_oStage.addChild(_oFade);
+        mainInstance().getStage().addChild(_oFade);
         
         createjs.Tween.get(_oFade).to({alpha:0}, 1000).call(function(){_oFade.visible = false;});  
         
@@ -113,9 +118,9 @@ function CMenu() {
                 _oButFullscreen.unload();
         }
         
-        s_oStage.removeAllChildren();
+        mainInstance().getStage().removeAllChildren();
         _oBg = null;
-        s_oMenu = null;
+        // s_oMenu = null;
     };
     
     this.refreshButtonPos = function(iNewX,iNewY){
@@ -130,9 +135,9 @@ function CMenu() {
         }
     };
     
-    this._onAudioToggle = function(){
-        Howler.mute(s_bAudioActive);
-        s_bAudioActive = !s_bAudioActive;
+    this._onAudioToggle = function() {
+        Howler.mute(mainInstance().getAudioActive());
+        mainInstance().setAudioActive(!mainInstance().getAudioActive())
     };
     
     this._onCreditsBut = function(){
@@ -141,12 +146,12 @@ function CMenu() {
     
     this.resetFullscreenBut = function(){
         if (_fRequestFullScreen && screenfull.enabled){
-            _oButFullscreen.setActive(s_bFullscreen);
+            _oButFullscreen.setActive(mainInstance().getFullscreen());
         }
     };
         
     this._onFullscreenRelease = function(){
-	if(s_bFullscreen) { 
+	if(mainInstance().getFullscreen()) { 
 		_fCancelFullScreen.call(window.document);
 	}else{
 		_fRequestFullScreen.call(window.document.documentElement);
@@ -159,17 +164,17 @@ function CMenu() {
         
         this.unload();
 
-        $(s_oMain).trigger("start_session");
-        s_oMain.gotoGame();
+        $(mainInstance()).trigger("start_session");
+        mainInstance().gotoGame();
         
     };
 	
-    s_oMenu = this;
+    // s_oMenu = this;
     
     this._init();
 }
 
-var s_oMenu = null;
+// var s_oMenu = null;
 
 const Singleton = (() => {
     let instance = null;

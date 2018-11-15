@@ -1,5 +1,19 @@
-function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
+import createjs from './createjs.js'
 
+import {
+    createBitmap,
+ } from './ctl_utils.js'
+import {
+    mainInstance,
+} from './CMain.js'
+import CGfxButton from './CGfxButton.js'
+import CSpriteLibrary from './sprite_lib.js'
+import settings from './settings.js'
+import {
+    TEXT_ARE_SURE,
+  } from './game/js/CLang.js'
+
+function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
     var _oButYes;
     var _oButNo;
     var _oFade;
@@ -11,26 +25,26 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
 
     this._init = function (oConfirmFunction, oNegateFunction) {
         _oFade = new createjs.Shape();
-        _oFade.graphics.beginFill("black").drawRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
         _oFade.alpha = 0;
         _oListener = _oFade.on("mousedown",function(){});
-        s_oStage.addChild(_oFade);
+        mainInstance().getStage().addChild(_oFade);
         
         createjs.Tween.get(_oFade).to({alpha:0.7},500);
         
         _oPanelContainer = new createjs.Container();        
-        s_oStage.addChild(_oPanelContainer);
+        mainInstance().getStage().addChild(_oPanelContainer);
         
-        var oSprite = s_oSpriteLibrary.getSprite('msg_box');
+        var oSprite = CSpriteLibrary.getSprite('msg_box');
         var oPanel = createBitmap(oSprite);        
         oPanel.regX = oSprite.width/2;
         oPanel.regY = oSprite.height/2;
         _oPanelContainer.addChild(oPanel);
         
-        _oPanelContainer.x = CANVAS_WIDTH/2;
-        _oPanelContainer.y = CANVAS_HEIGHT + oSprite.height/2;  
+        _oPanelContainer.x = settings.CANVAS_WIDTH / 2;
+        _oPanelContainer.y = settings.CANVAS_HEIGHT + (oSprite.height / 2);
         _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
-        createjs.Tween.get(_oPanelContainer).to({y:CANVAS_HEIGHT/2 - 40},500, createjs.Ease.quartIn);
+        createjs.Tween.get(_oPanelContainer).to({y: (settings.CANVAS_HEIGHT / 2) - 40},500, createjs.Ease.quartIn);
         /*
         var oTitleStroke = new createjs.Text(TEXT_ARE_SURE," 34px "+PRIMARY_FONT, "#000000");
         oTitleStroke.y = -oSprite.height/2 + 120;
@@ -40,18 +54,18 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
         oTitleStroke.outline = 5;
         _oPanelContainer.addChild(oTitleStroke);
         */
-        var oTitle = new createjs.Text(TEXT_ARE_SURE," 60px "+PRIMARY_FONT, "#ffffff");
+        var oTitle = new createjs.Text(TEXT_ARE_SURE," 60px "+settings.PRIMARY_FONT, "#ffffff");
         oTitle.y = -oSprite.height/2 + 160;
         oTitle.textAlign = "center";
         oTitle.textBaseline = "middle";
         oTitle.lineWidth = 400;
         _oPanelContainer.addChild(oTitle);
 
-        _oButYes = new CGfxButton(110, 80, s_oSpriteLibrary.getSprite('but_yes'), _oPanelContainer);
-        _oButYes.addEventListener(ON_MOUSE_UP, this._onButYes, this);
+        _oButYes = new CGfxButton(110, 80, CSpriteLibrary.getSprite('but_yes'), _oPanelContainer);
+        _oButYes.addEventListener(settings.ON_MOUSE_UP, this._onButYes, this);
 
-        _oButNo = new CGfxButton(-110, 80, s_oSpriteLibrary.getSprite('but_no'), _oPanelContainer);
-        _oButNo.addEventListener(ON_MOUSE_UP, this._onButNo, this);
+        _oButNo = new CGfxButton(-110, 80, CSpriteLibrary.getSprite('but_no'), _oPanelContainer);
+        _oButNo.addEventListener(settings.ON_MOUSE_UP, this._onButNo, this);
         _oButNo.pulseAnimation();
     };
 
@@ -85,8 +99,8 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
         _oButNo.unload();
         _oButYes.unload();
 
-        s_oStage.removeChild(_oFade);
-        s_oStage.removeChild(_oPanelContainer);
+        mainInstance().getStage().removeChild(_oFade);
+        mainInstance().getStage().removeChild(_oPanelContainer);
 
         _oFade.off("mousedown",_oListener);
     };
@@ -94,4 +108,6 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
     _oParent = this;
     this._init(oConfirmFunction, oNegateFunction);
 }
+
+export default CAreYouSurePanel;
 
