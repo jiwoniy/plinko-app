@@ -33,14 +33,17 @@ function CMenu() {
     var _pStartPosAudio;
     var _pStartPosFullscreen;
     
-    this._init = function(){
+    this._init = function() {
+        console.log('CMenu--')
+        console.log(CSpriteLibrary.getSprite('bg_menu'))
         _oBg = createBitmap(CSpriteLibrary.getSprite('bg_menu'));
+        
         mainInstance().getStage().addChild(_oBg);
-
         var oSprite = CSpriteLibrary.getSprite('logo_menu');
+
         var oLogo = createBitmap(oSprite);
-        oLogo.regX = oSprite.width/2;
-        oLogo.regY = oSprite.height/2;
+        oLogo.regX = oSprite.width / 2;
+        oLogo.regY = oSprite.height / 2;
         oLogo.x = settings.CANVAS_WIDTH / 2
         oLogo.y = 500;
         mainInstance().getStage().addChild(oLogo);
@@ -187,9 +190,10 @@ const Singleton = (() => {
       getInstance(isConstructor) {
         if (isConstructor) {
             instance = createInstance();
-        } else if (!isConstructor && !instance) {
-            instance = createInstance();
         }
+        // } else if (!isConstructor && !instance) {
+        //     instance = createInstance();
+        // }
         // if (isConstructor && !instance) {
         //   instance = createInstance();
         // }

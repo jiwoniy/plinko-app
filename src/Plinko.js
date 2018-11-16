@@ -5,8 +5,8 @@ import './game/js/detectBrowser.js'
 import CMain from './game/js/CMain.js'
 import {
   getParamValue,
-//   isIOS,
-//   sizeHandler
+  isIOS,
+  sizeHandler
 } from './game/js/ctl_utils.js'
 
 import {
@@ -39,7 +39,7 @@ class Plinko extends Component {
   }
 
   componentDidMount () {
-    var oMain = new CMain({
+    var oMain = CMain(true, {
       num_ball: 3,
       //INSTANT_WIN_WHEEL_SETTINGS sets the win occurrence of each prize in the wheel.
       //      -background: THE BACKGROUND IMAGE NAME IN sprites/prize FOLDER (the images name MUST ALWAYS BE image_#)
@@ -59,14 +59,11 @@ class Plinko extends Component {
       ],
       
       total_images_backgrounds_in_folder: 4, 	////SET HERE THE EXACT NUMBER OF BACKGROUND IMAGES IN GAME FOLDER IF YOU WANT TO ADD MORE DIFFERENT IMAGES
-      
-      fullscreen:true,            //SET THIS TO FALSE IF YOU DON'T WANT TO SHOW FULLSCREEN BUTTON
-      check_orientation:true,     //SET TO FALSE IF YOU DON'T WANT TO SHOW ORIENTATION ALERT ON MOBILE DEVICES   
-      
+      fullscreen: true,            //SET THIS TO FALSE IF YOU DON'T WANT TO SHOW FULLSCREEN BUTTON
+      check_orientation: true,     //SET TO FALSE IF YOU DON'T WANT TO SHOW ORIENTATION ALERT ON MOBILE DEVICES   
       //////////////////////////////////////////////////////////////////////////////////////////
       ad_show_counter: 5     //NUMBER OF BALL PLAYED BEFORE AD SHOWN
       //
-                                                  
      });
      
      
@@ -74,49 +71,49 @@ class Plinko extends Component {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeStartSession();
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("end_session", function(evt) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeEndSession();
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("restart_level", function(evt, iLevel) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeRestartLevel({level:iLevel});
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("save_score", function(evt,iScore, szMode) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeSaveScore({score:iScore, mode: szMode});
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("start_level", function(evt, iLevel) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeStartLevel({level:iLevel});
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("end_level", function(evt,iLevel) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeEndLevel({level:iLevel});
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("show_interlevel_ad", function(evt) {
     if(getParamValue('ctl-arcade') === "true"){
       this.state.parent.__ctlArcadeShowInterlevelAD();
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
     $(oMain).on("share_event", function(evt, iScore) {
@@ -128,12 +125,15 @@ class Plinko extends Component {
         msg_share: TEXT_SHARE_SHARE1 + iScore + TEXT_SHARE_SHARE1
       });
     }
-    //...ADD YOUR CODE HERE EVENTUALLY
+      //...ADD YOUR CODE HERE EVENTUALLY
     });
 
-    // if(isIOS()){ 
-    // setTimeout(function(){sizeHandler();},200); 
-    // }else{ sizeHandler(); } 
+    if (isIOS()) { 
+      setTimeout(function() {
+        sizeHandler();},200); 
+    } else {
+      sizeHandler(); 
+    } 
 
   }
   render() {

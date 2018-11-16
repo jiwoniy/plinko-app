@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-function CSpriteLibrary(){
+function CSpriteLibrary() {
     this._oLibSprites = {};
     // var _oLibSprites;
     var _iNumSprites;
@@ -64,7 +64,7 @@ function CSpriteLibrary(){
 }
 
 const Singleton = (() => {
-    let instance;
+    let instance = null;
   
     function createInstance() {
         return new CSpriteLibrary();
@@ -72,11 +72,10 @@ const Singleton = (() => {
   
     return {
       getInstance() {
-
         if (!instance) {
-          instance = createInstance();
-        }
-        return instance;
+            instance = createInstance();
+          }
+          return instance;
       },
     };
 })();

@@ -17,6 +17,8 @@ import {
     createBitmap,
     createSprite,
     sizeHandler,
+    s_iOffsetX,
+    s_iOffsetY,
  } from './ctl_utils.js'
  import settings from './settings.js'
  import screenfull from './screenfull.js'

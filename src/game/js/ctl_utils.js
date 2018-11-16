@@ -1,11 +1,17 @@
 import $ from 'jquery'
-import createjs from './createjs.js'
 
+import createjs from './createjs.js'
 import screenfull from './screenfull.js'
 import settings from './settings.js'
 import {
     mainInstance,
 } from './CMain.js'
+import {
+    interfaceInstance
+} from './CInterface.js'
+import { 
+    menuInstance
+} from './CMenu.js'
 
 var s_iScaleFactor = 1;
 var s_iOffsetX;
@@ -184,32 +190,32 @@ function sizeHandler() {
         s_iOffsetX = 0;
     }
         
-    if(s_oInterface !== null){
-        s_oInterface.refreshButtonPos( s_iOffsetX,s_iOffsetY);
+    if(interfaceInstance() !== null){
+        interfaceInstance().refreshButtonPos( s_iOffsetX,s_iOffsetY);
     }
-    if(s_oMenu !== null){
-        s_oMenu.refreshButtonPos( s_iOffsetX,s_iOffsetY);
+    if(menuInstance() !== null){
+        menuInstance().refreshButtonPos( s_iOffsetX,s_iOffsetY);
     }
 
         
-	if(s_bIsIphone){
-        canvas = document.getElementById('canvas');
-        s_oStage.canvas.width = destW*2;
-        s_oStage.canvas.height = destH*2;
+	if (s_bIsIphone) {
+        const canvas = document.getElementById('canvas');
+        mainInstance().getStage().canvas.width = destW*2;
+        mainInstance().getStage().canvas.height = destH*2;
         canvas.style.width = destW+"px";
         canvas.style.height = destH+"px";
         var iScale = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
         s_iScaleFactor = iScale * 2;
-        s_oStage.scaleX = s_oStage.scaleY = s_iScaleFactor;  
-    }else if($.browser.mobile || isChrome()) {
+        mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor;  
+    } else if ($.browser.mobile || isChrome()) {
         $("#canvas").css("width",destW+"px");
         $("#canvas").css("height",destH+"px");
-    }else{
-        s_oStage.canvas.width = destW;
-        s_oStage.canvas.height = destH;
+    } else {
+        mainInstance().getStage().canvas.width = destW;
+        mainInstance().getStage().canvas.height = destH;
 
         s_iScaleFactor = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
-        s_oStage.scaleX = s_oStage.scaleY = s_iScaleFactor; 
+        mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor; 
     }
         
     if(fOffsetY < 0){
@@ -225,22 +231,22 @@ function sizeHandler() {
 };
 
 function _checkOrientation(iWidth,iHeight) {
-    if($.browser.mobile && settings.ENABLE_CHECK_ORIENTATION){
-        if( iWidth>iHeight ){ 
-            if( $(".orientation-msg-container").attr("data-orientation") === "landscape" ){
+    if ($.browser.mobile && settings.ENABLE_CHECK_ORIENTATION) {
+        if (iWidth>iHeight) { 
+            if ( $(".orientation-msg-container").attr("data-orientation") === "landscape" ) {
                 $(".orientation-msg-container").css("display","none");
-                s_oMain.startUpdate();
-            }else{
+                mainInstance().startUpdate();
+            } else {
                 $(".orientation-msg-container").css("display","block");
-                s_oMain.stopUpdate();
+                mainInstance().stopUpdate();
             }  
-        }else{
-            if( $(".orientation-msg-container").attr("data-orientation") === "portrait" ){
+        } else {
+            if( $(".orientation-msg-container").attr("data-orientation") === "portrait" ) {
                 $(".orientation-msg-container").css("display","none");
-                s_oMain.startUpdate();
-            }else{
+                mainInstance().startUpdate();
+            } else {
                 $(".orientation-msg-container").css("display","block");
-                s_oMain.stopUpdate();
+                mainInstance().stopUpdate();
             }   
         }
     }
@@ -248,12 +254,12 @@ function _checkOrientation(iWidth,iHeight) {
 
 function playSound(szSound,iVolume,bLoop){
     if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
-        s_aSounds[szSound].play();
-        s_aSounds[szSound].volume(iVolume);
-        s_aSounds[szSound].loop(bLoop);
+        mainInstance().getSounds()[szSound].play();
+        mainInstance().getSounds()[szSound].volume(iVolume);
+        mainInstance().getSounds()[szSound].loop(bLoop);
         
         //var oPointer = createjs.Sound.play(szSound,{loop: iLoop,volume:iVolume});
-        return s_aSounds[szSound];
+        return mainInstance().getSounds()[szSound];
     }
     return null;
 }
@@ -266,7 +272,7 @@ function playSound(szSound,iVolume,bLoop){
 
 function setVolume(szSound, iVolume){
     if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
-        s_aSounds[szSound].volume(iVolume);
+        mainInstance().getSounds()[szSound].volume(iVolume);
     }
 }  
 
@@ -288,14 +294,14 @@ function setVolume(szSound, iVolume){
 //     }
 // }
 
-function createBitmap(oSprite, iWidth, iHeight){
+function createBitmap(oSprite, iWidth, iHeight) {
 	var oBmp = new createjs.Bitmap(oSprite);
 	var hitObject = new createjs.Shape();
 	
-	if (iWidth && iHeight){
-		hitObject .graphics.beginFill("#fff").drawRect(0, 0, iWidth, iHeight);
-	}else{
-		hitObject .graphics.beginFill("#ff0").drawRect(0, 0, oSprite.width, oSprite.height);
+	if (iWidth && iHeight) {
+		hitObject.graphics.beginFill("#fff").drawRect(0, 0, iWidth, iHeight);
+	} else {
+		hitObject.graphics.beginFill("#ff0").drawRect(0, 0, oSprite.width, oSprite.height);
 	}
 
 	oBmp.hitArea = hitObject;
@@ -303,10 +309,10 @@ function createBitmap(oSprite, iWidth, iHeight){
 	return oBmp;
 }
 
-function createSprite(oSpriteSheet, szState, iRegX,iRegY,iWidth, iHeight){
-	if(szState !== null){
+function createSprite(oSpriteSheet, szState, iRegX,iRegY,iWidth, iHeight) {
+	if (szState !== null) {
 		var oRetSprite = new createjs.Sprite(oSpriteSheet, szState);
-	}else{
+	} else {
 		var oRetSprite = new createjs.Sprite(oSpriteSheet);
 	}
 	
@@ -588,21 +594,21 @@ function NoClickDelay(el) {
 	if( window.Touch ) this.element.addEventListener('touchstart', this, false);
 }
 //Fisher-Yates Shuffle
-function shuffle(array) {
-        var counter = array.length, temp, index;
-        // While there are elements in the array
-        while (counter > 0) {
-            // Pick a random index
-            index = Math.floor(Math.random() * counter);
-            // Decrease counter by 1
-            counter--;
-            // And swap the last element with it
-            temp = array[counter];
-            array[counter] = array[index];
-            array[index] = temp;
-        }
-        return array;
-}
+// function shuffle(array) {
+//     var counter = array.length, temp, index;
+//     // While there are elements in the array
+//     while (counter > 0) {
+//         // Pick a random index
+//         index = Math.floor(Math.random() * counter);
+//         // Decrease counter by 1
+//         counter--;
+//         // And swap the last element with it
+//         temp = array[counter];
+//         array[counter] = array[index];
+//         array[index] = temp;
+//     }
+//     return array;
+// }
 
 NoClickDelay.prototype = {
 handleEvent: function(e) {
@@ -675,23 +681,23 @@ onTouchEnd: function(e) {
             document.body.className = this[hidden] ? "hidden" : "visible";
 
 			if(document.body.className === "hidden"){
-				s_oMain.stopUpdate();
+				mainInstance().stopUpdate();
 			}else{
-				s_oMain.startUpdate();
+				mainInstance().startUpdate();
 			}
 		}
     }
 })();
 
-function ctlArcadeResume(){
-    if(s_oMain !== null){
-        s_oMain.startUpdate();
+function ctlArcadeResume() {
+    if(mainInstance() !== null) {
+        mainInstance().startUpdate();
     }
 }
 
-function ctlArcadePause(){
-    if(s_oMain !== null){
-        s_oMain.stopUpdate();
+function ctlArcadePause() {
+    if(mainInstance() !== null) {
+        mainInstance().stopUpdate();
     }
 }
 
@@ -732,12 +738,12 @@ function fullscreenHandler(){
         mainInstance().setFullScreen(false)
     }
 
-    if (s_oInterface !== null){
-        s_oInterface.resetFullscreenBut();
+    if (interfaceInstance() !== null){
+        interfaceInstance().resetFullscreenBut();
     }
 
-    if (s_oMenu !== null){
-        s_oMenu.resetFullscreenBut();
+    if (menuInstance() !== null){
+        menuInstance().resetFullscreenBut();
     }
 }
 
@@ -746,12 +752,12 @@ if (screenfull.enabled) {
     screenfull.on('change', function(){
         mainInstance().setFullScreen(screenfull.isFullscreen)
 
-        if (s_oInterface !== null){
-            s_oInterface.resetFullscreenBut();
+        if (interfaceInstance() !== null){
+            interfaceInstance().resetFullscreenBut();
         }
 
-        if (s_oMenu !== null){
-            s_oMenu.resetFullscreenBut();
+        if (menuInstance() !== null){
+            menuInstance().resetFullscreenBut();
         }
     });
 }

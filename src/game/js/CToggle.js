@@ -17,16 +17,16 @@ function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
     var _aCbOwner;
     var _oButton;
     
-    this._init = function(iXPos,iYPos,oSprite,bActive, oParentContainer){
+    this._init = function(iXPos,iYPos,oSprite,bActive, oParentContainer) {
         _aCbCompleted = [];
         _aCbOwner = [];
         
         var oData = {   
-                        images: [oSprite], 
-                        // width, height & registration point of each sprite
-                        frames: {width: oSprite.width/2, height: oSprite.height, regX: (oSprite.width/2)/2, regY: oSprite.height/2}, 
-                        animations: {state_true:[0],state_false:[1]}
-                   };
+            images: [oSprite], 
+            // width, height & registration point of each sprite
+            frames: {width: oSprite.width/2, height: oSprite.height, regX: (oSprite.width/2)/2, regY: oSprite.height/2}, 
+            animations: {state_true:[0],state_false:[1]}
+        };
                    
          var oSpriteSheet = new createjs.SpriteSheet(oData);
          
@@ -42,7 +42,7 @@ function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
         this._initListener();
     };
     
-    this.unload = function(){
+    this.unload = function() {
         if($.browser.mobile){
             _oButton.off("mousedown", _oListenerMouseDown);
             _oButton.off("pressup" , _oListenerMouseUp);
@@ -56,7 +56,7 @@ function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
         //oParentContainer.removeChild(_oButton);
     };
     
-    this._initListener = function(){
+    this._initListener = function() {
         if($.browser.mobile){
             _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
             _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
@@ -67,17 +67,17 @@ function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
         }     
     };
     
-    this.addEventListener = function( iEvent,cbCompleted, cbOwner ){
+    this.addEventListener = function(iEvent,cbCompleted, cbOwner) {
         _aCbCompleted[iEvent]=cbCompleted;
         _aCbOwner[iEvent] = cbOwner; 
     };
     
-    this.setActive = function(bActive){
+    this.setActive = function(bActive) {
         _bActive = bActive;
         _oButton.gotoAndStop("state_"+_bActive);
     };
     
-    this.buttonRelease = function(){
+    this.buttonRelease = function() {
         _oButton.scaleX = 1;
         _oButton.scaleY = 1;
         
@@ -91,29 +91,31 @@ function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
         }
     };
     
-    this.buttonDown = function(){
+    this.buttonDown = function() {
         _oButton.scaleX = 0.9;
         _oButton.scaleY = 0.9;
 
-       if(_aCbCompleted[settings.ON_MOUSE_DOWN]){
+       if(_aCbCompleted[settings.ON_MOUSE_DOWN]) {
            _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN]);
        }
     };
     
-    this.buttonOver = function(evt){
+    this.buttonOver = function(evt) {
         if(!$.browser.mobile){
             evt.target.cursor = "pointer";
         }  
     };
     
-    this.setPosition = function(iXPos,iYPos){
+    this.setPosition = function(iXPos,iYPos) {
          _oButton.x = iXPos;
          _oButton.y = iYPos;
     };
     
-    this.getButtonImage = function(){
+    this.getButtonImage = function() {
         return _oButton;
     };
     
     this._init(iXPos,iYPos,oSprite,bActive, oParentContainer);
 }
+
+export default CToggle;

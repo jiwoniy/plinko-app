@@ -3,6 +3,9 @@ import createjs from './createjs.js'
 import {
     createBitmap
 } from './ctl_utils.js'
+import {
+    mainInstance,
+} from './CMain.js'
 import settings from './settings.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CTextButton from './CTextButton.js'
@@ -10,7 +13,7 @@ import {
     TEXT_PRELOADER_CONTINUE,
 } from './CLang.js'
 
-function CPreloader() {
+function CPreloader({ parentMainInstance }) {
     var _iMaskWidth;
     var _iMaskHeight;
     var _oLoadingText;
@@ -30,7 +33,7 @@ function CPreloader() {
         CSpriteLibrary.loadSprites();
 
         _oContainer = new createjs.Container();
-        s_oStage.addChild(_oContainer);
+        parentMainInstance.getStage().addChild(_oContainer);
     };
 
     this.unload = function () {
@@ -45,7 +48,7 @@ function CPreloader() {
     this._onAllImagesLoaded = function () {
         this.attachSprites();
 
-        s_oMain.preloaderReady();
+        mainInstance().preloaderReady();
     };
 
     this.attachSprites = function () {
@@ -90,7 +93,7 @@ function CPreloader() {
         _oContainer.addChild(_oLoadingText);
         
         var oSprite = CSpriteLibrary.getSprite('but_start');
-        _oButStart = CTextButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT / 2, oSprite, TEXT_PRELOADER_CONTINUE, "Arial", "#000", 50, true, _oContainer);        
+        _oButStart = new CTextButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT / 2, oSprite, TEXT_PRELOADER_CONTINUE, "Arial", "#000", 50, true, _oContainer);        
         _oButStart.addEventListener(settings.ON_MOUSE_UP, this._onButStartRelease, this);
         _oButStart.setVisible(false);
         _oButStart.setTextHeight(60);
@@ -107,7 +110,7 @@ function CPreloader() {
     };
 
     this._onButStartRelease = function(){
-        s_oMain._onRemovePreloader();
+        mainInstance()._onRemovePreloader();
     };
 
     this.refreshLoader = function (iPerc) {

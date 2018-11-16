@@ -11,7 +11,7 @@ import CSpriteLibrary from './sprite_lib.js'
 import settings from './settings.js'
 import {
     TEXT_ARE_SURE,
-  } from './game/js/CLang.js'
+  } from './CLang.js'
 
 function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
     var _oButYes;

@@ -1,10 +1,9 @@
 import $ from 'jquery'
 
 import createjs from './createjs.js'
-
 import {
     createBitmap,
-  } from './game/js/ctl_utils.js'
+  } from './ctl_utils.js'
 import {
     mainInstance,
 } from './CMain.js'
@@ -18,7 +17,7 @@ import {
     TEXT_WIN,
     TEXT_REDEEM,
     TEXT_GAMEOVER,
-  } from './game/js/CLang.js'
+  } from './CLang.js'
 
 function CEndPanel(iPrizeIndex, bHasWin) {
     

@@ -8,7 +8,7 @@ import {
 } from './ctl_utils.js'
 import settings from './settings.js'
 
-function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer){
+function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
     var _bDisable;
     
     var _oListenerMouseDown;
@@ -22,13 +22,12 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     var _oTextBack;
     var _oButtonBg;
     
-    this._init =function(iXPos,iYPos,oSprite,szText,szFont,szColor,iFontSize, bStandard, oParentContainer){
+    this._init =function(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
         _bDisable = false;
         
         _aCbCompleted = [];
         _aCbOwner = [];
-        
-        _oButtonBg = createBitmap( oSprite);           
+        _oButtonBg = createBitmap(oSprite);           
 
         var iStepShadow = Math.ceil(iFontSize/20);
 
@@ -230,8 +229,7 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
         return _oButton.y;
     };
 
-    this._init(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer);
-    
-    return this;
-    
+    this._init(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer);    
 }
+
+export default CTextButton;

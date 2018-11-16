@@ -31,6 +31,7 @@ function CMain(oData) {
         // audioActive: true,
         audioActive: true,
         fullScreen: false,
+        sounds: [],
         // bUpdate: null,
         // status: settings.STATE_LOADING,
         // sounds: [],
@@ -61,10 +62,11 @@ function CMain(oData) {
             settings.DISABLE_SOUND_MOBILE = true;
         }
         
-        s_oSpriteLibrary  = new CSpriteLibrary();
+        // s_oSpriteLibrary  = new CSpriteLibrary(true);
         //ADD PRELOADER
         
-        _oPreloader = new CPreloader();
+        // _oPreloader = new CPreloader();
+        _oPreloader = new CPreloader({ parentMainInstance: this });
 
     };
 
@@ -87,6 +89,10 @@ function CMain(oData) {
     this.setAudioActive = function (value) {
         this.state.audioActive = value
     }
+
+    this.getSounds = function () {
+        return this.state.sounds;
+    }
     
     this.preloaderReady = function() {
         if(settings.DISABLE_SOUND_MOBILE === false || s_bMobile === false){
@@ -104,8 +110,7 @@ function CMain(oData) {
     };
     
     this._initSounds = function() {
-        
-        var aSoundsInfo = [];
+        const aSoundsInfo = [];
         
         aSoundsInfo.push({path: './sounds/',filename:'soundtrack',loop:true,volume:1, ingamename: 'soundtrack'});
         aSoundsInfo.push({path: './sounds/',filename:'press_button',loop:false,volume:1, ingamename: 'click'});
@@ -116,9 +121,9 @@ function CMain(oData) {
 
         RESOURCE_TO_LOAD += aSoundsInfo.length;
 
-        s_aSounds = [];
+        this.state.sounds = [];
         for(var i=0; i<aSoundsInfo.length; i++) {
-            s_aSounds[aSoundsInfo[i].ingamename] = new Howl({ 
+            this.state.sounds[aSoundsInfo[i].ingamename] = new Howl({ 
                 src: [aSoundsInfo[i].path+aSoundsInfo[i].filename+'.mp3', aSoundsInfo[i].path+aSoundsInfo[i].filename+'.ogg'],
                 autoplay: false,
                 preload: true,
@@ -131,48 +136,48 @@ function CMain(oData) {
     };
 
     this._loadImages = function(){
-        s_oSpriteLibrary.init( this._onImagesLoaded,this._onAllImagesLoaded, this );
+        CSpriteLibrary.init( this._onImagesLoaded,this._onAllImagesLoaded, this );
 
-        s_oSpriteLibrary.addSprite("logo_game","./sprites/logo_game.png");
-        s_oSpriteLibrary.addSprite("logo_menu","./sprites/logo_menu.png");
+        CSpriteLibrary.addSprite("logo_game","./sprites/logo_game.png");
+        CSpriteLibrary.addSprite("logo_menu","./sprites/logo_menu.png");
         
-        s_oSpriteLibrary.addSprite("but_play","./sprites/but_play.png");
-        s_oSpriteLibrary.addSprite("msg_box","./sprites/msg_box.png");
-        s_oSpriteLibrary.addSprite("ctl_logo","./sprites/ctl_logo.png");
-        s_oSpriteLibrary.addSprite("but_credits","./sprites/but_credits.png");
-        s_oSpriteLibrary.addSprite("but_yes","./sprites/but_yes.png");
-        s_oSpriteLibrary.addSprite("but_no","./sprites/but_no.png");
+        CSpriteLibrary.addSprite("but_play","./sprites/but_play.png");
+        CSpriteLibrary.addSprite("msg_box","./sprites/msg_box.png");
+        CSpriteLibrary.addSprite("ctl_logo","./sprites/ctl_logo.png");
+        CSpriteLibrary.addSprite("but_credits","./sprites/but_credits.png");
+        CSpriteLibrary.addSprite("but_yes","./sprites/but_yes.png");
+        CSpriteLibrary.addSprite("but_no","./sprites/but_no.png");
         
-        s_oSpriteLibrary.addSprite("bg_menu","./sprites/bg_menu.jpg"); 
-        s_oSpriteLibrary.addSprite("bg_game","./sprites/bg_game.jpg");
-        s_oSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
-        s_oSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
+        CSpriteLibrary.addSprite("bg_menu","./sprites/bg_menu.jpg"); 
+        CSpriteLibrary.addSprite("bg_game","./sprites/bg_game.jpg");
+        CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
+        CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
         
-        s_oSpriteLibrary.addSprite("but_exit","./sprites/but_exit.png");
-        s_oSpriteLibrary.addSprite("audio_icon","./sprites/audio_icon.png");
-        s_oSpriteLibrary.addSprite("but_fullscreen","./sprites/but_fullscreen.png");
-        s_oSpriteLibrary.addSprite("but_restart","./sprites/but_restart.png"); 
-        s_oSpriteLibrary.addSprite("but_home","./sprites/but_home.png"); 
-        s_oSpriteLibrary.addSprite("but_settings","./sprites/but_settings.png");  
+        CSpriteLibrary.addSprite("but_exit","./sprites/but_exit.png");
+        CSpriteLibrary.addSprite("audio_icon","./sprites/audio_icon.png");
+        CSpriteLibrary.addSprite("but_fullscreen","./sprites/but_fullscreen.png");
+        CSpriteLibrary.addSprite("but_restart","./sprites/but_restart.png"); 
+        CSpriteLibrary.addSprite("but_home","./sprites/but_home.png"); 
+        CSpriteLibrary.addSprite("but_settings","./sprites/but_settings.png");  
         
-        s_oSpriteLibrary.addSprite("ball_panel","./sprites/ball_panel.png");
+        CSpriteLibrary.addSprite("ball_panel","./sprites/ball_panel.png");
         
-        s_oSpriteLibrary.addSprite("ball","./sprites/ball.png");
-        s_oSpriteLibrary.addSprite("stake","./sprites/stake.png");
-        s_oSpriteLibrary.addSprite("ball_generator","./sprites/ball_generator.png");
+        CSpriteLibrary.addSprite("ball","./sprites/ball.png");
+        CSpriteLibrary.addSprite("stake","./sprites/stake.png");
+        CSpriteLibrary.addSprite("ball_generator","./sprites/ball_generator.png");
         
-        s_oSpriteLibrary.addSprite("holes_occluder","./sprites/holes_occluder.png");
-        s_oSpriteLibrary.addSprite("hole_board_occluder","./sprites/hole_board_occluder.png");
+        CSpriteLibrary.addSprite("holes_occluder","./sprites/holes_occluder.png");
+        CSpriteLibrary.addSprite("hole_board_occluder","./sprites/hole_board_occluder.png");
         
-        s_oSpriteLibrary.addSprite("basket_display","./sprites/basket_display.jpg");
-        s_oSpriteLibrary.addSprite("hand_anim","./sprites/hand_anim.png");
+        CSpriteLibrary.addSprite("basket_display","./sprites/basket_display.jpg");
+        CSpriteLibrary.addSprite("hand_anim","./sprites/hand_anim.png");
         
         for(let i = 0; i < settings.NUM_IMAGES_BACKGROUNDS; i += 1) {
-            s_oSpriteLibrary.addSprite("image_"+i,"./sprites/prize/image_"+i+".png");
+            CSpriteLibrary.addSprite("image_"+i,"./sprites/prize/image_"+i+".png");
         }
         
-        RESOURCE_TO_LOAD += s_oSpriteLibrary.getNumSprites();
-        s_oSpriteLibrary.loadSprites();
+        RESOURCE_TO_LOAD += CSpriteLibrary.getNumSprites();
+        CSpriteLibrary.loadSprites();
     };
     
     this._onImagesLoaded = function() {
@@ -189,7 +194,8 @@ function CMain(oData) {
     this._onRemovePreloader = function(){
         _oPreloader.unload();
             
-        s_oSoundtrack = playSound('soundtrack', 1, true);
+        // s_oSoundtrack = playSound('soundtrack', 1, true);
+        playSound('soundtrack', 1, true);
 
         this.gotoMenu();
     };
@@ -198,8 +204,8 @@ function CMain(oData) {
         this._loadImages();
     };
     
-    this.gotoMenu = function(){
-        _oMenu = new CMenu();
+    this.gotoMenu = function() {
+        _oMenu = new CMenu(true);
         _iState = settings.STATE_MENU;
     };
 
@@ -275,13 +281,13 @@ var s_iPrevTime = 0;
 var s_iCntFps = 0;
 var s_iCurFps = 0;
 // var s_bFullscreen = false;
-var s_aSounds = new Array();
+// var s_aSounds = new Array();
 
 var s_oDrawLayer;
 // var s_oStage;
 // var s_oMain;
-var s_oSpriteLibrary;
-var s_oSoundtrack;
+// var s_oSpriteLibrary;
+// var s_oSoundtrack;
 var s_oCanvas;
 
 
@@ -294,7 +300,7 @@ const Singleton = (() => {
   
     return {
       getInstance(isConstructor, data) {
-        if (isConstructor && !instance) {
+        if (isConstructor) {
           instance = createInstance(data);
         }
         return instance;

@@ -4,6 +4,7 @@ import createjs from './createjs.js'
 import {
     createBitmap,
     setVolume,
+    s_iScaleFactor,
  } from './ctl_utils.js'
  import {
     mainInstance,
@@ -14,7 +15,9 @@ import CBallGenerator from './CBallGenerator.js'
 import CInsertTubeController from './CInsertTubeController.js'
 import CScoreBasketController from './CScoreBasketController.js'
 import CEndPanel from './CEndPanel.js'
-import CGridMapping from './CGridMapping.js'
+import CGridMapping, {
+    gridInstance
+} from './CGridMapping.js'
 import CInterface from './CInterface.js'
 import settings from './settings.js'
 
@@ -130,7 +133,7 @@ function CGame(oData) {
         _oBoardContainer.x = settings.CANVAS_WIDTH / 2;
         _oBoardContainer.y = (settings.CANVAS_HEIGHT / 2) - 29;
 
-        new CGridMapping(_aBoard);
+        new CGridMapping(true, _aBoard);
     };
     
     this._initProbability = function(){
@@ -171,7 +174,7 @@ function CGame(oData) {
     
     this.getFallPath = function(){
         var iEndCol = this._setEndCol();
-        var aPath = s_oGridMapping.getRandomPathFromColToCol(_iColToLaunchBall,iEndCol);
+        var aPath = gridInstance().getRandomPathFromColToCol(_iColToLaunchBall,iEndCol);
         
         for(var i=0; i<aPath.length; i++){
             _aBoard[aPath[i].row][aPath[i].col].highlight(true);

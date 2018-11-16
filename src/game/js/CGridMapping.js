@@ -330,4 +330,27 @@ function CGridMapping(aMatrix) {
 }
 
 // var s_oGridMapping;
-export default CGridMapping;
+// export default CGridMapping;
+
+const Singleton = (() => {
+    let instance = null;
+  
+    function createInstance(board) {
+        return new CGridMapping(board);
+    }
+  
+    return {
+      getInstance(isConstructor, board) {
+        if (isConstructor) {
+          instance = createInstance(board);
+        }
+        return instance;
+      },
+    };
+})();
+
+const gridInstance = () => Singleton.getInstance(false)
+export default Singleton.getInstance;
+export {
+    gridInstance,
+}
