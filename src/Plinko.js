@@ -130,7 +130,8 @@ class Plinko extends Component {
 
     if (isIOS()) { 
       setTimeout(function() {
-        sizeHandler();},200); 
+        sizeHandler();
+      },200); 
     } else {
       sizeHandler(); 
     } 

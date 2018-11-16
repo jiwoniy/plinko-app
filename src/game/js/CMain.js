@@ -11,7 +11,7 @@ import CGame from './CGame.js'
 import settings from './settings.js'
 
 function CMain(oData) {
-    var _bUpdate;
+    // var _bUpdate;
     var _iCurResource = 0;
     var RESOURCE_TO_LOAD = 0;
     var _iState = settings.STATE_LOADING;
@@ -32,7 +32,7 @@ function CMain(oData) {
         audioActive: true,
         fullScreen: false,
         sounds: [],
-        // bUpdate: null,
+        bUpdate: null,
         // status: settings.STATE_LOADING,
         // sounds: [],
         // menu: null,
@@ -94,13 +94,13 @@ function CMain(oData) {
         return this.state.sounds;
     }
     
-    this.preloaderReady = function() {
-        if(settings.DISABLE_SOUND_MOBILE === false || s_bMobile === false){
+    this.preloaderReady = () => {
+        if(settings.DISABLE_SOUND_MOBILE === false || s_bMobile === false) {
             this._initSounds();
         }
         
         this._loadImages();
-        _bUpdate = true;
+        this.state.bUpdate = true;
     };
     
     this.soundLoaded = function() {
@@ -219,16 +219,17 @@ function CMain(oData) {
     //     _iState = settings.STATE_HELP;
     // };
 	
-    this.stopUpdate = function(){
-        _bUpdate = false;
+    this.stopUpdate = () => {
+        this.state.bUpdate = false
         createjs.Ticker.paused = true;
         $("#block_game").css("display","block");
         Howler.mute(true);
      };
 
     this.startUpdate = () => {
+        this.state.bUpdate = true
         s_iPrevTime = new Date().getTime();
-        _bUpdate = true;
+        
         createjs.Ticker.paused = false;
         $("#block_game").css("display","none");
 
@@ -238,7 +239,7 @@ function CMain(oData) {
     };
     
     this._update = (event) => {
-		if(_bUpdate === false) {
+		if(this.state.bUpdate === false) {
 			return;
 		}
         var iCurTime = new Date().getTime();

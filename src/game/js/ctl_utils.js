@@ -16,7 +16,7 @@ import {
 var s_iScaleFactor = 1;
 var s_iOffsetX;
 var s_iOffsetY;
-var s_bIsIphone = false;
+// var s_bIsIphone = false;
 
 $(window).resize(function() {
 	sizeHandler();
@@ -87,28 +87,31 @@ function isChrome() {
 }
 
 function isIOS() {
-   var iDevices = [
-       'iPad Simulator',
-       'iPhone Simulator',
-       'iPod Simulator',
-       'iPad',
-       'iPhone',
-       'iPod' 
-   ]; 
-
-   if (navigator.userAgent.toLowerCase().indexOf("iphone") !== -1) {
-       s_bIsIphone = true;
-   }
-           
-   while (iDevices.length) {
-       if (navigator.platform === iDevices.pop()) {
-           return true; 
-       } 
-   } 
-   s_bIsIphone = false;
-
-   return false; 
-}
+    const iDevices = [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod' 
+    ]; 
+ 
+ //    var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+ 
+    if (navigator.userAgent.toLowerCase().indexOf("iphone") !== -1) {
+     //    s_bIsIphone = true;
+        return true
+    }
+            
+    while (iDevices.length) {
+        if (navigator.platform === iDevices.pop()) {
+            return true; 
+        } 
+    } 
+ //    s_bIsIphone = false;
+ 
+    return false; 
+ }
 
 function getIOSWindowHeight() {
     // Get zoom level of mobile Safari
@@ -131,24 +134,23 @@ function getIOSWindowHeight() {
 function sizeHandler() {
 	window.scrollTo(0, 1);
 
-	if (!$("#canvas")){
+	if (!$("#canvas")) {
 		return;
 	}
 
 	var h;
-    var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
-
-    if(iOS) {
+    // var iOS = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
+    if(isIOS()) {
         h = getIOSWindowHeight();
     } else { 
-        h = getSize("Height");
+        h = getSize('Height');
     }
     
-    var w = getSize("Width");
-    _checkOrientation(w,h);
+    var w = getSize('Width');
+    _checkOrientation(w, h);
 
-	var multiplier = Math.min((h / settings.CANVAS_HEIGHT), (w / settings.CANVAS_WIDTH));
-
+	let multiplier = Math.min((h / settings.CANVAS_HEIGHT), (w / settings.CANVAS_WIDTH));
+    console.log(`multiplier: ${multiplier}`)
 	var destW = settings.CANVAS_WIDTH * multiplier;
 	var destH = settings.CANVAS_HEIGHT * multiplier;
         
@@ -169,7 +171,7 @@ function sizeHandler() {
     var fGameInverseScaling = (settings.CANVAS_WIDTH / destW);
 
     if( fOffsetX*fGameInverseScaling < - settings.EDGEBOARD_X ||  
-        fOffsetY*fGameInverseScaling < - settings.EDGEBOARD_Y ){
+        fOffsetY*fGameInverseScaling < - settings.EDGEBOARD_Y ) {
         multiplier = Math.min( h / (settings.CANVAS_HEIGHT - (settings.EDGEBOARD_Y * 2)), w / (settings.CANVAS_WIDTH - (settings.EDGEBOARD_X * 2)));
         destW = settings.CANVAS_WIDTH * multiplier;
         destH = settings.CANVAS_HEIGHT * multiplier;
@@ -179,29 +181,28 @@ function sizeHandler() {
         fGameInverseScaling = (settings.CANVAS_WIDTH / destW);
     }
 
-    s_iOffsetX = (-1*fOffsetX * fGameInverseScaling);
-    s_iOffsetY = (-1*fOffsetY * fGameInverseScaling);
+    s_iOffsetX = (-1 * fOffsetX * fGameInverseScaling);
+    s_iOffsetY = (-1 * fOffsetY * fGameInverseScaling);
     
-    if(fOffsetY >= 0 ){
+    if (fOffsetY >= 0) {
         s_iOffsetY = 0;
     }
     
-    if(fOffsetX >= 0 ){
+    if (fOffsetX >= 0) {
         s_iOffsetX = 0;
     }
         
-    if(interfaceInstance() !== null){
+    if(interfaceInstance() !== null) {
         interfaceInstance().refreshButtonPos( s_iOffsetX,s_iOffsetY);
     }
-    if(menuInstance() !== null){
+    if(menuInstance() !== null) {
         menuInstance().refreshButtonPos( s_iOffsetX,s_iOffsetY);
     }
-
         
-	if (s_bIsIphone) {
+	if (isIOS()) {
         const canvas = document.getElementById('canvas');
-        mainInstance().getStage().canvas.width = destW*2;
-        mainInstance().getStage().canvas.height = destH*2;
+        mainInstance().getStage().canvas.width = destW * 2;
+        mainInstance().getStage().canvas.height = destH * 2;
         canvas.style.width = destW+"px";
         canvas.style.height = destH+"px";
         var iScale = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
@@ -218,9 +219,9 @@ function sizeHandler() {
         mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor; 
     }
         
-    if(fOffsetY < 0){
+    if (fOffsetY < 0) {
         $("#canvas").css("top",fOffsetY+"px");
-    }else{
+    } else {
         $("#canvas").css("top","0px");
     }
     
@@ -230,10 +231,10 @@ function sizeHandler() {
 
 };
 
-function _checkOrientation(iWidth,iHeight) {
+function _checkOrientation(width, height) {
     if ($.browser.mobile && settings.ENABLE_CHECK_ORIENTATION) {
-        if (iWidth>iHeight) { 
-            if ( $(".orientation-msg-container").attr("data-orientation") === "landscape" ) {
+        if (width > height) { 
+            if ($(".orientation-msg-container").attr("data-orientation") === "landscape") {
                 $(".orientation-msg-container").css("display","none");
                 mainInstance().startUpdate();
             } else {
@@ -241,7 +242,7 @@ function _checkOrientation(iWidth,iHeight) {
                 mainInstance().stopUpdate();
             }  
         } else {
-            if( $(".orientation-msg-container").attr("data-orientation") === "portrait" ) {
+            if($(".orientation-msg-container").attr("data-orientation") === "portrait") {
                 $(".orientation-msg-container").css("display","none");
                 mainInstance().startUpdate();
             } else {
@@ -252,7 +253,7 @@ function _checkOrientation(iWidth,iHeight) {
     }
 }
 
-function playSound(szSound,iVolume,bLoop){
+function playSound(szSound,iVolume,bLoop) {
     if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
         mainInstance().getSounds()[szSound].play();
         mainInstance().getSounds()[szSound].volume(iVolume);
