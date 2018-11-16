@@ -34,61 +34,57 @@ function CMenu() {
     var _pStartPosFullscreen;
     
     this._init = function() {
-        console.log('CMenu--')
-        console.log(CSpriteLibrary.getSprite('bg_menu'))
         _oBg = createBitmap(CSpriteLibrary.getSprite('bg_menu'));
         
         mainInstance().getStage().addChild(_oBg);
-        var oSprite = CSpriteLibrary.getSprite('logo_menu');
-
-        var oLogo = createBitmap(oSprite);
-        oLogo.regX = oSprite.width / 2;
-        oLogo.regY = oSprite.height / 2;
+        const logoMenuSprite = CSpriteLibrary.getSprite('logo_menu');
+        var oLogo = createBitmap(logoMenuSprite);
+        oLogo.regX = logoMenuSprite.width / 2;
+        oLogo.regY = logoMenuSprite.height / 2;
         oLogo.x = settings.CANVAS_WIDTH / 2
         oLogo.y = 500;
         mainInstance().getStage().addChild(oLogo);
 
-        var oSprite = CSpriteLibrary.getSprite('but_play');
-        _oButPlay = new CGfxButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT - 540,oSprite, mainInstance().getStage());
+        const playButtonSprite = CSpriteLibrary.getSprite('but_play');
+        _oButPlay = new CGfxButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT - 540, playButtonSprite, mainInstance().getStage());
         _oButPlay.addEventListener(settings.ON_MOUSE_UP, this._onButPlayRelease, this);
         _oButPlay.pulseAnimation();
      
-        var oSprite = CSpriteLibrary.getSprite('but_credits');
-        var pFirstPos = {x:oSprite.width/2 + 10,y:oSprite.height/2 + 10};
-        var pSecondPos = {x:pFirstPos.x + oSprite.width + 10,y:oSprite.height/2 + 10};
-        _pStartPosCredits = {x: pFirstPos.x, y: pFirstPos.y};
-        if(settings.ENABLE_CREDITS){
-            _oCreditsBut = new CGfxButton(_pStartPosCredits.x,_pStartPosCredits.y,oSprite, mainInstance().getStage());
+        const creditsButtonSprite = CSpriteLibrary.getSprite('but_credits');
+        const pFirstPos = { x: (creditsButtonSprite.width / 2) + 10,y: (creditsButtonSprite.height / 2) + 10 };
+        const pSecondPos = { x: pFirstPos.x + creditsButtonSprite.width + 10,y: creditsButtonSprite.height/2 + 10 };
+        _pStartPosCredits = { x: pFirstPos.x, y: pFirstPos.y };
+        if (settings.ENABLE_CREDITS) {
+            _oCreditsBut = new CGfxButton(_pStartPosCredits.x, _pStartPosCredits.y, creditsButtonSprite, mainInstance().getStage());
             _oCreditsBut.addEventListener(settings.ON_MOUSE_UP, this._onCreditsBut, this);
         }
      
-        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
-            var oSprite = CSpriteLibrary.getSprite('audio_icon');
-            _pStartPosAudio = {x: settings.CANVAS_WIDTH - (oSprite.width/4)- 10, y: (oSprite.height/2) + 10};            
-            _oAudioToggle = new CToggle(_pStartPosAudio.x,_pStartPosAudio.y,oSprite, mainInstance().getAudioActive(), mainInstance().getStage());
+        if (settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
+            const audioIconSprite = CSpriteLibrary.getSprite('audio_icon');
+            _pStartPosAudio = {x: settings.CANVAS_WIDTH - (audioIconSprite.width / 4) - 10, y: (audioIconSprite.height / 2) + 10};            
+            _oAudioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
             _oAudioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
         }
 
-        var doc = window.document;
-        var docEl = doc.documentElement;
+        const doc = window.document;
+        const docEl = doc.documentElement;
         _fRequestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
         _fCancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 
-        if(settings.ENABLE_FULLSCREEN === false){
+        if (settings.ENABLE_FULLSCREEN === false) {
             _fRequestFullScreen = false;
         }
 
-        if (_fRequestFullScreen && screenfull.enabled){
-            
-            if(settings.ENABLE_CREDITS){
+        if (_fRequestFullScreen && screenfull.enabled) {
+            if (settings.ENABLE_CREDITS) {
                 _pStartPosFullscreen = pSecondPos;
             } else {
                 _pStartPosFullscreen = pFirstPos;
             }
             
-            oSprite = CSpriteLibrary.getSprite("but_fullscreen")
+            const fullscreenButtonSprite = CSpriteLibrary.getSprite("but_fullscreen")
             //_pStartPosFullscreen = {x:_pStartPosCredits.x + oSprite.width/2 + 10,y:(oSprite.height/2) + 10};
-            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, oSprite, mainInstance().getFullscreen(), mainInstance().getStage());
+            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenButtonSprite, mainInstance().getFullscreen(), mainInstance().getStage());
             _oButFullscreen.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
         }
 

@@ -43,7 +43,7 @@ function CSpriteLibrary() {
     
     this._onSpriteLoaded = function() {
         _cbCompleted.call(_cbOwner);
-        if (++_iCntSprites == _iNumSprites) {
+        if (++_iCntSprites === _iNumSprites) {
             this._onSpritesLoaded();
         }
     }    

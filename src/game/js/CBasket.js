@@ -7,14 +7,13 @@ import {
  import settings from './settings.js'
 
 function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite) {
-    var _iStartSize;
-    
-    var _oParent;
+    // var _iStartSize;
+    // var _oParent;
     var _oText;
     var _oBasket;
     var _oHighlight;
     
-    this._init = function(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite){
+    this._init = function(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite) {
         _oBasket = new createjs.Container();
         _oBasket.y = iY;
         _oBasket.x = iX;
@@ -37,26 +36,25 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
 
     };
     
-    this.unload = function(){
+    this.unload = () => {
         oParentContainer.removeChild(_oBasket);
     };
     
-    this._setText = function(iSize){      
-
+    this._setText = function(iSize) {
         var iNewSize = iSize;
         
-        while(_oText.getBounds().height>iHeight-iSize){
+        while(_oText.getBounds().height>iHeight-iSize) {
             iNewSize--;
-            _oText.font = " "+iNewSize+"px "+ settings.PRIMARY_FONT;
+            // _oText.font = " "+iNewSize+"px "+ settings.PRIMARY_FONT;
+            _oText.font = ` ${iNewSize}px${settings.PRIMARY_FONT}`;
 
         };
-        var iOffset = 10;
-        
-        _oText.y = -_oText.getBounds().height/2+iOffset;
+        const iOffset = 10;
+        _oText.y = -(_oText.getBounds().height / 2) + iOffset;
     };
     
-    this._verticalizeText = function(szText){
-        var szNewText = "";
+    this._verticalizeText = function(szText) {
+        let szNewText = "";
         for(var i=0; i<szText.length; i++){
             if(i !== szText.length-1){
                 szNewText += szText[i]+"\n";
@@ -68,29 +66,28 @@ function CBasket(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrize
         return szNewText;
     };
     
-    this.lit = function(bWin){
-        
-        if(bWin){
+    this.lit = (bWin) => {
+        if (bWin) {
             _oHighlight.gotoAndPlay("state_green");
-        }else {
+        } else {
             _oHighlight.gotoAndPlay("state_red");
         }
        
-        _oParent._recursiveLit(settings.BASKET_LIT_ITERATION);
+        // _oParent._recursiveLit(settings.BASKET_LIT_ITERATION);
+        this._recursiveLit(settings.BASKET_LIT_ITERATION);
     };
     
-    this._recursiveLit = function(iLitIteration){
+    this._recursiveLit = (iLitIteration) => {
         iLitIteration--;
-        if(iLitIteration<0){
+        if (iLitIteration < 0) {
             return;
         }
-
-        createjs.Tween.get(_oHighlight).to({alpha:1}, 100).to({alpha:0}, 100).call(function(){
-            _oParent._recursiveLit(iLitIteration);
+        createjs.Tween.get(_oHighlight).to({alpha:1}, 100).to({alpha:0}, 100).call(() => {
+            this._recursiveLit(iLitIteration);
         });
     };
     
-    _oParent = this;
+    // _oParent = this;
     this._init(iX, iY, oParentContainer, oSpriteSheet, iWidth, iHeight, oPrizeSprite);
 }
 

@@ -18,7 +18,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
     
     var _oButton;
     var _oClickArea;
-    var _oTween;
+    // var _oTween;
     var _oParent;
     var _oListenerMouseDown;
     var _oListenerMouseUp;
@@ -135,15 +135,21 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
     };
     
     this.pulseAnimation = function () {
-        _oTween = createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
+        createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
             _oParent.pulseAnimation();
         });
+        // _oTween = createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
+        //     _oParent.pulseAnimation();
+        // });
     };
 
     this.trembleAnimation = function () {
-        _oTween = createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
+        createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
             _oParent.trebleAnimation();
         });
+        // _oTween = createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
+        //     _oParent.trebleAnimation();
+        // });
     };
     
     this.setPosition = function(iXPos,iYPos) {

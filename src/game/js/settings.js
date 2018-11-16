@@ -11,9 +11,9 @@ const settings = () => {
   const FPS_TIME      = 1000 / FPS;
   const DISABLE_SOUND_MOBILE = false;
 
-  const PRIMARY_FONT = "impact";
-  const SECONDARY_FONT = "Arial";
-  const PRIMARY_FONT_COLOUR = "#FFFFFF";
+  const PRIMARY_FONT = 'impact';
+  const SECONDARY_FONT = 'Arial';
+  const PRIMARY_FONT_COLOUR = '#FFFFFF';
 
   const BOARD_ROW = 13;
   const BOARD_COL = 7;

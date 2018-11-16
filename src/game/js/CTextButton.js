@@ -22,46 +22,44 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     var _oTextBack;
     var _oButtonBg;
     
-    this._init =function(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
+    this._init =function(iXPos, iYPos, pSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
         _bDisable = false;
         
         _aCbCompleted = [];
         _aCbOwner = [];
-        _oButtonBg = createBitmap(oSprite);           
+        _oButtonBg = createBitmap(pSprite);           
 
         var iStepShadow = Math.ceil(iFontSize/20);
 
         _oTextBack = new createjs.Text(szText,"bold "+iFontSize+"px "+szFont, "#000000");
-        _oTextBack.textAlign = "center";
-        _oTextBack.textBaseline = "alphabetic";
-        var oBounds = _oTextBack.getBounds();    
-        _oTextBack.x = oSprite.width/2 + iStepShadow;
-        _oTextBack.y = Math.floor((oSprite.height)/2) +(oBounds.height/3) + iStepShadow -7;
+        _oTextBack.textAlign = 'center';
+        _oTextBack.textBaseline = 'alphabetic';
+        const textBackBounds = _oTextBack.getBounds();    
+        _oTextBack.x = pSprite.width / 2 + iStepShadow;
+        _oTextBack.y = Math.floor(pSprite.height/2) +(textBackBounds.height / 3) + iStepShadow - 7;
 
         _oText = new createjs.Text(szText,"bold "+iFontSize+"px "+szFont, szColor);
-        _oText.textAlign = "center";
-        _oText.textBaseline = "alphabetic";
-        var oBounds = _oText.getBounds();    
-        _oText.x = oSprite.width/2;
-        _oText.y = Math.floor((oSprite.height)/2) +(oBounds.height/3) -7;
+        _oText.textAlign = 'center';
+        _oText.textBaseline = 'alphabetic';
+        const textBounds = _oText.getBounds();    
+        _oText.x = pSprite.width/2;
+        _oText.y = Math.floor(pSprite.height / 2) +(textBounds.height / 3) -7;
 
         _oButton = new createjs.Container();
         _oButton.x = iXPos;
         _oButton.y = iYPos;
-        _oButton.regX = oSprite.width/2;
-        _oButton.regY = oSprite.height/2; 
-        _oButton.cursor = "pointer";
+        _oButton.regX = pSprite.width / 2;
+        _oButton.regY = pSprite.height / 2; 
+        _oButton.cursor = 'pointer';
 
-        if(!bStandard) {
-            var oData = {   
-                        images: [oSprite], 
-                        // width, height & registration point of each sprite
-                        frames: {width: oSprite.width/2, height: oSprite.height, regX:(oSprite.width/2)/2, regY:oSprite.height/2}, 
-                        animations: {state_true:[0],state_false:[1]}
-                   };
-                   
-            var oSpriteSheet = new createjs.SpriteSheet(oData);         
-            _oButtonBg = createSprite(oSpriteSheet, "state_false",(oSprite.width/2)/2,oSprite.height/2,oSprite.width/2,oSprite.height);
+        if(!bStandard) {                   
+            const spriteSheet = new createjs.SpriteSheet({   
+                images: [pSprite], 
+                // width, height & registration point of each sprite
+                frames: {width: pSprite.width/2, height: pSprite.height, regX:(pSprite.width / 2 ) /2, regY:pSprite.height / 2}, 
+                animations: {state_true:[0],state_false:[1]}
+           });         
+            _oButtonBg = createSprite(spriteSheet, "state_false", (pSprite.width / 2) / 2, pSprite.height / 2, pSprite.width / 2, pSprite.height);
             
             var iOffset = 17;
             

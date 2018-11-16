@@ -27,43 +27,42 @@ $(window).resize(function() {
 // }
 
 function getSize(Name) {
-       var size;
-       var name = Name.toLowerCase();
-       var document = window.document;
-       var documentElement = document.documentElement;
-       if (window["inner" + Name] === undefined) {
-               // IE6 & IE7 don't have window.innerWidth or innerHeight
-               size = documentElement["client" + Name];
-       } else if (window["inner" + Name] != documentElement["client" + Name]) {
-               // WebKit doesn't include scrollbars while calculating viewport size so we have to get fancy
+    var size;
+    var name = Name.toLowerCase();
+    var document = window.document;
+    var documentElement = document.documentElement;
+    if (window["inner" + Name] === undefined) {
+        // IE6 & IE7 don't have window.innerWidth or innerHeight
+        size = documentElement["client" + Name];
+    } else if (window["inner" + Name] !== documentElement["client" + Name]) {
+        // WebKit doesn't include scrollbars while calculating viewport size so we have to get fancy
 
-               // Insert markup to test if a media query will match document.doumentElement["client" + Name]
-               var bodyElement = document.createElement("body");
-               bodyElement.id = "vpw-test-b";
-               bodyElement.style.cssText = "overflow:scroll";
-               var divElement = document.createElement("div");
-               divElement.id = "vpw-test-d";
-               divElement.style.cssText = "position:absolute;top:-1000px";
-               // Getting specific on the CSS selector so it won't get overridden easily
-               divElement.innerHTML = "<style>@media(" + name + ":" + documentElement["client" + Name] + "px){body#vpw-test-b div#vpw-test-d{" + name + ":7px!important}}</style>";
-               bodyElement.appendChild(divElement);
-               documentElement.insertBefore(bodyElement, document.head);
+        // Insert markup to test if a media query will match document.doumentElement["client" + Name]
+        var bodyElement = document.createElement("body");
+        bodyElement.id = "vpw-test-b";
+        bodyElement.style.cssText = "overflow:scroll";
+        var divElement = document.createElement("div");
+        divElement.id = "vpw-test-d";
+        divElement.style.cssText = "position:absolute;top:-1000px";
+        // Getting specific on the CSS selector so it won't get overridden easily
+        divElement.innerHTML = "<style>@media(" + name + ":" + documentElement["client" + Name] + "px){body#vpw-test-b div#vpw-test-d{" + name + ":7px!important}}</style>";
+        bodyElement.appendChild(divElement);
+        documentElement.insertBefore(bodyElement, document.head);
 
-               if (divElement["offset" + Name] == 7) {
-                       // Media query matches document.documentElement["client" + Name]
-                       size = documentElement["client" + Name];
-               }
-               else {
-                       // Media query didn't match, use window["inner" + Name]
-                       size = window["inner" + Name];
-               }
-               // Cleanup
-               documentElement.removeChild(bodyElement);
-       } else {
-            // Default to use window["inner" + Name]
+        if (divElement["offset" + Name] === 7) {
+            // Media query matches document.documentElement["client" + Name]
+            size = documentElement["client" + Name];
+        } else {
+            // Media query didn't match, use window["inner" + Name]
             size = window["inner" + Name];
-       }
-       return size;
+        }
+        // Cleanup
+        documentElement.removeChild(bodyElement);
+    } else {
+        // Default to use window["inner" + Name]
+        size = window["inner" + Name];
+    }
+    return size;
 };
 
 
@@ -150,10 +149,8 @@ function sizeHandler() {
     _checkOrientation(w, h);
 
 	let multiplier = Math.min((h / settings.CANVAS_HEIGHT), (w / settings.CANVAS_WIDTH));
-    console.log(`multiplier: ${multiplier}`)
 	var destW = settings.CANVAS_WIDTH * multiplier;
 	var destH = settings.CANVAS_HEIGHT * multiplier;
-        
         
     var iAdd = 0;
     if (destH < h) {
@@ -311,32 +308,33 @@ function createBitmap(oSprite, iWidth, iHeight) {
 }
 
 function createSprite(oSpriteSheet, szState, iRegX,iRegY,iWidth, iHeight) {
+    let createdSprite = null
 	if (szState !== null) {
-		var oRetSprite = new createjs.Sprite(oSpriteSheet, szState);
+		createdSprite = new createjs.Sprite(oSpriteSheet, szState);
 	} else {
-		var oRetSprite = new createjs.Sprite(oSpriteSheet);
+		createdSprite = new createjs.Sprite(oSpriteSheet);
 	}
 	
 	var hitObject = new createjs.Shape();
-	hitObject .graphics.beginFill("#000000").drawRect(-iRegX, -iRegY, iWidth, iHeight);
+	hitObject.graphics.beginFill("#000000").drawRect(-iRegX, -iRegY, iWidth, iHeight);
 
-	oRetSprite.hitArea = hitObject;
+	createdSprite.hitArea = hitObject;
 	
-	return oRetSprite;
+	return createdSprite;
 }
 
-function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
+// function pad(n, width, z) {
+//     z = z || '0';
+//     n = n + '';
+//     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+// }
 
-function randomFloatBetween(minValue,maxValue,precision){
-    if(typeof(precision) === 'undefined'){
-        precision = 2;
-    }
-    return parseFloat(Math.min(minValue + (Math.random() * (maxValue - minValue)),maxValue).toFixed(precision));
-}
+// function randomFloatBetween(minValue,maxValue,precision){
+//     if (typeof(precision) === 'undefined') {
+//         precision = 2;
+//     }
+//     return parseFloat(Math.min(minValue + (Math.random() * (maxValue - minValue)),maxValue).toFixed(precision));
+// }
 
 function rotateVector2D( iAngle, v) { 
 	var iX = v.getX() * Math.cos( iAngle ) + v.getY() * Math.sin( iAngle );
@@ -344,10 +342,10 @@ function rotateVector2D( iAngle, v) {
 	v.set( iX, iY );
 }
 
-function tweenVectorsOnX( vStart, vEnd, iLerp ){
-    var iNewX = vStart + iLerp *( vEnd-vStart);
-    return iNewX;
-}
+// function tweenVectorsOnX( vStart, vEnd, iLerp ){
+//     var iNewX = vStart + iLerp *( vEnd-vStart);
+//     return iNewX;
+// }
 
 function shuffle(array) {
   var currentIndex = array.length
@@ -371,29 +369,28 @@ function shuffle(array) {
   return array;
 }
 
-function bubbleSort(a)
-{
-    var swapped;
-    do {
-        swapped = false;
-        for (var i=0; i < a.length-1; i++) {
-            if (a[i] > a[i+1]) {
-                var temp = a[i];
-                a[i] = a[i+1];
-                a[i+1] = temp;
-                swapped = true;
-            }
-        }
-    } while (swapped);
-}
+// function bubbleSort(a) {
+//     var swapped;
+//     do {
+//         swapped = false;
+//         for (var i=0; i < a.length-1; i++) {
+//             if (a[i] > a[i+1]) {
+//                 var temp = a[i];
+//                 a[i] = a[i+1];
+//                 a[i+1] = temp;
+//                 swapped = true;
+//             }
+//         }
+//     } while (swapped);
+// }
 
-function compare(a,b) {
-  if (a.index > b.index)
-     return -1;
-  if (a.index < b.index)
-    return 1;
-  return 0;
-}
+// function compare(a,b) {
+//   if (a.index > b.index)
+//      return -1;
+//   if (a.index < b.index)
+//     return 1;
+//   return 0;
+// }
 
 //----------------------
 		// Linear	
@@ -409,9 +406,9 @@ function compare(a,b) {
 		 * @return A value between b and c parameters
 		 */
 
-function easeLinear (t, b, c, d){
-			return c*t/d + b;
-}
+// function easeLinear (t, b, c, d) {
+//     return c*t/d + b;
+// }
 
 //----------------------
 		// Quad		
@@ -427,9 +424,9 @@ function easeLinear (t, b, c, d){
 		 * @return A value between b and c parameters
 		 */	
 
-function easeInQuad (t, b, c, d){
-			return c*(t/=d)*t + b;
-		}
+// function easeInQuad (t, b, c, d) {
+//     return c*(t/=d)*t + b;
+// }
 //----------------------
 		// Sine	
 		/**
@@ -444,151 +441,151 @@ function easeInQuad (t, b, c, d){
 		 * @return A value between b and c parameters
 		 */	                
                 
-function easeInSine (t, b, c, d) {
-			return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
-		}
+// function easeInSine (t, b, c, d) {
+//     return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+// }
                 
                 
                 
-function easeInCubic (t, b, c, d) {
-			return c*(t/=d)*t*t + b;
-		};                
+// function easeInCubic (t, b, c, d) {
+//     return c*(t/=d)*t*t + b;
+// };                
 
 
-function getTrajectoryPoint(t,p){
-    var result = new createjs.Point();
-    var oneMinusTSq = (1-t) * (1-t);
-    var TSq = t*t;
-    result.x = oneMinusTSq*p.start.x+2*(1-t)*t*p.traj.x+TSq*p.end.x;
-    result.y = oneMinusTSq*p.start.y+2*(1-t)*t*p.traj.y+TSq*p.end.y;
-    return result;
-}
+// function getTrajectoryPoint(t,p) {
+//     var result = new createjs.Point();
+//     var oneMinusTSq = (1-t) * (1-t);
+//     var TSq = t*t;
+//     result.x = oneMinusTSq*p.start.x+2*(1-t)*t*p.traj.x+TSq*p.end.x;
+//     result.y = oneMinusTSq*p.start.y+2*(1-t)*t*p.traj.y+TSq*p.end.y;
+//     return result;
+// }
 
-function formatTime(iTime){	
-    iTime/=1000;
-    var iMins = Math.floor(iTime/60);
-    var iSecs = iTime-(iMins*60);
-    iSecs = parseFloat(iSecs).toFixed(1)
+// function formatTime(iTime) {
+//     iTime/=1000;
+//     var iMins = Math.floor(iTime/60);
+//     var iSecs = iTime-(iMins*60);
+//     iSecs = parseFloat(iSecs).toFixed(1)
     
-    var szRet = "";
+//     var szRet = "";
 
-    if ( iMins < 10 ){
-            szRet += "0" + iMins + ":";
-    }else{
-            szRet += iMins + ":";
-    }
+//     if (iMins < 10) {
+//             szRet += "0" + iMins + ":";
+//     } else {
+//             szRet += iMins + ":";
+//     }
 
-    if ( iSecs < 10 ){
-            szRet += "0" + iSecs;
-    }else{
-            szRet += iSecs;
-    }	
+//     if (iSecs < 10) {
+//             szRet += "0" + iSecs;
+//     } else {
+//             szRet += iSecs;
+//     }	
 
-    return szRet;
-}
+//     return szRet;
+// }
 
-function degreesToRadians(iAngle){
-    return iAngle * Math.PI / 180;
-}
+// function degreesToRadians(iAngle) {
+//     return iAngle * Math.PI / 180;
+// }
 
-function checkRectCollision(bitmap1,bitmap2) {
-    var b1, b2;
-    b1 = getBounds(bitmap1,0.9);
-    b2 = getBounds(bitmap2,0.98);
-    return calculateIntersection(b1,b2);
-}
+// function checkRectCollision(bitmap1,bitmap2) {
+//     var b1, b2;
+//     b1 = getBounds(bitmap1,0.9);
+//     b2 = getBounds(bitmap2,0.98);
+//     return calculateIntersection(b1,b2);
+// }
 
-function calculateIntersection(rect1, rect2){
-    // first we have to calculate the
-    // center of each rectangle and half of
-    // width and height
-    var dx, dy, r1={}, r2={};
-    r1.cx = rect1.x + (r1.hw = (rect1.width /2));
-    r1.cy = rect1.y + (r1.hh = (rect1.height/2));
-    r2.cx = rect2.x + (r2.hw = (rect2.width /2));
-    r2.cy = rect2.y + (r2.hh = (rect2.height/2));
+// function calculateIntersection(rect1, rect2) {
+//     // first we have to calculate the
+//     // center of each rectangle and half of
+//     // width and height
+//     var dx, dy, r1={}, r2={};
+//     r1.cx = rect1.x + (r1.hw = (rect1.width /2));
+//     r1.cy = rect1.y + (r1.hh = (rect1.height/2));
+//     r2.cx = rect2.x + (r2.hw = (rect2.width /2));
+//     r2.cy = rect2.y + (r2.hh = (rect2.height/2));
 
-    dx = Math.abs(r1.cx-r2.cx) - (r1.hw + r2.hw);
-    dy = Math.abs(r1.cy-r2.cy) - (r1.hh + r2.hh);
+//     dx = Math.abs(r1.cx-r2.cx) - (r1.hw + r2.hw);
+//     dy = Math.abs(r1.cy-r2.cy) - (r1.hh + r2.hh);
 
-    if (dx < 0 && dy < 0) {
-      dx = Math.min(Math.min(rect1.width,rect2.width),-dx);
-      dy = Math.min(Math.min(rect1.height,rect2.height),-dy);
-      return {x:Math.max(rect1.x,rect2.x),
-              y:Math.max(rect1.y,rect2.y),
-              width:dx,
-              height:dy,
-              rect1: rect1,
-              rect2: rect2};
-    } else {
-      return null;
-    }
-}
+//     if (dx < 0 && dy < 0) {
+//       dx = Math.min(Math.min(rect1.width,rect2.width),-dx);
+//       dy = Math.min(Math.min(rect1.height,rect2.height),-dy);
+//       return {x:Math.max(rect1.x,rect2.x),
+//               y:Math.max(rect1.y,rect2.y),
+//               width:dx,
+//               height:dy,
+//               rect1: rect1,
+//               rect2: rect2};
+//     } else {
+//       return null;
+//     }
+// }
 
-function getBounds(obj,iTolerance) {
-    var bounds={x:Infinity,y:Infinity,width:0,height:0};
-    if ( obj instanceof createjs.Container ) {
-      bounds.x2 = -Infinity;
-      bounds.y2 = -Infinity;
-      var children = obj.children, l=children.length, cbounds, c;
-      for ( c = 0; c < l; c++ ) {
-        cbounds = getBounds(children[c],1);
-        if ( cbounds.x < bounds.x ) bounds.x = cbounds.x;
-        if ( cbounds.y < bounds.y ) bounds.y = cbounds.y;
-        if ( cbounds.x + cbounds.width > bounds.x2 ) bounds.x2 = cbounds.x + cbounds.width;
-        if ( cbounds.y + cbounds.height > bounds.y2 ) bounds.y2 = cbounds.y + cbounds.height;
-        //if ( cbounds.x - bounds.x + cbounds.width  > bounds.width  ) bounds.width  = cbounds.x - bounds.x + cbounds.width;
-        //if ( cbounds.y - bounds.y + cbounds.height > bounds.height ) bounds.height = cbounds.y - bounds.y + cbounds.height;
-      }
-      if ( bounds.x == Infinity ) bounds.x = 0;
-      if ( bounds.y == Infinity ) bounds.y = 0;
-      if ( bounds.x2 == Infinity ) bounds.x2 = 0;
-      if ( bounds.y2 == Infinity ) bounds.y2 = 0;
+// function getBounds(obj,iTolerance) {
+//     var bounds={x:Infinity,y:Infinity,width:0,height:0};
+//     if ( obj instanceof createjs.Container ) {
+//       bounds.x2 = -Infinity;
+//       bounds.y2 = -Infinity;
+//       var children = obj.children, l=children.length, cbounds, c;
+//       for ( c = 0; c < l; c++ ) {
+//         cbounds = getBounds(children[c],1);
+//         if ( cbounds.x < bounds.x ) bounds.x = cbounds.x;
+//         if ( cbounds.y < bounds.y ) bounds.y = cbounds.y;
+//         if ( cbounds.x + cbounds.width > bounds.x2 ) bounds.x2 = cbounds.x + cbounds.width;
+//         if ( cbounds.y + cbounds.height > bounds.y2 ) bounds.y2 = cbounds.y + cbounds.height;
+//         //if ( cbounds.x - bounds.x + cbounds.width  > bounds.width  ) bounds.width  = cbounds.x - bounds.x + cbounds.width;
+//         //if ( cbounds.y - bounds.y + cbounds.height > bounds.height ) bounds.height = cbounds.y - bounds.y + cbounds.height;
+//       }
+//       if ( bounds.x == Infinity ) bounds.x = 0;
+//       if ( bounds.y == Infinity ) bounds.y = 0;
+//       if ( bounds.x2 == Infinity ) bounds.x2 = 0;
+//       if ( bounds.y2 == Infinity ) bounds.y2 = 0;
       
-      bounds.width = bounds.x2 - bounds.x;
-      bounds.height = bounds.y2 - bounds.y;
-      delete bounds.x2;
-      delete bounds.y2;
-    } else {
-      var gp,gp2,gp3,gp4,imgr={},sr;
-      if ( obj instanceof createjs.Bitmap ) {
-        sr = obj.sourceRect || obj.image;
+//       bounds.width = bounds.x2 - bounds.x;
+//       bounds.height = bounds.y2 - bounds.y;
+//       delete bounds.x2;
+//       delete bounds.y2;
+//     } else {
+//       var gp,gp2,gp3,gp4,imgr={},sr;
+//       if ( obj instanceof createjs.Bitmap ) {
+//         sr = obj.sourceRect || obj.image;
 
-        imgr.width = sr.width * iTolerance;
-        imgr.height = sr.height * iTolerance;
-      } else if ( obj instanceof createjs.Sprite ) {
-        if ( obj.spriteSheet._frames && obj.spriteSheet._frames[obj.currentFrame] && obj.spriteSheet._frames[obj.currentFrame].image ) {
-          var cframe = obj.spriteSheet.getFrame(obj.currentFrame);
-          imgr.width =  cframe.rect.width;
-          imgr.height =  cframe.rect.height;
-          imgr.regX = cframe.regX;
-          imgr.regY = cframe.regY;
-        } else {
-          bounds.x = obj.x || 0;
-          bounds.y = obj.y || 0;
-        }
-      } else {
-        bounds.x = obj.x || 0;
-        bounds.y = obj.y || 0;
-      }
+//         imgr.width = sr.width * iTolerance;
+//         imgr.height = sr.height * iTolerance;
+//       } else if ( obj instanceof createjs.Sprite ) {
+//         if ( obj.spriteSheet._frames && obj.spriteSheet._frames[obj.currentFrame] && obj.spriteSheet._frames[obj.currentFrame].image ) {
+//           var cframe = obj.spriteSheet.getFrame(obj.currentFrame);
+//           imgr.width =  cframe.rect.width;
+//           imgr.height =  cframe.rect.height;
+//           imgr.regX = cframe.regX;
+//           imgr.regY = cframe.regY;
+//         } else {
+//           bounds.x = obj.x || 0;
+//           bounds.y = obj.y || 0;
+//         }
+//       } else {
+//         bounds.x = obj.x || 0;
+//         bounds.y = obj.y || 0;
+//       }
 
-      imgr.regX = imgr.regX || 0; imgr.width  = imgr.width  || 0;
-      imgr.regY = imgr.regY || 0; imgr.height = imgr.height || 0;
-      bounds.regX = imgr.regX;
-      bounds.regY = imgr.regY;
+//       imgr.regX = imgr.regX || 0; imgr.width  = imgr.width  || 0;
+//       imgr.regY = imgr.regY || 0; imgr.height = imgr.height || 0;
+//       bounds.regX = imgr.regX;
+//       bounds.regY = imgr.regY;
       
-      gp  = obj.localToGlobal(0         -imgr.regX,0          -imgr.regY);
-      gp2 = obj.localToGlobal(imgr.width-imgr.regX,imgr.height-imgr.regY);
-      gp3 = obj.localToGlobal(imgr.width-imgr.regX,0          -imgr.regY);
-      gp4 = obj.localToGlobal(0         -imgr.regX,imgr.height-imgr.regY);
+//       gp  = obj.localToGlobal(0         -imgr.regX,0          -imgr.regY);
+//       gp2 = obj.localToGlobal(imgr.width-imgr.regX,imgr.height-imgr.regY);
+//       gp3 = obj.localToGlobal(imgr.width-imgr.regX,0          -imgr.regY);
+//       gp4 = obj.localToGlobal(0         -imgr.regX,imgr.height-imgr.regY);
 
-      bounds.x = Math.min(Math.min(Math.min(gp.x,gp2.x),gp3.x),gp4.x);
-      bounds.y = Math.min(Math.min(Math.min(gp.y,gp2.y),gp3.y),gp4.y);
-      bounds.width = Math.max(Math.max(Math.max(gp.x,gp2.x),gp3.x),gp4.x) - bounds.x;
-      bounds.height = Math.max(Math.max(Math.max(gp.y,gp2.y),gp3.y),gp4.y) - bounds.y;
-    }
-    return bounds;
-}
+//       bounds.x = Math.min(Math.min(Math.min(gp.x,gp2.x),gp3.x),gp4.x);
+//       bounds.y = Math.min(Math.min(Math.min(gp.y,gp2.y),gp3.y),gp4.y);
+//       bounds.width = Math.max(Math.max(Math.max(gp.x,gp2.x),gp3.x),gp4.x) - bounds.x;
+//       bounds.height = Math.max(Math.max(Math.max(gp.y,gp2.y),gp3.y),gp4.y) - bounds.y;
+//     }
+//     return bounds;
+// }
 
 function NoClickDelay(el) {
 	this.element = el;
@@ -612,40 +609,49 @@ function NoClickDelay(el) {
 // }
 
 NoClickDelay.prototype = {
-handleEvent: function(e) {
-    switch(e.type) {
-        case 'touchstart': this.onTouchStart(e); break;
-        case 'touchmove': this.onTouchMove(e); break;
-        case 'touchend': this.onTouchEnd(e); break;
-    }
-},
-	
-onTouchStart: function(e) {
-    e.preventDefault();
-    this.moved = false;
-    
-    this.element.addEventListener('touchmove', this, false);
-    this.element.addEventListener('touchend', this, false);
-},
-	
-onTouchMove: function(e) {
-    this.moved = true;
-},
-	
-onTouchEnd: function(e) {
-    this.element.removeEventListener('touchmove', this, false);
-    this.element.removeEventListener('touchend', this, false);
-    
-    if( !this.moved ) {
-        var theTarget = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-        if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
+    handleEvent: function(e) {
+        switch (e.type) {
+            case
+                'touchstart': this.onTouchStart(e);
+                break;
+            case 
+                'touchmove': this.onTouchMove(e);
+                break;
+            case
+                'touchend': this.onTouchEnd(e);
+                break;
+            default: 
+                break;
+        }
+    },
         
-        var theEvent = document.createEvent('MouseEvents');
-        theEvent.initEvent('click', true, true);
-        theTarget.dispatchEvent(theEvent);
+    onTouchStart: function(e) {
+        e.preventDefault();
+        this.moved = false;
+        
+        this.element.addEventListener('touchmove', this, false);
+        this.element.addEventListener('touchend', this, false);
+    },
+        
+    onTouchMove: function(e) {
+        this.moved = true;
+    },
+        
+    onTouchEnd: function(e) {
+        this.element.removeEventListener('touchmove', this, false);
+        this.element.removeEventListener('touchend', this, false);
+        
+        if (!this.moved) {
+            var theTarget = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            if (theTarget.nodeType === 3) {
+                theTarget = theTarget.parentNode;
+            }
+            
+            var theEvent = document.createEvent('MouseEvents');
+            theEvent.initEvent('click', true, true);
+            theTarget.dispatchEvent(theEvent);
+        }
     }
-}
-
 };
 
 (function() {
@@ -690,19 +696,19 @@ onTouchEnd: function(e) {
     }
 })();
 
-function ctlArcadeResume() {
-    if(mainInstance() !== null) {
-        mainInstance().startUpdate();
-    }
-}
+// function ctlArcadeResume() {
+//     if(mainInstance() !== null) {
+//         mainInstance().startUpdate();
+//     }
+// }
 
-function ctlArcadePause() {
-    if(mainInstance() !== null) {
-        mainInstance().stopUpdate();
-    }
-}
+// function ctlArcadePause() {
+//     if(mainInstance() !== null) {
+//         mainInstance().stopUpdate();
+//     }
+// }
 
-function getParamValue(paramName){
+function getParamValue(paramName) {
     const url = window.location.search.substring(1);
     const qArray = url.split('&'); 
     for (let i = 0; i < qArray.length; i += 1) 

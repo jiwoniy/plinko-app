@@ -12,90 +12,93 @@ import settings from './settings.js'
 
 function CMain(oData) {
     // var _bUpdate;
-    var _iCurResource = 0;
-    var RESOURCE_TO_LOAD = 0;
-    var _iState = settings.STATE_LOADING;
-    var _oData;
+    // var _iCurResource = 0;
+    // var RESOURCE_TO_LOAD = 0;
+    // var _iState = settings.STATE_LOADING;
+    // var _oData;
     
-    var _oPreloader;
-    var _oMenu;
-    var _oModeMenu;
-    var _oHelp;
-    var _oGame;
+    // var _oPreloader;
+    // var _oMenu;
+    // var _oModeMenu;
+    // var _oHelp;
+    // var _oGame;
 
     this.oStage = null
+    this.preloader = null
 
     this.state = {
-        // initData: oData || {},
-        // loadResources: 0,
+        initData: oData || {},
+        loadResources: 0,
+        loadResourcesCounter: 0,
         // audioActive: true,
         audioActive: true,
         fullScreen: false,
         sounds: [],
         bUpdate: null,
-        // status: settings.STATE_LOADING,
+        gameStatus: settings.STATE_LOADING,
         // sounds: [],
-        // menu: null,
+        menu: null,
         // soundsLoadedCnt: 0,
         // imagesLoadedCnt: 0,
-        // game: null
+        game: null,
     }
 
     this.initContainer = () => {
-        s_oCanvas = document.getElementById("canvas");
-        this.oStage = new createjs.Stage(s_oCanvas);
-        this.oStage.preventSelection = true;
-        createjs.Touch.enable(this.oStage);
-		
-	    // s_bMobile = $.browser.mobile;
-        if($.browser.mobile === false) {
-            this.oStage.enableMouseOver(settings.FPS);  
-            $('body').on('contextmenu', '#canvas', function(e){ return false; });
-        }
-		
-        s_iPrevTime = new Date().getTime();
+        // s_oCanvas = document.getElementById("canvas");
+        if (document.getElementById("canvas")) {
+            this.oStage = new createjs.Stage(document.getElementById("canvas"));
+            this.oStage.preventSelection = true;
+            createjs.Touch.enable(this.oStage);
+            
+            // s_bMobile = $.browser.mobile;
+            if($.browser.mobile === false) {
+                this.oStage.enableMouseOver(settings.FPS);  
+                $('body').on('contextmenu', '#canvas', function(e){ return false; });
+            }
+            
+            // s_iPrevTime = new Date().getTime();
 
-	    createjs.Ticker.addEventListener("tick", this._update);
-        createjs.Ticker.framerate = settings.FPS;
-        
-        if(navigator.userAgent.match(/Windows Phone/i)) {
-            settings.DISABLE_SOUND_MOBILE = true;
+            createjs.Ticker.addEventListener("tick", this._update);
+            createjs.Ticker.framerate = settings.FPS;
+            
+            if(navigator.userAgent.match(/Windows Phone/i)) {
+                settings.DISABLE_SOUND_MOBILE = true;
+            }
+            
+            // s_oSpriteLibrary  = new CSpriteLibrary(true);
+            //ADD PRELOADER
+            
+            // _oPreloader = new CPreloader();
+            this.preloader = new CPreloader({ parentMainInstance: this });
         }
-        
-        // s_oSpriteLibrary  = new CSpriteLibrary(true);
-        //ADD PRELOADER
-        
-        // _oPreloader = new CPreloader();
-        _oPreloader = new CPreloader({ parentMainInstance: this });
-
     };
 
-    this.getStage = function () {
+    this.getStage = () => {
         return this.oStage;
     }
 
-    this.getFullscreen = function () {
+    this.getFullscreen = () => {
         return this.state.fullScreen
     }
 
-    this.setFullScreen = function (value) {
+    this.setFullScreen = (value) => {
         this.state.fullScreen = value
     }
 
-    this.getAudioActive = function () {
+    this.getAudioActive = () => {
         return this.state.audioActive
     }
 
-    this.setAudioActive = function (value) {
+    this.setAudioActive = (value) => {
         this.state.audioActive = value
     }
 
-    this.getSounds = function () {
+    this.getSounds = () => {
         return this.state.sounds;
     }
     
     this.preloaderReady = () => {
-        if(settings.DISABLE_SOUND_MOBILE === false || s_bMobile === false) {
+        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
             this._initSounds();
         }
         
@@ -103,13 +106,13 @@ function CMain(oData) {
         this.state.bUpdate = true;
     };
     
-    this.soundLoaded = function() {
-        _iCurResource++;
-        var iPerc = Math.floor(_iCurResource/RESOURCE_TO_LOAD *100);
-        _oPreloader.refreshLoader(iPerc);
+    this.soundLoaded = () => {
+        this.state.loadResourcesCounter += 1;
+        var iPerc = Math.floor((this.state.loadResourcesCounter / this.state.loadResources)*100);
+        this.preloader.refreshLoader(iPerc);
     };
     
-    this._initSounds = function() {
+    this._initSounds = () => {
         const aSoundsInfo = [];
         
         aSoundsInfo.push({path: './sounds/',filename:'soundtrack',loop:true,volume:1, ingamename: 'soundtrack'});
@@ -119,7 +122,7 @@ function CMain(oData) {
         aSoundsInfo.push({path: './sounds/',filename:'ball_in_basket',loop:false,volume:1, ingamename: 'ball_in_basket'});
         aSoundsInfo.push({path: './sounds/',filename:'ball_in_basket_negative',loop:false,volume:1, ingamename: 'ball_in_basket_negative'});
 
-        RESOURCE_TO_LOAD += aSoundsInfo.length;
+        this.state.loadResources += aSoundsInfo.length;
 
         this.state.sounds = [];
         for(var i=0; i<aSoundsInfo.length; i++) {
@@ -135,7 +138,7 @@ function CMain(oData) {
 
     };
 
-    this._loadImages = function(){
+    this._loadImages = () => {
         CSpriteLibrary.init( this._onImagesLoaded,this._onAllImagesLoaded, this );
 
         CSpriteLibrary.addSprite("logo_game","./sprites/logo_game.png");
@@ -176,42 +179,39 @@ function CMain(oData) {
             CSpriteLibrary.addSprite("image_"+i,"./sprites/prize/image_"+i+".png");
         }
         
-        RESOURCE_TO_LOAD += CSpriteLibrary.getNumSprites();
+        this.state.loadResources += CSpriteLibrary.getNumSprites();
         CSpriteLibrary.loadSprites();
     };
     
-    this._onImagesLoaded = function() {
-        _iCurResource++;
-        var iPerc = Math.floor((_iCurResource / RESOURCE_TO_LOAD) * 100);
+    this._onImagesLoaded = () => {
+        this.state.loadResourcesCounter += 1;
+        const iPerc = Math.floor((this.state.loadResourcesCounter / this.state.loadResources) * 100);
         //console.log("PERC: "+iPerc);
-        _oPreloader.refreshLoader(iPerc);
+        this.preloader.refreshLoader(iPerc);
     };
     
-    this._onAllImagesLoaded = function(){
-        
+    this._onAllImagesLoaded = () => { 
     };
     
-    this._onRemovePreloader = function(){
-        _oPreloader.unload();
-            
+    this._onRemovePreloader = () => {
+        this.preloader.unload();
         // s_oSoundtrack = playSound('soundtrack', 1, true);
         playSound('soundtrack', 1, true);
-
         this.gotoMenu();
     };
     
-    this.onAllPreloaderImagesLoaded = function(){
+    this.onAllPreloaderImagesLoaded = () => {
         this._loadImages();
     };
     
-    this.gotoMenu = function() {
-        _oMenu = new CMenu(true);
-        _iState = settings.STATE_MENU;
+    this.gotoMenu = () => {
+        this.state.menu = new CMenu(true);
+        this.state.gameStatus = settings.STATE_MENU;
     };
 
-    this.gotoGame = function(){
-        _oGame = new CGame(_oData);   						
-        _iState = settings.STATE_GAME;
+    this.gotoGame = () => {
+        this.state.game = new CGame(this.state.initData);   						
+        this.state.gameStatus = settings.STATE_GAME;
     };
     
     // this.gotoHelp = function() {
@@ -228,7 +228,7 @@ function CMain(oData) {
 
     this.startUpdate = () => {
         this.state.bUpdate = true
-        s_iPrevTime = new Date().getTime();
+        // s_iPrevTime = new Date().getTime();
         
         createjs.Ticker.paused = false;
         $("#block_game").css("display","none");
@@ -239,32 +239,31 @@ function CMain(oData) {
     };
     
     this._update = (event) => {
-		if(this.state.bUpdate === false) {
+		if (this.state.bUpdate === false) {
 			return;
 		}
-        var iCurTime = new Date().getTime();
-        s_iTimeElaps = iCurTime - s_iPrevTime;
-        s_iCntTime += s_iTimeElaps;
-        s_iCntFps++;
-        s_iPrevTime = iCurTime;
+        // var iCurTime = new Date().getTime();
+        // s_iTimeElaps = iCurTime - s_iPrevTime;
+        // s_iCntTime += s_iTimeElaps;
+        // s_iCntFps++;
+        // s_iPrevTime = iCurTime;
         
-        if ( s_iCntTime >= 1000 ){
-            s_iCurFps = s_iCntFps;
-            s_iCntTime-=1000;
-            s_iCntFps = 0;
-        }
+        // if ( s_iCntTime >= 1000 ){
+        //     // s_iCurFps = s_iCntFps;
+        //     s_iCntTime-=1000;
+        //     s_iCntFps = 0;
+        // }
                 
-        if(_iState === settings.STATE_GAME){
-            _oGame.update();
+        if (this.state.gameStatus === settings.STATE_GAME) {
+            this.state.game.update();
         }
         
         this.oStage.update(event);
-
     };
     
     // s_oMain = this;
     
-    _oData = oData;
+    // _oData = oData;
     
     settings.ENABLE_CREDITS = true;
     settings.ENABLE_FULLSCREEN = oData.fullscreen;
@@ -274,23 +273,22 @@ function CMain(oData) {
     
     this.initContainer();
 }
-var s_bMobile;
+// var s_bMobile;
 // var s_bAudioActive = true;
-var s_iCntTime = 0;
-var s_iTimeElaps = 0;
-var s_iPrevTime = 0;
-var s_iCntFps = 0;
-var s_iCurFps = 0;
+// var s_iCntTime = 0;
+// var s_iTimeElaps = 0;
+// var s_iPrevTime = 0;
+// var s_iCntFps = 0;
+// var s_iCurFps = 0;
 // var s_bFullscreen = false;
 // var s_aSounds = new Array();
 
-var s_oDrawLayer;
+// var s_oDrawLayer;
 // var s_oStage;
 // var s_oMain;
 // var s_oSpriteLibrary;
 // var s_oSoundtrack;
-var s_oCanvas;
-
+// var s_oCanvas;
 
 const Singleton = (() => {
     let instance = null;
