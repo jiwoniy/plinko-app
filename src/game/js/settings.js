@@ -48,7 +48,7 @@ const settings = () => {
 
   const BASKET_LIT_ITERATION = 10;
 
-  let PRIZE = null;
+  let PRIZE = [];
   let PRIZE_PROBABILITY = null;
 
   let ENABLE_FULLSCREEN = null;
@@ -56,12 +56,22 @@ const settings = () => {
   let AD_SHOW_COUNTER = null;
 
   let NUM_IMAGES_BACKGROUNDS = null;
+  let NUM_BALL = 0;
 
   return {
-    // getCanvasWidth: () => CANVAS_WIDTH,
-    // setCanvasWidth: () => {
-    //   return CANVAS_WIDTH
-    // },
+    getNumBall: () => NUM_BALL,
+    setNumBall: (value) => {
+      NUM_BALL = value
+    },
+    getPrize: () => PRIZE,
+    setPrize: (value) => {
+      PRIZE = value
+    },
+    getAdShowCounter: () => AD_SHOW_COUNTER,
+    setAdShowCounter: (value) => {
+      AD_SHOW_COUNTER = value
+    },
+
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
 
@@ -122,11 +132,10 @@ const settings = () => {
 
     BASKET_LIT_ITERATION,
 
-    PRIZE,
+    // PRIZE,
     PRIZE_PROBABILITY,
     ENABLE_FULLSCREEN,
     ENABLE_CHECK_ORIENTATION,
-    AD_SHOW_COUNTER,
     NUM_IMAGES_BACKGROUNDS,
     // SHOW_CREDITS,
   }

@@ -11,11 +11,11 @@ import {
 
 function CBall(oPos, oParentContainer) {
     var _iDiameter;
-    var _iStartAnimTime;
+    // var _iStartAnimTime;
 
     var _oBall;
     var _oBallSprite;
-    var _oParent;
+    // var _oParent;
     
     this._init = function(oPos, oParentContainer) {
         
@@ -119,7 +119,7 @@ function CBall(oPos, oParentContainer) {
         
     // };
     
-    this.launchAnim = function(oPos){
+    this.launchAnim = function(oPos) {
         var iTime = 1000;
         
         createjs.Tween.get(_oBall).to({x:oPos.x}, iTime, createjs.Ease.sineOut);
@@ -128,28 +128,33 @@ function CBall(oPos, oParentContainer) {
         });
     };
     
-    this.startPathAnim = function(aPath, iStartTime){
-        _iStartAnimTime = iStartTime;
-        
+    this.startPathAnim = (aPath, iStartTime) => {
+        // _iStartAnimTime = iStartTime;
         this._jumpBall(aPath, iStartTime);
     };
     
-    this._jumpBall = function(aPath, iTime){
+    this._jumpBall = (aPath, iTime) => {
         playSound('ball_collision', 1, false);
         
         var aCurCell = aPath.splice(0,1);
         
-        if(aPath.length === 1){
-            _oParent._lastJumpBallAnim(aPath, iTime);
+        if(aPath.length === 1) {
+            this._lastJumpBallAnim(aPath, iTime);
             return;
         }
         
         var oCurPos = gameInstance().getBallPivotCellPos(aCurCell[0].row, aCurCell[0].col);
         var oNextPos = gameInstance().getBallPivotCellPos(aPath[0].row, aPath[0].col);
         
-        createjs.Tween.get(_oBall).to({x:oNextPos.x}, iTime/*, createjs.Ease.cubicOut*/)
-        createjs.Tween.get(_oBall).to({y:oCurPos.y-10}, iTime/4, createjs.Ease.cubicOut).to({y:oNextPos.y}, iTime*3/4, createjs.Ease.cubicIn).call(function(){
-            _oParent._jumpBall(aPath, iTime);
+        createjs.Tween
+            .get(_oBall)
+            .to({x:oNextPos.x}, iTime/*, createjs.Ease.cubicOut*/)
+        createjs.Tween
+            .get(_oBall)
+            .to({y:oCurPos.y-10}, iTime/4, createjs.Ease.cubicOut)
+            .to({y:oNextPos.y}, iTime*3/4, createjs.Ease.cubicIn)
+            .call(() => {
+            this._jumpBall(aPath, iTime);
         });
 
     };
@@ -173,47 +178,69 @@ function CBall(oPos, oParentContainer) {
     //     });
     // };
 
-    this.releaseBallAnim = function(iCol){
-        var pEndPos = gameInstance().getBoard()[0][iCol].getCenterOfBallOnPivot();
-        
-        createjs.Tween.get(_oBall).to({y:pEndPos.y}, 500, createjs.Ease.sineIn).call(function(){
-            gameInstance().launchBall(iCol)
-        });
+    this.releaseBallAnim = (iCol) => {
+        const pEndPos = gameInstance().getBoard()[0][iCol].getCenterOfBallOnPivot();
+        createjs.Tween
+            .get(_oBall)
+            .to({y:pEndPos.y}, 500, createjs.Ease.sineIn)
+            .call(() => {
+                gameInstance().launchBall(iCol)
+            });
     };
     
-    this._lastFallBallAnim = function(aPath, iTime){
+    this._lastFallBallAnim = (aPath, iTime) => {
         var oParams = this._getFallParams(aPath, iTime);
         
         var iFloor = oParams.posy + 170;
         
-        createjs.Tween.get(_oBallSprite).to({rotation:oParams.rotation}, iTime, createjs.Ease.sineIn);
-        createjs.Tween.get(_oBall, {override:true}).to({x:oParams.posx}, iTime, createjs.Ease.sineIn);
-        createjs.Tween.get(_oBall).to({y:iFloor}, iTime, createjs.Ease.cubicIn).call(function(){
-                
-                createjs.Tween.get(_oBall).to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut).to({y:iFloor}, iTime, createjs.Ease.bounceOut);
-
+        createjs.Tween
+            .get(_oBallSprite)
+            .to({rotation:oParams.rotation}, iTime, createjs.Ease.sineIn);
+        createjs.Tween
+            .get(_oBall, {override:true})
+            .to({x:oParams.posx}, iTime, createjs.Ease.sineIn);
+        createjs.Tween
+            .get(_oBall).to({y:iFloor}, iTime, createjs.Ease.cubicIn)
+            .call(() => {
+                createjs.Tween
+                    .get(_oBall)
+                    .to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut)
+                    .to({y:iFloor}, iTime, createjs.Ease.bounceOut);
                 gameInstance().ballArrived(aPath[0].col);
-        });
+            });
     };
     
-    this._lastJumpBallAnim = function(aPath, iTime){
+    this._lastJumpBallAnim = (aPath, iTime) => {
         var oNextPos = gameInstance().getBallPivotCellPos(aPath[0].row, aPath[0].col);
         var iFloor = oNextPos.y + 192;
         
-        createjs.Tween.get(_oBall, {override:true}).to({x:oNextPos.x}, iTime, createjs.Ease.sineIn);
-        createjs.Tween.get(_oBall).to({y:_oBall.y-10}, iTime/4, createjs.Ease.cubicOut).to({y:iFloor}, iTime*3/4, createjs.Ease.cubicIn).call(function(){
-            gameInstance().ballArrived(aPath[0].col);
-                
-                createjs.Tween.get(_oBall).to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut).to({y:iFloor}, iTime, createjs.Ease.bounceOut).call(function(){
-                    createjs.Tween.get(_oBall).to({alpha:0}, 3000, createjs.Ease.cubicIn).call(function(){
-                        _oParent.unload();
+        createjs.Tween
+            .get(_oBall, {override:true})
+            .to({x:oNextPos.x}, iTime, createjs.Ease.sineIn);
+    
+        createjs.Tween
+            .get(_oBall)
+            .to({y:_oBall.y-10}, iTime/4, createjs.Ease.cubicOut)
+            .to({y:iFloor}, iTime*3/4, createjs.Ease.cubicIn)
+            .call(() => {
+                gameInstance().ballArrived(aPath[0].col);
+                createjs.Tween
+                    .get(_oBall)
+                    .to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut)
+                    .to({y:iFloor}, iTime, createjs.Ease.bounceOut)
+                    .call(() => {
+                        createjs.Tween
+                            .get(_oBall)
+                            .to({alpha:0}, 3000, createjs.Ease.cubicIn)
+                            .call(() => {
+                                this.unload();
+                            });
                     });
-                });
                 
-        });
+            });
     };
     
-    _oParent = this;
+    // _oParent = this;
     this._init(oPos, oParentContainer);
 }
 

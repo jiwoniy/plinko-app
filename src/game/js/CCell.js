@@ -7,8 +7,7 @@ import CSpriteLibrary from './sprite_lib.js'
 import settings from './settings.js'
 
 function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer) {
-    
-    var _oParent;
+    // var _oParent;
     var _oCell;
     var _oDebugHighlight;
     var _oStake;
@@ -91,7 +90,7 @@ function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer) {
         _oCell.addChild(oDebugText);
     };
     
-    _oParent = this;
+    // _oParent = this;
     this._init(iX, iY, oParentContainer, iRow, iCol, oStakeContainer);
 }
 

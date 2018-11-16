@@ -14,13 +14,11 @@ function CGUIExpandible(iX, iY, oSprite, oParentContainer) {
     var _oFrontContainer;
     var _oExpandedPos;
     
-    var _pStartPos;
+    // var _pStartPos;
     
     this._init = function(iX, iY, oSprite, oParentContainer){
-        
         _aButtons = [];
-        
-        _pStartPos = {x: iX, y: iY};
+        // _pStartPos = {x: iX, y: iY};
         _oGUIContainer = new createjs.Container();
         _oGUIContainer.x = iX;
         _oGUIContainer.y = iY;

@@ -730,7 +730,6 @@ function getParamValue(paramName) {
 //     return s;
 // };
 
-
 function fullscreenHandler(){
     const screen = window.screen;
     if (!settings.ENABLE_FULLSCREEN || !screenfull.enabled){
@@ -754,7 +753,6 @@ function fullscreenHandler(){
     }
 }
 
-
 if (screenfull.enabled) {
     screenfull.on('change', function(){
         mainInstance().setFullScreen(screenfull.isFullscreen)
@@ -768,7 +766,6 @@ if (screenfull.enabled) {
         }
     });
 }
-
 
 export {
     getParamValue,

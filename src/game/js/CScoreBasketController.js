@@ -27,14 +27,14 @@ function CScoreBasketController(oParentContainer) {
 
         _aBasket = [];
         
-        for(var i=0; i< settings.PRIZE.length; i++) {
-            _aBasket.push(new CBasket(290 +i*140, 0, oScoreContainer, oSpriteSheet, iWidth, iHeight, settings.PRIZE[i].background));
+        for(var i=0; i< settings.getPrize().length; i++) {
+            _aBasket.push(new CBasket(290 +i*140, 0, oScoreContainer, oSpriteSheet, iWidth, iHeight, settings.getPrize()[i].background));
         };
         
     };
     
     this.unload = function(){
-        for(var i=0; i< settings.PRIZE.length; i++) {
+        for(var i=0; i< settings.getPrize().length; i++) {
             _aBasket[i].unload();
         };
     };

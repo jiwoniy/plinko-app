@@ -10,7 +10,6 @@ import CSpriteLibrary from './sprite_lib.js'
 import settings from './settings.js'
 
 function CCreditsPanel() {
-    
     var _oFade;
     var _oPanelContainer;
     var _oButExit;
@@ -20,8 +19,7 @@ function CCreditsPanel() {
     
     var _pStartPanelPos;
     
-    this._init = function(){
-        
+    this._init = () => {
         _oFade = new createjs.Shape();
         _oFade.graphics.beginFill("black").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
         _oFade.alpha = 0;
@@ -38,45 +36,46 @@ function CCreditsPanel() {
         _oPanelContainer = new createjs.Container();        
         mainInstance().getStage().addChild(_oPanelContainer);
         
-        var oSprite = CSpriteLibrary.getSprite('msg_box');
-        var oPanel = createBitmap(oSprite);        
-        oPanel.regX = oSprite.width/2;
-        oPanel.regY = oSprite.height/2;
+        const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
+        const oPanel = createBitmap(msgBoxSprite);        
+        oPanel.regX = msgBoxSprite.width / 2;
+        oPanel.regY = msgBoxSprite.height / 2;
         _oPanelContainer.addChild(oPanel);
         
         _oPanelContainer.x = settings.CANVAS_WIDTH / 2;
-        _oPanelContainer.y = settings.CANVAS_HEIGHT + oSprite.height / 2;  
+        _oPanelContainer.y = settings.CANVAS_HEIGHT + (msgBoxSprite.height / 2);
         _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
-        createjs.Tween.get(_oPanelContainer).to({y: (settings.CANVAS_HEIGHT / 2) - 40},500, createjs.Ease.quartIn);
+        createjs.Tween
+            .get(_oPanelContainer)
+            .to({ y: (settings.CANVAS_HEIGHT / 2) - 40 }, 500, createjs.Ease.quartIn);
 
-        var oTitle = new createjs.Text("DEVELOPED BY"," 50px "+ settings.PRIMARY_FONT, "#ffffff");
+        const oTitle = new createjs.Text("DEVELOPED BY"," 50px "+ settings.PRIMARY_FONT, "#ffffff");
         oTitle.y = -100;
         oTitle.textAlign = "center";
         oTitle.textBaseline = "middle";
         oTitle.lineWidth = 300;
         _oPanelContainer.addChild(oTitle);
 
-        var oLink = new createjs.Text("www.ecoblock.com"," 50px "+ settings.PRIMARY_FONT, "#ffffff");
+        const oLink = new createjs.Text("www.ecoblock.com"," 50px "+ settings.PRIMARY_FONT, "#ffffff");
         oLink.y = 90;
         oLink.textAlign = "center";
         oLink.textBaseline = "middle";
         oLink.lineWidth = 300;
         _oPanelContainer.addChild(oLink);
         
-        var oSprite = CSpriteLibrary.getSprite('ctl_logo');
-        _oLogo = createBitmap(oSprite);
-        _oLogo.regX = oSprite.width/2;
-        _oLogo.regY = oSprite.height/2;
+        const ctlLogoSprite = CSpriteLibrary.getSprite('ctl_logo');
+        _oLogo = createBitmap(ctlLogoSprite);
+        _oLogo.regX = ctlLogoSprite.width / 2;
+        _oLogo.regY = ctlLogoSprite.height / 2;
         _oPanelContainer.addChild(_oLogo);
       
-        var oSprite = CSpriteLibrary.getSprite('but_exit');
-        _oButExit = new CGfxButton(298, -200, oSprite, _oPanelContainer);
+        const exitButtonSprite = CSpriteLibrary.getSprite('but_exit');
+        _oButExit = new CGfxButton(298, -200, exitButtonSprite, _oPanelContainer);
         _oButExit.addEventListener(settings.ON_MOUSE_UP, this.unload, this);
         
     };
     
-    this.unload = function(){
-        
+    this.unload = () => {
         _oButExit.setClickable(false);
         
         createjs.Tween.get(_oFade).to({alpha:0},500);
@@ -89,15 +88,13 @@ function CCreditsPanel() {
         }); 
         
         _oHitArea.off("click",_oListener);
-        
-        
     };
     
-    this._onLogoButRelease = function(){
+    this._onLogoButRelease = () => {
         window.open("http://www.ecoblock.com/index.php?&l=en");
     };
     
-    this._onMoreGamesReleased = function(){
+    this._onMoreGamesReleased = () => {
         window.open("http://ecoblock.net/");
     };
     

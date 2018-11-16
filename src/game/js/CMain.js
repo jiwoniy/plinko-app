@@ -210,7 +210,7 @@ function CMain(oData) {
     };
 
     this.gotoGame = () => {
-        this.state.game = new CGame(this.state.initData);   						
+        this.state.game = new CGame(true, this.state.initData);   						
         this.state.gameStatus = settings.STATE_GAME;
     };
     

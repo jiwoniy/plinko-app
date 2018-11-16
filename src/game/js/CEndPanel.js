@@ -20,17 +20,15 @@ import {
   } from './CLang.js'
 
 function CEndPanel(iPrizeIndex, bHasWin) {
-    
     var _oButExit;
     var _oFade;
     var _oPanelContainer;
-    var _oParent;
+    // var _oParent;
     var _oListener;
     
-    var _pStartPanelPos;
+    // var _pStartPanelPos;
     
-    this._init = function(iPrizeIndex, bHasWin){
-        
+    this._init = (iPrizeIndex, bHasWin) => {
         _oFade = new createjs.Shape();
         _oFade.graphics.beginFill("black").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
         _oFade.alpha = 0;
@@ -42,33 +40,33 @@ function CEndPanel(iPrizeIndex, bHasWin) {
         _oPanelContainer = new createjs.Container();        
         mainInstance().getStage().addChild(_oPanelContainer);
         
-        var oSprite = CSpriteLibrary.getSprite('msg_box');
-        var oPanel = createBitmap(oSprite);        
-        oPanel.regX = oSprite.width/2;
-        oPanel.regY = oSprite.height/2;
-        _oPanelContainer.addChild(oPanel);
+        const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
+        const panel = createBitmap(msgBoxSprite);        
+        panel.regX = msgBoxSprite.width / 2;
+        panel.regY = msgBoxSprite.height / 2;
+        _oPanelContainer.addChild(panel);
         
         _oPanelContainer.x = settings.CANVAS_WIDTH / 2;
-        _oPanelContainer.y = settings.CANVAS_HEIGHT + (oSprite.height / 2);
-        _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
+        _oPanelContainer.y = settings.CANVAS_HEIGHT + (msgBoxSprite.height / 2);
+        // _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
         createjs.Tween.get(_oPanelContainer).to({y: (settings.CANVAS_HEIGHT / 2) - 40},500, createjs.Ease.quartIn);
 
-        if(bHasWin){
-            var oTitle = new createjs.Text(TEXT_WIN," 60px "+ settings.PRIMARY_FONT, "#ffffff");
-            oTitle.y = -oSprite.height/2 + 140;
+        if (bHasWin) {
+            const oTitle = new createjs.Text(TEXT_WIN," 60px "+ settings.PRIMARY_FONT, "#ffffff");
+            oTitle.y = -(msgBoxSprite.height / 2) + 140;
             oTitle.textAlign = "center";
             oTitle.textBaseline = "middle";
             oTitle.lineWidth = 400;
             oTitle.lineHeight = 70;
             _oPanelContainer.addChild(oTitle);
             
-            var szPrize = settings.PRIZE[iPrizeIndex].background;
-            var oSprite = CSpriteLibrary.getSprite(szPrize);
-            var oPrize = createBitmap(oSprite);        
-            oPrize.regX = oSprite.width/2;
-            oPrize.regY = oSprite.height/2;
+            const szPrize = settings.getPrize()[iPrizeIndex].background;
+            const prizeSprite = CSpriteLibrary.getSprite(szPrize);
+            const oPrize = createBitmap(prizeSprite);        
+            oPrize.regX = prizeSprite.width / 2;
+            oPrize.regY = prizeSprite.height / 2;
             
-            var oRedeem = new createjs.Text(TEXT_REDEEM," 60px "+ settings.PRIMARY_FONT, "#ffffff");
+            const oRedeem = new createjs.Text(TEXT_REDEEM," 60px "+ settings.PRIMARY_FONT, "#ffffff");
             oRedeem.y = 140;
             oRedeem.textAlign = "center";
             oRedeem.textBaseline = "middle";
@@ -77,12 +75,11 @@ function CEndPanel(iPrizeIndex, bHasWin) {
             
             _oPanelContainer.addChild(oPrize);
             
-            oPanel.on("click",this.redeem);
-            oPanel.cursor = "pointer";
-            
-        }else {
-            var oTitle = new createjs.Text(TEXT_GAMEOVER," 60px "+ settings.PRIMARY_FONT, "#ffffff");
-            oTitle.y = -oSprite.height/2 + 140;
+            panel.on("click",this.redeem);
+            panel.cursor = "pointer";
+        } else {
+            const oTitle = new createjs.Text(TEXT_GAMEOVER," 60px "+ settings.PRIMARY_FONT, "#ffffff");
+            oTitle.y = -(msgBoxSprite.height / 2) + 140;
             oTitle.textAlign = "center";
             oTitle.textBaseline = "middle";
             oTitle.lineWidth = 600;
@@ -102,37 +99,37 @@ function CEndPanel(iPrizeIndex, bHasWin) {
         
     };
     
-    this.unload = function() {
+    this.unload = () => {
         _oFade.off("mousedown",_oListener);
         mainInstance().getStage().removeChild(_oFade);
         mainInstance().getStage().removeChild(_oPanelContainer);
         
-        if(!bHasWin){
+        if (!bHasWin) {
             _oButExit.unload();
         }
     };
 
-    this.redeem = function() {
-        _oParent._onExit();
-        if(settings.PRIZE[iPrizeIndex].redeemlink !== ""){
-            window.open(settings.PRIZE[iPrizeIndex].redeemlink);
+    this.redeem = () => {
+        this._onExit();
+        if(settings.getPrize()[iPrizeIndex].redeemlink !== ""){
+            window.open(settings.getPrize()[iPrizeIndex].redeemlink);
         }
         
     };  
     
-    this._onExit = function() {
-        if(settings.PRIZE[iPrizeIndex].redeemlink !== ""){
-            window.open(settings.PRIZE[iPrizeIndex].redeemlink);
+    this._onExit = () => {
+        if(settings.getPrize()[iPrizeIndex].redeemlink !== ""){
+            window.open(settings.getPrize()[iPrizeIndex].redeemlink);
         }
         
         $(mainInstance()).trigger("show_interlevel_ad");
 
-        _oParent.unload();
+        this.unload();
         
         gameInstance().onExit();
     };
     
-    _oParent = this;
+    // _oParent = this;
     this._init(iPrizeIndex, bHasWin);
 
     return this;
