@@ -15,8 +15,8 @@ const settings = () => {
   const SECONDARY_FONT = 'Arial';
   const PRIMARY_FONT_COLOUR = '#FFFFFF';
 
-  const BOARD_ROW = 13;
-  const BOARD_COL = 7;
+  const matrixRow = 13;
+  const matrixCol = 7;
 
   let BALL_RADIUS = null;
   let NUM_INSERT_TUBE = null;
@@ -53,7 +53,7 @@ const settings = () => {
 
   let ENABLE_FULLSCREEN = null;
   let ENABLE_CHECK_ORIENTATION = null;
-  let AD_SHOW_COUNTER = null;
+  // let AD_SHOW_COUNTER = null;
 
   let NUM_IMAGES_BACKGROUNDS = null;
   let NUM_BALL = 0;
@@ -67,10 +67,10 @@ const settings = () => {
     setPrize: (value) => {
       PRIZE = value
     },
-    getAdShowCounter: () => AD_SHOW_COUNTER,
-    setAdShowCounter: (value) => {
-      AD_SHOW_COUNTER = value
-    },
+    // getAdShowCounter: () => AD_SHOW_COUNTER,
+    // setAdShowCounter: (value) => {
+    //   AD_SHOW_COUNTER = value
+    // },
 
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
@@ -100,8 +100,8 @@ const settings = () => {
     ON_DRAG_START,
     ON_DRAG_END,
 
-    BOARD_ROW,
-    BOARD_COL,
+    getMatrixRow: () => matrixRow,
+    getMatrixCol: () => matrixCol,
 
     BALL_RADIUS,
     NUM_INSERT_TUBE,

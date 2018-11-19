@@ -9,42 +9,50 @@ import {
  import {
     mainInstance,
 } from './CMain.js'
+import CGridMapping from './CGridMapping.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CCell from './CCell.js'
 import CBallGenerator from './CBallGenerator.js'
 import CInsertTubeController from './CInsertTubeController.js'
 import CScoreBasketController from './CScoreBasketController.js'
 import CEndPanel from './CEndPanel.js'
-import CGridMapping, {
-    gridInstance
-} from './CGridMapping.js'
 import CInterface from './CInterface.js'
 import settings from './settings.js'
 
 function CGame(oData) {
     // var _bStartGame;
 
-    var _iColToLaunchBall;
+    // var _iColToLaunchBall;
     var _iNumBallRemaining;
 
-    var _aProbability;
+    // this _aProbability;
 
-    var _oInterface;
+    // var _oInterface;
     // var _oEndPanel = null;
     // var _oParent;
-    var _oBallGenerator;
-    var _oInsertTubeController;
-    var _oScoreBasketController;
+    // var _oBallGenerator;
+    // var _oInsertTubeController;
+    // var _oScoreBasketController;
     var _oBgContainer;
     var _oBoardContainer;
     var _oMidContainer;
     var _oForegroundContainer;
-    var _aBoard;
-    var _oCurBall = null;
+    // var _aBoard;
+    // var _oCurBall = null;
+
+    this.interfaceInstance = null
+    this.insertTubeController = null
+    this.ballGenerator = null
+    this.scoreBasketController = null
+    this.gridInstance = null
 
     this.state = {
+        board: [],
         initData: oData || {},
-        endPanel: null
+        endPanel: null,
+        _aProbability: [],
+        currentBall: null,
+        currentBallIndex: null
     }
     
     this._init = () => {
@@ -54,11 +62,11 @@ function CGame(oData) {
 
         _iNumBallRemaining = settings.getNumBall();
         
-        var oBg = createBitmap(CSpriteLibrary.getSprite('bg_game'));
+        const oBg = createBitmap(CSpriteLibrary.getSprite('bg_game'));
         mainInstance().getStage().addChild(oBg);
 
         const logoGameSprite = CSpriteLibrary.getSprite('logo_game');
-        var oLogo = createBitmap(logoGameSprite);
+        const oLogo = createBitmap(logoGameSprite);
         oLogo.regX = logoGameSprite.width / 2;
         oLogo.regY = logoGameSprite.height / 2;
         oLogo.x = settings.CANVAS_WIDTH / 2;
@@ -77,7 +85,7 @@ function CGame(oData) {
         mainInstance().getStage().addChild(_oForegroundContainer);
 
         this._setBoard();
-        settings.NUM_INSERT_TUBE = _aBoard[0].length;
+        settings.NUM_INSERT_TUBE = this.state.board[0].length;
 
         const sideLeftSprite = CSpriteLibrary.getSprite('side_left');
         const oSideLeft = createBitmap(sideLeftSprite);
@@ -91,39 +99,36 @@ function CGame(oData) {
         _oForegroundContainer.addChild(oSideRight);
 
         settings.BALL_RADIUS = CSpriteLibrary.getSprite('ball').height / 2;
-        _oBallGenerator = new CBallGenerator(_oMidContainer);
+        this.ballGenerator = new CBallGenerator(_oMidContainer);
+        this.insertTubeController = new CInsertTubeController(_oMidContainer);
+        this.scoreBasketController = new CScoreBasketController(_oBgContainer);
         
-        _oInsertTubeController = new CInsertTubeController(_oMidContainer);
+        this.initProbability();
+        this.interfaceInstance = new CInterface(true, _oBgContainer, this);
+        this.insertTubeController.showSlots();
 
-        _oScoreBasketController = new CScoreBasketController(_oBgContainer);
-
-        
-        this._initProbability();
-        _oInterface = new CInterface(true, _oBgContainer, this);
-        _oInsertTubeController.showSlots();
-
-        $(mainInstance()).trigger("start_level",1);
+        $(mainInstance()).trigger("start_level", 1);
     };
     
     this._setBoard = () => {
-        const iRow = settings.BOARD_ROW;
-        const iCol = settings.BOARD_COL;
-        _aBoard = [];
+        const iRow = settings.getMatrixRow();
+        const iCol = settings.getMatrixCol();
+        this.state.board = [];
         for(let i = 0; i < iRow; i += 1) {
-            _aBoard[i] = [];
-            for(let j = 0; j < iCol - ( (i+1) % 2); j += 1) {
+            this.state.board[i] = [];
+            for(let j = 0; j < iCol - ( (i + 1) % 2); j += 1) {
                 let iX;
-                if(i % 2 === 0) {
+                if (i % 2 === 0) {
                     iX = j * settings.CELL_SIZE;
                 } else {
                     iX = -(settings.CELL_SIZE / 2) + (j * settings.CELL_SIZE);
                 }
                 const iY = i * settings.CELL_SIZE / 2;
-                _aBoard[i][j] = new CCell(iX, iY, _oBoardContainer, i, j/*, _oActionContainer*/);
+                this.state.board[i][j] = new CCell(iX, iY, _oBoardContainer, i, j/*, _oActionContainer*/);
                 
                 ////REMOVE STAKE
-                if(i === settings.BOARD_ROW-1 || (i%2 === 1 && (j===0 || j === settings.BOARD_COL - 1))) {
-                    _aBoard[i][j].removeStake();
+                if(i === settings.getMatrixRow() - 1 || (i % 2 === 1 && (j===0 || j === settings.getMatrixCol() - 1))) {
+                    this.state.board[i][j].removeStake();
                 }
             }
         }
@@ -133,74 +138,75 @@ function CGame(oData) {
         _oBoardContainer.x = settings.CANVAS_WIDTH / 2;
         _oBoardContainer.y = (settings.CANVAS_HEIGHT / 2) - 29;
 
-        new CGridMapping(true, _aBoard);
+        this.gridInstance = new CGridMapping(true, this.state.board);
     };
     
-    this._initProbability = () => {
-        _aProbability = [];
-        for(let i = 0; i < settings.getPrize().length; i += 1) {
+    this.initProbability = () => {
+        this.state._aProbability = [];
+        for (let i = 0; i < settings.getPrize().length; i += 1) {
             const iProbability = settings.getPrize()[i].win_occurrence;
-            for(let j = 0; j < iProbability; j += 1) {
-                _aProbability.push(i);
+            for (let j = 0; j < iProbability; j += 1) {
+                this.state._aProbability.push(i);
             }            
-        }            
+        }
     };
     
-    this.launch = (iStartCol) => {
-        _iColToLaunchBall = iStartCol;
+    this.launch = (startIndex) => {
+        this.state.currentBallIndex = startIndex;
         _iNumBallRemaining -= 1;
         
         this.setBall();
         
-        _oInsertTubeController.hideSlots();
-        _oBallGenerator.shiftBallAnimation();
+        this.insertTubeController.hideSlots();
+        this.ballGenerator.shiftBallAnimation();
 
-        var oDestBall = this.getBallPivotCellPos(0, iStartCol);
-        _oCurBall.launchAnim(oDestBall);
+        var oDestBall = this.getBallPivotCellPos(0, startIndex);
+        this.state.currentBall.launchAnim(oDestBall);
         
-        _oInterface.refreshBallNum(_iNumBallRemaining);
-        _oInterface.hideControls();
+        this.interfaceInstance.refreshBallNum(_iNumBallRemaining);
+        this.interfaceInstance.hideControls();
     };
+
+    this.setCurrentBall = (ball) => {
+        this.state.currentBall = ball;
+    }
     
     this.setBall = () => {
-        _oCurBall = _oBallGenerator.getNextBall();
+        this.setCurrentBall(this.ballGenerator.getNextBall())
+        // this.state.currentBall = this.ballGenerator.getNextBall();
 
-        var oCurBallPos = _oCurBall.getPos();
-        var oNewPos = _oBoardContainer.globalToLocal(oCurBallPos.x * s_iScaleFactor, oCurBallPos.y * s_iScaleFactor);
+        const oCurBallPos = this.state.currentBall.getPos();
+        const oNewPos = _oBoardContainer.globalToLocal(oCurBallPos.x * s_iScaleFactor, oCurBallPos.y * s_iScaleFactor);
 
-        _oBoardContainer.addChild(_oCurBall.getSprite());
-        _oCurBall.setPos(oNewPos);
+        _oBoardContainer.addChild(this.state.currentBall.getSprite());
+        this.state.currentBall.setPos(oNewPos);
     };
     
     this.getFallPath = () => {
-        var iEndCol = this._setEndCol();
-        var aPath = gridInstance().getRandomPathFromColToCol(_iColToLaunchBall,iEndCol);
+        const destIndex = this._setEndCol();
+        const ballPaths = this.gridInstance.getRandomPathFromColToCol(this.state.currentBallIndex, destIndex);
         
-        for(var i=0; i<aPath.length; i++){
-            _aBoard[aPath[i].row][aPath[i].col].highlight(true);
+        for (let i = 0; i < ballPaths.length; i += 1) {
+            this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
         }
         
-        var aNewPath = this.getPathCopy(aPath);
-        
-        _oCurBall.startPathAnim(aNewPath, 500);
+        const aNewPath = this.getPathCopy(ballPaths);
+        this.state.currentBall.startPathAnim(aNewPath, 500);
 
-        _oCurBall = null;
+        this.setCurrentBall(null)
     };
     
     this.ballArrived = (iDestCol) => {
         // var iPrizeWin = iDestCol;
-        var bHasWin = settings.getPrize()[iDestCol].prizewinning;
+        const bHasWin = settings.getPrize()[iDestCol].prizewinning;
 
         $(mainInstance()).trigger("save_score",[iDestCol]);
 
-        _oInsertTubeController.showSlots();
-        
-        _oInterface.showControls();
-        
-        _oScoreBasketController.litBasket(iDestCol, bHasWin);
+        this.insertTubeController.showSlots();
+        this.interfaceInstance.showControls();
+        this.scoreBasketController.litBasket(iDestCol, bHasWin);
         
         this.checkEndGame(iDestCol, bHasWin);
-        
     };
     
     this.checkEndGame = function(iPrizeWin, bHasWin) {
@@ -216,22 +222,21 @@ function CGame(oData) {
     
    
     this._setEndCol = () => {
-        //DETECT ALL POSSIBLE PRIZE LOWER THEN BANK
-        var iPrizeToChoose = _aProbability[Math.floor(Math.random()*_aProbability.length)];      
-
+        // DETECT ALL POSSIBLE PRIZE LOWER THEN BANK
+        const iPrizeToChoose = this.state._aProbability[Math.floor(Math.random() * this.state._aProbability.length)];      
         return iPrizeToChoose;
     };
     
-    this.getBall = () => {
-        return _oCurBall;
-    };
+    // this.getBall = () => {
+    //     return _oCurBall;
+    // };
     
     this.getBoard = () => {
-        return _aBoard;
+        return this.state.board;
     };
     
     this.getBallPivotCellPos = (iRow, iCol) => {
-        return _aBoard[iRow][iCol].getCenterOfBallOnPivot();
+        return this.state.board[iRow][iCol].getCenterOfBallOnPivot();
     };
     
     this.getPathCopy = (aPath) => {
@@ -245,15 +250,14 @@ function CGame(oData) {
    
     this.restartGame = () => {
         $(mainInstance()).trigger("show_interlevel_ad");
-        _oInterface.showControls();
+        this.interfaceInstance.showControls();
     };        
     
     this.unload = () => {
         // _bStartGame = false;
         
-        _oInterface.unload();
-        
-        _oScoreBasketController.unload();
+        this.interfaceInstance.unload();
+        this.scoreBasketController.unload();
         
         createjs.Tween.removeAllTweens();
         mainInstance().getStage().removeAllChildren();
@@ -274,12 +278,12 @@ function CGame(oData) {
     };
     
     this.gameOver = (iPrizeWin, bHasWin) => {
-        _oInterface.hideControls();
+        this.interfaceInstance.hideControls();
         this.state.endPanel = new CEndPanel(iPrizeWin, bHasWin);
     };
 
     this.getSlotPosition = (iIndex) => {
-        return _oInsertTubeController.getSlotPos(iIndex);
+        return this.insertTubeController.getSlotPos(iIndex);
     };
     
     
@@ -296,7 +300,7 @@ function CGame(oData) {
     // s_oGame=this;
     settings.setNumBall(this.state.initData.num_ball)
     settings.setPrize(this.state.initData.prize_settings)
-    settings.setAdShowCounter(this.state.initData.ad_show_counter)
+    // settings.setAdShowCounter(this.state.initData.ad_show_counter)
     // settings.PRIZE = o;
     // settings.AD_SHOW_COUNTER = oData.ad_show_counter;
     // _oParent=this;

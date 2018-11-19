@@ -85,7 +85,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
         _aCbOwner[iEvent] = cbOwner; 
     };
     
-    this.addEventListenerWithParams = function(iEvent,cbCompleted, cbOwner,aParams){
+    this.addEventListenerWithParams = function(iEvent, cbCompleted, cbOwner, aParams) {
         _aCbCompleted[iEvent]=cbCompleted;
         _aCbOwner[iEvent] = cbOwner;
         _aParams = aParams;

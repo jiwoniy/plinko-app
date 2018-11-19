@@ -18,7 +18,6 @@ function CBall(oPos, oParentContainer) {
     // var _oParent;
     
     this._init = function(oPos, oParentContainer) {
-        
         _oBall = new createjs.Container();
         _oBall.x = oPos.x;
         _oBall.y = oPos.y;
@@ -31,7 +30,6 @@ function CBall(oPos, oParentContainer) {
         _oBall.addChild(_oBallSprite);
 
         _iDiameter = oSprite.height;
-        
     };
     
     this.unload = function() {
@@ -39,7 +37,7 @@ function CBall(oPos, oParentContainer) {
     };
    
     this.getPos = function() {
-        return {x: _oBall.x, y: _oBall.y};
+        return { x: _oBall.x, y: _oBall.y };
     };
     
     this.getSprite = function() {
@@ -60,70 +58,11 @@ function CBall(oPos, oParentContainer) {
         _oBall.regY = _iDiameter/2;
     };
     
-    // this._getFallParams = function(aPath, iTime){
-    //     var oPos = s_oGame.getBallPivotCellPos(aPath[0].row, aPath[0].col);
-        
-    //     ////IF iAngleShift IS 0, BALL WILL FALL OFF TO THE CENTER OF THE NEXT PIVOT... ELSE WILL FALL ON THE SIDE BASED ON iAngleShift RADIANS
-    //     var iAngleShift;
-    //     var szNextDir;
-    //     if(aPath.length > 1){
-    //         var oNextCell = s_oGame.getBallPivotCellPos(aPath[1].row, aPath[1].col);
-    //         if(oNextCell.x>oPos.x){
-    //             ///////GO RIGHT
-    //             iAngleShift = Math.random() * settings.BALL_FALL_MAX_ANGLE;
-    //             szNextDir = "right";
-    //         } else {
-    //             //////GO LEFT
-    //             iAngleShift = -Math.random() * settings.BALL_FALL_MAX_ANGLE;
-    //             szNextDir = "left";
-    //         }
-    //     } else {
-    //         iAngleShift = -settings.BALL_FALL_MAX_ANGLE + Math.random()* settings.BALL_FALL_MAX_ANGLE * 2;
-    //         szNextDir = "right";
-    //     }
-
-    //     var vShift = new CVector2(0, - settings.BALL_RADIUS);
-    //     rotateVector2D(iAngleShift, vShift);
-        
-    //     vShift.subtract(new CVector2(0, - settings.BALL_RADIUS));
-
-    //     var oShiftedPos = {x: oPos.x - vShift.getX(), y: oPos.y+ vShift.getY()};
-        
-    //     /////MORE FAR THE BALL WILL FALL FROM THE CENTER, LESS SHOULD BE THE ROTATION TAKEN
-    //     var iRotation;
-    //     var iRotAttenuation = iAngleShift * settings.BALL_FALL_ROTATION_ATTENUATION_FACTOR;
-    //     if(oPos.x > _oBall.x){
-    //         iRotation = _oBallSprite.rotation + settings.BALL_FALL_MAX_ROTATION - iRotAttenuation;
-    //     }else {
-    //         iRotation = _oBallSprite.rotation - settings.BALL_FALL_MAX_ROTATION - iRotAttenuation;
-    //     }
-        
-    //     ////CHECK IF BALL SHOULD GO FASTER WITH ANIMATION
-    //     var iNewTime;
-    //     var szCurDir;
-    //     if(_oBall.x < oShiftedPos.x){
-    //         szCurDir = "right";
-    //     }else {
-    //         szCurDir = "left";
-    //     }
-    //     if(szCurDir === szNextDir){
-    //         iNewTime = iTime * settings.BALL_FALL_SPEED_INCREASE;
-    //         if(iNewTime < settings.BALL_FALL_MAX_SPEED_LIMIT){
-    //             iNewTime = settings.BALL_FALL_MAX_SPEED_LIMIT;
-    //         }
-    //     } else {
-    //         iNewTime = _iStartAnimTime;
-    //     }
-
-    //     return {rotation: iRotation, posx: oShiftedPos.x, posy: oShiftedPos.y, newtime:iNewTime};
-        
-    // };
-    
     this.launchAnim = function(oPos) {
         var iTime = 1000;
         
-        createjs.Tween.get(_oBall).to({x:oPos.x}, iTime, createjs.Ease.sineOut);
-        createjs.Tween.get(_oBall).to({y:oPos.y-400}, iTime/2, createjs.Ease.cubicOut).to({y:oPos.y}, iTime/2, createjs.Ease.cubicIn).call(function(){
+        createjs.Tween.get(_oBall).to({ x: oPos.x }, iTime, createjs.Ease.sineOut);
+        createjs.Tween.get(_oBall).to({ y: oPos.y-400 }, iTime / 2, createjs.Ease.cubicOut).to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
             gameInstance().getFallPath();
         });
     };

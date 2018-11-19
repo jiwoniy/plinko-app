@@ -12,16 +12,18 @@ function CBallGenerator(oParentContainer) {
     var _iBallInAnimation;
     var _iOffsetFromBall;
     
-    var _aBall;
-    
+    // var _aBall;
     // var _oParent;
     var _oGeneratorContainer;
     var _oFrontContainer;
     
     var _pStartPoint;
+
+    this.state = {
+        ball: []
+    }
     
     this._init = (oParentContainer) => {
-        
         _oGeneratorContainer = new createjs.Container();
         oParentContainer.addChild(_oGeneratorContainer);
         
@@ -31,17 +33,17 @@ function CBallGenerator(oParentContainer) {
         _iBallInTube = 3;
         _iOffsetFromBall = (settings.BALL_RADIUS * 2) - 20;
         _pStartPoint = {x: 182, y: 264};
-        _aBall = [];
-        for(var i=0; i<_iBallInTube; i++){
-            var oBallPos = {x: _pStartPoint.x - i*_iOffsetFromBall, y: _pStartPoint.y};
-            _aBall[i] = new CBall(oBallPos, _oGeneratorContainer);
+        // this.state.ball = [];
+        for(let i = 0; i < _iBallInTube; i += 1) {
+            const oBallPos = {x: _pStartPoint.x - i*_iOffsetFromBall, y: _pStartPoint.y};
+            this.state.ball[i] = new CBall(oBallPos, _oGeneratorContainer);
         }
         
-        var oSprite = CSpriteLibrary.getSprite('ball_generator');
-        var oGenerator = createBitmap(oSprite);
-        oGenerator.x = 0;
-        oGenerator.y = 196;
-        _oFrontContainer.addChild(oGenerator);
+        const ballGeneratorSprite = CSpriteLibrary.getSprite('ball_generator');
+        const generator = createBitmap(ballGeneratorSprite);
+        generator.x = 0;
+        generator.y = 196;
+        _oFrontContainer.addChild(generator);
         
     };
     
@@ -51,22 +53,22 @@ function CBallGenerator(oParentContainer) {
     };
     
     this.shiftBallAnimation = () => {
-        _aBall.splice(0,1);
+        this.state.ball.splice(0, 1);
         
         var iLastIndex = _iBallInTube - 1;
         
         const ballPosition = { x: _pStartPoint.x - (iLastIndex * _iOffsetFromBall), y: _pStartPoint.y };
-        _aBall[iLastIndex] = new CBall(ballPosition, _oGeneratorContainer);
+        this.state.ball[iLastIndex] = new CBall(ballPosition, _oGeneratorContainer);
         
         _iBallInAnimation = 2;
         for(let i = 0; i < _iBallInAnimation; i += 1) {
             const innerBallPosition = { x: _pStartPoint.x - (i * _iOffsetFromBall), y: _pStartPoint.y};
-            createjs.Tween.get(_aBall[i].getSprite(), { override: true }).wait(i*200).to({ x: innerBallPosition.x }, 1000, createjs.Ease.cubicIn);
+            createjs.Tween.get(this.state.ball[i].getSprite(), { override: true }).wait(i*200).to({ x: innerBallPosition.x }, 1000, createjs.Ease.cubicIn);
         }
     };
     
     this.getNextBall = () => {
-        return _aBall[0];
+        return this.state.ball[0];
     };
     
     // _oParent = this;

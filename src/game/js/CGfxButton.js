@@ -24,7 +24,7 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
     var _oListenerMouseUp;
     var _oListenerMouseOver;
     
-    this._init =function(iXPos,iYPos,oSprite, oParentContainer){
+    this._init = function(iXPos,iYPos,oSprite, oParentContainer) {
         _bDisabled = false;
         
         _iScaleFactor = 1;
@@ -47,7 +47,7 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
     };
     
     this.unload = function() {
-        if($.browser.mobile) {
+        if ($.browser.mobile) {
             _oButton.off("mousedown", _oListenerMouseDown);
             _oButton.off("pressup" , _oListenerMouseUp);
         } else {
@@ -61,15 +61,15 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
         //oParentContainer.removeChild(_oButton);
     };
     
-    this.setVisible = function(bVisible){
+    this.setVisible = function(bVisible) {
         _oButton.visible = bVisible;
     };
     
-    this.setClickable = function(bVal){
+    this.setClickable = function(bVal) {
         _bDisabled = !bVal;
     };
     
-    this._initListener = function(){
+    this._initListener = function() {
         if($.browser.mobile) {
             _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
             _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
@@ -80,31 +80,31 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
         }     
     };
     
-    this.addEventListener = function( iEvent,cbCompleted, cbOwner ){
+    this.addEventListener = function( iEvent,cbCompleted, cbOwner) {
         _aCbCompleted[iEvent]=cbCompleted;
         _aCbOwner[iEvent] = cbOwner; 
     };
     
-    this.addEventListenerWithParams = function(iEvent,cbCompleted, cbOwner,aParams){
+    this.addEventListenerWithParams = function(iEvent,cbCompleted, cbOwner,aParams) {
         _aCbCompleted[iEvent]=cbCompleted;
         _aCbOwner[iEvent] = cbOwner;
         _aParams = aParams;
     };
     
-    this.buttonRelease = function(){
-        if(_bDisabled){
+    this.buttonRelease = function () {
+        if (_bDisabled) {
             return;
         }
         _oButton.scaleX = _iScaleFactor;
         _oButton.scaleY = _iScaleFactor;
 
-        if(_aCbCompleted[settings.ON_MOUSE_UP]){
+        if (_aCbCompleted[settings.ON_MOUSE_UP]) {
             _aCbCompleted[settings.ON_MOUSE_UP].call(_aCbOwner[settings.ON_MOUSE_UP], _aParams);
         }
     };
     
-    this.buttonDown = function(){
-        if(_bDisabled){
+    this.buttonDown = function() {
+        if (_bDisabled) {
             return;
         }
         _oButton.scaleX = _iScaleFactor*0.9;
@@ -112,21 +112,21 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
 
         playSound("click",1,false);
 
-       if(_aCbCompleted[settings.ON_MOUSE_DOWN]){
+       if (_aCbCompleted[settings.ON_MOUSE_DOWN]) {
            _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN], _aParams);
        }
     };
     
-    this.buttonOver = function(evt){
-        if(!$.browser.mobile){
-            if(_bDisabled){
+    this.buttonOver = function(evt) {
+        if (!$.browser.mobile) {
+            if (_bDisabled) {
                 return;
             }
             evt.target.cursor = "pointer";
         }  
     };
     
-    this.addText = function(szText){
+    this.addText = function(szText) {
         var oScoreText = new createjs.Text(szText," 50px "+ settings.PRIMARY_FONT, "#ffffff");
         oScoreText.textAlign = "center";
         oScoreText.textBaseline = "middle";
@@ -152,33 +152,33 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
         // });
     };
     
-    this.setPosition = function(iXPos,iYPos){
+    this.setPosition = function(iXPos,iYPos) {
          _oButton.x = iXPos;
          _oButton.y = iYPos;
     };
     
-    this.setX = function(iXPos){
+    this.setX = function(iXPos) {
          _oButton.x = iXPos;
     };
     
-    this.setY = function(iYPos){
+    this.setY = function(iYPos) {
          _oButton.y = iYPos;
     };
     
-    this.getButtonImage = function(){
+    this.getButtonImage = function() {
         return _oButton;
     };
 
-    this.getX = function(){
+    this.getX = function() {
         return _oButton.x;
     };
     
-    this.getY = function(){
+    this.getY = function() {
         return _oButton.y;
     };
         
-    this.getPos = function(){
-        return {x: _oButton.x, y: _oButton.y};
+    this.getPos = function() {
+        return { x: _oButton.x, y: _oButton.y };
     };
         
     _oParent = this;

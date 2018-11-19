@@ -292,19 +292,19 @@ function setVolume(szSound, iVolume){
 //     }
 // }
 
-function createBitmap(oSprite, iWidth, iHeight) {
-	var oBmp = new createjs.Bitmap(oSprite);
+function createBitmap(sprite, iWidth, iHeight) {
+	var bitMap = new createjs.Bitmap(sprite);
 	var hitObject = new createjs.Shape();
 	
 	if (iWidth && iHeight) {
 		hitObject.graphics.beginFill("#fff").drawRect(0, 0, iWidth, iHeight);
 	} else {
-		hitObject.graphics.beginFill("#ff0").drawRect(0, 0, oSprite.width, oSprite.height);
+		hitObject.graphics.beginFill("#ff0").drawRect(0, 0, sprite.width, sprite.height);
 	}
 
-	oBmp.hitArea = hitObject;
+	bitMap.hitArea = hitObject;
 
-	return oBmp;
+	return bitMap;
 }
 
 function createSprite(oSpriteSheet, szState, iRegX,iRegY,iWidth, iHeight) {
@@ -730,38 +730,38 @@ function getParamValue(paramName) {
 //     return s;
 // };
 
-function fullscreenHandler(){
+function fullscreenHandler() {
     const screen = window.screen;
-    if (!settings.ENABLE_FULLSCREEN || !screenfull.enabled){
+    if (!settings.ENABLE_FULLSCREEN || !screenfull.enabled) {
        return;
     }
 	
-    if(screen.height < window.innerHeight+3 && screen.height > window.innerHeight-3){
+    if (screen.height < window.innerHeight+3 && screen.height > window.innerHeight-3) {
         // s_bFullscreen = true;
         mainInstance().setFullScreen(true)
-    }else{
+    } else {
         // s_bFullscreen = false;
         mainInstance().setFullScreen(false)
     }
 
-    if (interfaceInstance() !== null){
+    if (interfaceInstance() !== null) {
         interfaceInstance().resetFullscreenBut();
     }
 
-    if (menuInstance() !== null){
+    if (menuInstance() !== null) {
         menuInstance().resetFullscreenBut();
     }
 }
 
 if (screenfull.enabled) {
-    screenfull.on('change', function(){
+    screenfull.on('change', function() {
         mainInstance().setFullScreen(screenfull.isFullscreen)
 
-        if (interfaceInstance() !== null){
+        if (interfaceInstance() !== null) {
             interfaceInstance().resetFullscreenBut();
         }
 
-        if (menuInstance() !== null){
+        if (menuInstance() !== null) {
             menuInstance().resetFullscreenBut();
         }
     });

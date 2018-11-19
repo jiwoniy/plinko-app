@@ -16,8 +16,8 @@ function CGridMapping(aMatrix) {
     var _aPrecomputedStartPath;
     
     this._init = (aMatrix) => {
-        _iRow = settings.BOARD_ROW;
-        _iCol = settings.BOARD_COL;
+        _iRow = settings.getMatrixRow();
+        _iCol = settings.getMatrixCol();
         
         _aRadiusMap = [];
         
@@ -53,31 +53,31 @@ function CGridMapping(aMatrix) {
         switch(iDir){
             ////r%2 IS USED TO DETECT INDEX COLUMN FOR AN "ODD-ROW" HORIZONTAL LAYOUT HEX GRID. FOR EXAMPLE, IF ROW IS ODD, THE TOPRIGHT NEIGHBOR IS = COL+1. IF ROW IS EVEN, THE TOPRIGHT NEIGHBOR IS = COL. 
             case DIR_TOPRIGHT: {
-                if(r>0 && c<_iCol-r%2){
-                    oNextDir = {row: r-1, col: c+((r+1)%2)};
+                if (r > 0 && c < _iCol - (r % 2)) {
+                    oNextDir = { row: r - 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
-            case DIR_BOTRIGHT:{
-                if(r<_iRow-1 && c + r%2<_iCol){
-                    oNextDir = {row: r+1, col: c+((r+1)%2)};
+            case DIR_BOTRIGHT: {
+                if(r < _iRow - 1 && c + (r % 2) < _iCol) {
+                    oNextDir = { row: r + 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
-            case DIR_TOPLEFT:{
-                if(r>0 && c-(r-1)%2 >= 0){
-                    oNextDir = {row: r-1, col: c-((r+1)%2)};
+            case DIR_TOPLEFT: {
+                if(r > 0 && c - ((r - 1) % 2) >= 0) {
+                    oNextDir = { row: r - 1, col: c - ((r + 1) % 2) };
                 }
                 break;
             }
-            case DIR_BOTLEFT:{
-                if(r<_iRow-1 && c >= r%2){
-                    oNextDir = {row: r+1, col: c-(r%2)};
+            case DIR_BOTLEFT: {
+                if (r < _iRow - 1 && c >= r % 2) {
+                    oNextDir = { row: r + 1, col: c - (r % 2) };
                 }
                 break;
             } 
-            case DIR_SELF:{
-                oNextDir = {row: r, col: c};
+            case DIR_SELF: {
+                oNextDir = { row: r, col: c };
                 break;
             }
             default:
@@ -274,23 +274,23 @@ function CGridMapping(aMatrix) {
         return aRandomPath;
     };
     
-    this.getRandomPathFromColToCol = function(iStartCol, iEndCol){        
-        var aAllPath = [];
-        var iLastIndex = _aMatrixMap.length-1;
+    this.getRandomPathFromColToCol = function(startIndex, destIndex) {    
+        const aAllPath = [];
+        const iLastIndex = _aMatrixMap.length - 1;
         
-        for(var i=0; i<_aPrecomputedStartPath[iStartCol].length; i++){
-            var aPath = _aPrecomputedStartPath[iStartCol][i];
-                if(aPath[iLastIndex].col === iEndCol){
-                    aAllPath.push(aPath);
-                }
+        for(let i = 0; i < _aPrecomputedStartPath[startIndex].length; i += 1) {
+            const aPath = _aPrecomputedStartPath[startIndex][i];
+            if (aPath[iLastIndex].col === destIndex){
+                aAllPath.push(aPath);
+            }
         }
 
         let aRandomPath = [];
-        if(aAllPath.length > 0){
-            var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
+        if (aAllPath.length > 0) {
+            const iRandomIndex = Math.floor(Math.random() * (aAllPath.length - 1));
             aRandomPath = aAllPath[iRandomIndex];
         }
-        
+
         return aRandomPath;
     };
 
