@@ -69,7 +69,7 @@ function CGame(oData) {
         const oLogo = createBitmap(logoGameSprite);
         oLogo.regX = logoGameSprite.width / 2;
         oLogo.regY = logoGameSprite.height / 2;
-        oLogo.x = settings.CANVAS_WIDTH / 2;
+        oLogo.x = settings.getCanvasWidth() / 2;
         oLogo.y = 250;
 
         _oBgContainer = new createjs.Container();
@@ -95,7 +95,7 @@ function CGame(oData) {
         const sideRightSprite = CSpriteLibrary.getSprite('side_right');
         const oSideRight = createBitmap(sideRightSprite);
         oSideRight.regX = sideRightSprite.width;
-        oSideRight.x = settings.CANVAS_WIDTH - 100;
+        oSideRight.x = settings.getCanvasWidth() - 100;
         _oForegroundContainer.addChild(oSideRight);
 
         settings.BALL_RADIUS = CSpriteLibrary.getSprite('ball').height / 2;
@@ -135,8 +135,8 @@ function CGame(oData) {
 
         _oBoardContainer.regX = (_oBoardContainer.getBounds().x) + _oBoardContainer.getBounds().width/2;
         _oBoardContainer.regY = (_oBoardContainer.getBounds().y) + _oBoardContainer.getBounds().height/2;
-        _oBoardContainer.x = settings.CANVAS_WIDTH / 2;
-        _oBoardContainer.y = (settings.CANVAS_HEIGHT / 2) - 29;
+        _oBoardContainer.x = settings.getCanvasWidth() / 2;
+        _oBoardContainer.y = (settings.getCanvasHeight() / 2) - 29;
 
         this.gridInstance = new CGridMapping(true, this.state.board);
     };

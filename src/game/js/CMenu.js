@@ -41,12 +41,12 @@ function CMenu() {
         var oLogo = createBitmap(logoMenuSprite);
         oLogo.regX = logoMenuSprite.width / 2;
         oLogo.regY = logoMenuSprite.height / 2;
-        oLogo.x = settings.CANVAS_WIDTH / 2
+        oLogo.x = settings.getCanvasWidth() / 2
         oLogo.y = 500;
         mainInstance().getStage().addChild(oLogo);
 
         const playButtonSprite = CSpriteLibrary.getSprite('but_play');
-        _oButPlay = new CGfxButton((settings.CANVAS_WIDTH / 2), settings.CANVAS_HEIGHT - 540, playButtonSprite, mainInstance().getStage());
+        _oButPlay = new CGfxButton((settings.getCanvasWidth() / 2), settings.getCanvasHeight() - 540, playButtonSprite, mainInstance().getStage());
         _oButPlay.addEventListener(settings.ON_MOUSE_UP, this._onButPlayRelease, this);
         _oButPlay.pulseAnimation();
      
@@ -61,7 +61,7 @@ function CMenu() {
      
         if (settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
             const audioIconSprite = CSpriteLibrary.getSprite('audio_icon');
-            _pStartPosAudio = {x: settings.CANVAS_WIDTH - (audioIconSprite.width / 4) - 10, y: (audioIconSprite.height / 2) + 10};            
+            _pStartPosAudio = {x: settings.getCanvasWidth() - (audioIconSprite.width / 4) - 10, y: (audioIconSprite.height / 2) + 10};            
             _oAudioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
             _oAudioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
         }
@@ -89,7 +89,7 @@ function CMenu() {
         }
 
         _oFade = new createjs.Shape();
-        _oFade.graphics.beginFill("black").drawRect(0,0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
+        _oFade.graphics.beginFill("black").drawRect(0,0, settings.getCanvasWidth(), settings.getCanvasHeight());
         
         mainInstance().getStage().addChild(_oFade);
         

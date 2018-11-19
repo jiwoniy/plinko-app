@@ -21,12 +21,12 @@ function CCreditsPanel() {
     
     this._init = () => {
         _oFade = new createjs.Shape();
-        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
+        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
         _oFade.alpha = 0;
         mainInstance().getStage().addChild(_oFade);
         
         _oHitArea = new createjs.Shape();
-        _oHitArea.graphics.beginFill("#0f0f0f").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
+        _oHitArea.graphics.beginFill("#0f0f0f").drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
         _oHitArea.alpha = 0.01;
         _oListener = _oHitArea.on("click", this._onLogoButRelease);
         mainInstance().getStage().addChild(_oHitArea);
@@ -42,12 +42,12 @@ function CCreditsPanel() {
         oPanel.regY = msgBoxSprite.height / 2;
         _oPanelContainer.addChild(oPanel);
         
-        _oPanelContainer.x = settings.CANVAS_WIDTH / 2;
-        _oPanelContainer.y = settings.CANVAS_HEIGHT + (msgBoxSprite.height / 2);
+        _oPanelContainer.x = settings.getCanvasWidth() / 2;
+        _oPanelContainer.y = settings.getCanvasHeight() + (msgBoxSprite.height / 2);
         _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
         createjs.Tween
             .get(_oPanelContainer)
-            .to({ y: (settings.CANVAS_HEIGHT / 2) - 40 }, 500, createjs.Ease.quartIn);
+            .to({ y: (settings.getCanvasHeight() / 2) - 40 }, 500, createjs.Ease.quartIn);
 
         const oTitle = new createjs.Text("DEVELOPED BY"," 50px "+ settings.PRIMARY_FONT, "#ffffff");
         oTitle.y = -100;

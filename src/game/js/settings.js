@@ -1,6 +1,10 @@
 const settings = () => {
-  let CANVAS_WIDTH = 1280;
-  let CANVAS_HEIGHT = 1920;
+  // let CANVAS_WIDTH = 1280;
+  // let CANVAS_HEIGHT = 1920;
+  // let canvasWidth = 375
+  // let canvasHeight = 667
+  let canvasWidth = 1280
+  let canvasHeight = 1920
 
   const GAME_NAME = 'plinko';
 
@@ -72,8 +76,10 @@ const settings = () => {
     //   AD_SHOW_COUNTER = value
     // },
 
-    CANVAS_WIDTH,
-    CANVAS_HEIGHT,
+    // CANVAS_WIDTH,
+    // CANVAS_HEIGHT,
+    getCanvasWidth: () => canvasWidth,
+    getCanvasHeight: () => canvasHeight,
 
     EDGEBOARD_X,
     EDGEBOARD_Y,

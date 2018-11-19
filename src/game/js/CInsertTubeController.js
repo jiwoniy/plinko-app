@@ -21,7 +21,7 @@ function CInsertTubeController(oParentContainer) {
         const oBaseBoard = createBitmap(holesOccluderSprite);
         oBaseBoard.regX = holesOccluderSprite.width / 2;
         oBaseBoard.regY = holesOccluderSprite.height / 2;
-        oBaseBoard.x = settings.CANVAS_WIDTH / 2;
+        oBaseBoard.x = settings.getCanvasWidth() / 2;
         oBaseBoard.y = 408;
         _oController.addChild(oBaseBoard);
         

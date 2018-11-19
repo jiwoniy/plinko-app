@@ -25,7 +25,7 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
 
     this._init = function (oConfirmFunction, oNegateFunction) {
         _oFade = new createjs.Shape();
-        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.CANVAS_WIDTH, settings.CANVAS_HEIGHT);
+        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
         _oFade.alpha = 0;
         _oListener = _oFade.on("mousedown",function(){});
         mainInstance().getStage().addChild(_oFade);
@@ -41,10 +41,10 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
         oPanel.regY = oSprite.height/2;
         _oPanelContainer.addChild(oPanel);
         
-        _oPanelContainer.x = settings.CANVAS_WIDTH / 2;
-        _oPanelContainer.y = settings.CANVAS_HEIGHT + (oSprite.height / 2);
+        _oPanelContainer.x = settings.getCanvasWidth() / 2;
+        _oPanelContainer.y = settings.getCanvasHeight() + (oSprite.height / 2);
         _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
-        createjs.Tween.get(_oPanelContainer).to({y: (settings.CANVAS_HEIGHT / 2) - 40},500, createjs.Ease.quartIn);
+        createjs.Tween.get(_oPanelContainer).to({y: (settings.getCanvasHeight() / 2) - 40},500, createjs.Ease.quartIn);
         /*
         var oTitleStroke = new createjs.Text(TEXT_ARE_SURE," 34px "+PRIMARY_FONT, "#000000");
         oTitleStroke.y = -oSprite.height/2 + 120;

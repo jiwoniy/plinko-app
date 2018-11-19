@@ -148,34 +148,34 @@ function sizeHandler() {
     var w = getSize('Width');
     _checkOrientation(w, h);
 
-	let multiplier = Math.min((h / settings.CANVAS_HEIGHT), (w / settings.CANVAS_WIDTH));
-	var destW = settings.CANVAS_WIDTH * multiplier;
-	var destH = settings.CANVAS_HEIGHT * multiplier;
+	let multiplier = Math.min((h / settings.getCanvasHeight()), (w / settings.getCanvasWidth()));
+	var destW = settings.getCanvasWidth() * multiplier;
+	var destH = settings.getCanvasHeight() * multiplier;
         
     var iAdd = 0;
     if (destH < h) {
         iAdd = h-destH;
         destH += iAdd;
-        destW += iAdd * (settings.CANVAS_WIDTH / settings.CANVAS_HEIGHT);
+        destW += iAdd * (settings.getCanvasWidth() / settings.getCanvasHeight());
     } else if (destW < w) {
-        iAdd = w-destW;
+        iAdd = w - destW;
         destW += iAdd;
-        destH += iAdd * (settings.CANVAS_HEIGHT / settings.CANVAS_WIDTH);
+        destH += iAdd * (settings.getCanvasHeight() / settings.getCanvasWidth());
     }
 
     var fOffsetY = ((h / 2) - (destH / 2));
     var fOffsetX = ((w / 2) - (destW / 2));
-    var fGameInverseScaling = (settings.CANVAS_WIDTH / destW);
+    var fGameInverseScaling = (settings.getCanvasWidth() / destW);
 
     if( fOffsetX*fGameInverseScaling < - settings.EDGEBOARD_X ||  
         fOffsetY*fGameInverseScaling < - settings.EDGEBOARD_Y ) {
-        multiplier = Math.min( h / (settings.CANVAS_HEIGHT - (settings.EDGEBOARD_Y * 2)), w / (settings.CANVAS_WIDTH - (settings.EDGEBOARD_X * 2)));
-        destW = settings.CANVAS_WIDTH * multiplier;
-        destH = settings.CANVAS_HEIGHT * multiplier;
+        multiplier = Math.min( h / (settings.getCanvasHeight() - (settings.EDGEBOARD_Y * 2)), w / (settings.getCanvasWidth() - (settings.EDGEBOARD_X * 2)));
+        destW = settings.getCanvasWidth() * multiplier;
+        destH = settings.getCanvasHeight() * multiplier;
         fOffsetY = ( h - destH ) / 2;
         fOffsetX = ( w - destW ) / 2;
         
-        fGameInverseScaling = (settings.CANVAS_WIDTH / destW);
+        fGameInverseScaling = (settings.getCanvasWidth() / destW);
     }
 
     s_iOffsetX = (-1 * fOffsetX * fGameInverseScaling);
@@ -202,7 +202,7 @@ function sizeHandler() {
         mainInstance().getStage().canvas.height = destH * 2;
         canvas.style.width = destW+"px";
         canvas.style.height = destH+"px";
-        var iScale = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
+        var iScale = Math.min(destW / settings.getCanvasWidth(), destH / settings.getCanvasHeight());
         s_iScaleFactor = iScale * 2;
         mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor;  
     } else if ($.browser.mobile || isChrome()) {
@@ -212,7 +212,7 @@ function sizeHandler() {
         mainInstance().getStage().canvas.width = destW;
         mainInstance().getStage().canvas.height = destH;
 
-        s_iScaleFactor = Math.min(destW / settings.CANVAS_WIDTH, destH / settings.CANVAS_HEIGHT);
+        s_iScaleFactor = Math.min(destW / settings.getCanvasWidth(), destH / settings.getCanvasHeight());
         mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor; 
     }
         
@@ -293,13 +293,17 @@ function setVolume(szSound, iVolume){
 // }
 
 function createBitmap(sprite, iWidth, iHeight) {
-	var bitMap = new createjs.Bitmap(sprite);
+	const bitMap = new createjs.Bitmap(sprite);
 	var hitObject = new createjs.Shape();
 	
 	if (iWidth && iHeight) {
-		hitObject.graphics.beginFill("#fff").drawRect(0, 0, iWidth, iHeight);
+        hitObject.graphics
+            .beginFill("#fff")
+            .drawRect(0, 0, iWidth, iHeight);
 	} else {
-		hitObject.graphics.beginFill("#ff0").drawRect(0, 0, sprite.width, sprite.height);
+        hitObject.graphics
+            .beginFill("#ff0")
+            .drawRect(0, 0, sprite.width, sprite.height);
 	}
 
 	bitMap.hitArea = hitObject;

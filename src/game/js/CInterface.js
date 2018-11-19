@@ -85,7 +85,7 @@ function CInterface(oBgContainer, gameInstance) {
         mainInstance().getStage().addChild(_oHandAnim);
                
         const exitButtonSprite = CSpriteLibrary.getSprite('but_exit');
-        _pStartPosExit = { x: settings.CANVAS_WIDTH - (exitButtonSprite.width / 2) - 10, y: (exitButtonSprite.height / 2) + 10 };
+        _pStartPosExit = { x: settings.getCanvasWidth() - (exitButtonSprite.width / 2) - 10, y: (exitButtonSprite.height / 2) + 10 };
         _oButExit = new CGfxButton(_pStartPosExit.x, _pStartPosExit.y, exitButtonSprite, mainInstance().getStage());
         _oButExit.addEventListener(settings.ON_MOUSE_UP, this._onExit, this);
         
@@ -117,7 +117,7 @@ function CInterface(oBgContainer, gameInstance) {
         
         //////////////////////// BET CONTROLLER /////////////////////////
         const oControllerContainer = new createjs.Container();
-        oControllerContainer.x = settings.CANVAS_WIDTH / 2;
+        oControllerContainer.x = settings.getCanvasWidth() / 2;
         oControllerContainer.y = 1650;
         oBgContainer.addChild(oControllerContainer);
 
