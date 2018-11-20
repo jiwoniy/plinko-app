@@ -4,47 +4,42 @@ import CSpriteLibrary from './sprite_lib.js'
 import CBasket from './CBasket.js'
 
 function CScoreBasketController(oParentContainer) {
-    
-    var _aBasket;
-    
-    this._init = function(oParentContainer) {
+    this.state = {
+        baskets: []
+    }
+
+    this.initBasketController = function(oParentContainer) {
+        const container = new createjs.Container();
+        container.y = 1472;
+        oParentContainer.addChild(container);
         
-        var oScoreContainer = new createjs.Container();
-        oScoreContainer.y = 1472;
-        oParentContainer.addChild(oScoreContainer);
-        
-        var oSprite = CSpriteLibrary.getSprite('basket_display');
-        var iWidth = oSprite.width/4;
-        var iHeight = oSprite.height;
-        var oData = {
-            images: [oSprite], 
+        const basketSprite = CSpriteLibrary.getSprite('basket_display');
+        const iWidth = basketSprite.width / 4;
+        const iHeight = basketSprite.height;
+
+        const spriteSheet = new createjs.SpriteSheet({
+            images: [basketSprite], 
             // width, height & registration point of each sprite
             frames: {width: iWidth, height: iHeight, regX: iWidth/2, regY: iHeight/2}, 
             animations: {state_off:[0],state_green:[1], state_yellow:[2], state_red:[3]}
-        };
-                   
-        var oSpriteSheet = new createjs.SpriteSheet(oData);
-
-        _aBasket = [];
+        });
         
-        for(var i=0; i< settings.getPrize().length; i++) {
-            _aBasket.push(new CBasket(290 +i*140, 0, oScoreContainer, oSpriteSheet, iWidth, iHeight, settings.getPrize()[i].background));
-        };
-        
-    };
-    
-    this.unload = function(){
-        for(var i=0; i< settings.getPrize().length; i++) {
-            _aBasket[i].unload();
+        for (let i = 0; i < settings.getPrize().length; i += 1) {
+            this.state.baskets.push(new CBasket(290 + i * 140, 0, container, spriteSheet, iWidth, iHeight, settings.getPrize()[i].background));
         };
     };
     
-    this.litBasket = function(iIndex, bWin) {
-        
-        _aBasket[iIndex].lit(bWin);
+    this.unload = () => {
+        for (let i = 0; i < settings.getPrize().length; i += 1) {
+            this.state.baskets[i].unload();
+        };
     };
     
-    this._init(oParentContainer);
+    this.litBasket = (iIndex, bWin) => {
+        this.state.baskets[iIndex].lit(bWin);
+    };
+    
+    this.initBasketController(oParentContainer);
 }
 
 export default CScoreBasketController;

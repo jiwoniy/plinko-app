@@ -1,10 +1,10 @@
 import createjs from './createjs.js'
 import settings from './settings.js'
-import {
-    createBitmap,
- } from './ctl_utils.js'
+// import {
+//     createBitmap,
+//  } from './ctl_utils.js'
 import CBall from './CBall.js'
-import CSpriteLibrary from './sprite_lib.js'
+// import CSpriteLibrary from './sprite_lib.js'
 
 
 function CBallGenerator(oParentContainer) {
@@ -39,12 +39,11 @@ function CBallGenerator(oParentContainer) {
             this.state.ball[i] = new CBall(oBallPos, _oGeneratorContainer);
         }
         
-        const ballGeneratorSprite = CSpriteLibrary.getSprite('ball_generator');
-        const generator = createBitmap(ballGeneratorSprite);
-        generator.x = 0;
-        generator.y = 196;
-        _oFrontContainer.addChild(generator);
-        
+        // const ballGeneratorSprite = CSpriteLibrary.getSprite('ball_generator');
+        // const generator = createBitmap(ballGeneratorSprite);
+        // generator.x = 0;
+        // generator.y = 196;
+        // _oFrontContainer.addChild(generator);
     };
     
     this.unload = () => {

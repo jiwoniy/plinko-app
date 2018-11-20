@@ -68,7 +68,8 @@ const settings = () => {
   let enableCheckOrientation = null
   // let AD_SHOW_COUNTER = null;
 
-  let NUM_IMAGES_BACKGROUNDS = null;
+  // let NUM_IMAGES_BACKGROUNDS = null;
+  let basketImageNumber = null
   let NUM_BALL = 0;
 
   return {
@@ -169,7 +170,11 @@ const settings = () => {
       enableCheckOrientation = value
     },
     // ENABLE_CHECK_ORIENTATION,
-    NUM_IMAGES_BACKGROUNDS,
+    // NUM_IMAGES_BACKGROUNDS,
+    getBasketImageNumber: () => basketImageNumber,
+    setBasketImageNumber: (value) => {
+      basketImageNumber = value
+    }
     // SHOW_CREDITS,
   }
 }

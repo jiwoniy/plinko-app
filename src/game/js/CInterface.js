@@ -140,7 +140,7 @@ function CInterface(oBgContainer, gameInstance) {
 
         this.ballNum = new createjs.Text(settings.getNumBall()," 40px "+ settings.PRIMARY_FONT, "#ffffff");
         this.ballNum.x = oBallNumBg.x;
-        this.ballNum.y = oBallNumBg.y-2;
+        this.ballNum.y = oBallNumBg.y - 2;
         this.ballNum.textAlign = 'center';
         this.ballNum.textBaseline = 'middle';
         this.ballNum.lineWidth = 400;
@@ -150,6 +150,7 @@ function CInterface(oBgContainer, gameInstance) {
         this.guiExpandibleContainer = new CGUIExpandible(_pStartPosExit.x, _pStartPosExit.y, settingsSprite, mainInstance().getStage());
         this.guiExpandibleContainer.addButton(this.exitButtonContainer);
         this.guiExpandibleContainer.addButton(this.audioToggle);
+
         if (settings.getEnableFullScreen() && screenfull.enabled) {
             this.guiExpandibleContainer.addButton(this.fullscreenContainer);
         }
@@ -203,7 +204,7 @@ function CInterface(oBgContainer, gameInstance) {
         this.state.handAim.x = oPos.x;
         this.state.handAim.y = oPos.y;
     };  
-    
+  
     this._onButRestartRelease = () => {
         gameInstance.restartGame();
         $(mainInstance()).trigger("restart_level", 1);

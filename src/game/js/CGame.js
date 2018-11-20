@@ -62,9 +62,12 @@ function CGame(oData, mainInstance) {
         // _bStartGame=true;
         _iNumBallRemaining = settings.getNumBall();
         
-        const oBg = createBitmap(CSpriteLibrary.getSprite('bg_game'));
-        this.mainInstance.getStage().addChild(oBg);
-
+        const gameBackground = createBitmap(CSpriteLibrary.getSprite('bg_game'));
+        this.mainInstance.getStage().addChild(gameBackground);
+        
+        // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
+        // this.mainInstance.getStage().addChild(tabelTennisSprite);
+        
         // const logoGameSprite = CSpriteLibrary.getSprite('logo_game');
         // const oLogo = createBitmap(logoGameSprite);
         // oLogo.regX = logoGameSprite.width / 2;
@@ -146,6 +149,13 @@ function CGame(oData, mainInstance) {
         this.boardContainer.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
         this.boardContainer.x = settings.getCanvasWidth() / 2;
         this.boardContainer.y = (settings.getCanvasHeight() / 2) - 29;
+
+        // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
+        // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
+        // // tabelTennisSprite.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
+        // tabelTennisSprite.x = settings.getCanvasWidth() / 2;
+        // tabelTennisSprite.y = (settings.getCanvasHeight() / 2) - 29;
+        // this.mainInstance.getStage().addChild(tabelTennisSprite);
 
         this.gridInstance = new CGridMapping(true, this.state.board);
     };

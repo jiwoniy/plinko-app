@@ -50,7 +50,7 @@ class Plinko extends Component {
       //      -redeemlink: INSERT A REDEEM LINK FOR THE OBJECT. IF YOU DON'T WANT TO ADD ANY LINK, LEAVE THE FIELD AS IT IS: (redeemlink: "").
       prize_settings: [
         ///// YOU CAN'T ADD MORE PRIZE SLOT
-        { background: "image_1", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
+        { background: "basket_prize", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
         { background: "image_0", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },
         { background: "image_2", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
         { background: "image_0", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },

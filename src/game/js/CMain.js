@@ -152,9 +152,13 @@ function CMain(oData) {
         CSpriteLibrary.addSprite("but_no","./sprites/but_no.png");
         
         CSpriteLibrary.addSprite("bg_menu","./sprites/bg_menu.jpg"); 
-        CSpriteLibrary.addSprite("bg_game","./sprites/game_background.svg");
-        CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
-        CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
+        // CSpriteLibrary.addSprite("bg_game","./sprites/game_background.svg");
+        CSpriteLibrary.addSprite("bg_game","./sprites/table_tennis_bg.svg");
+        // CSpriteLibrary.addSprite("table_tennis","./sprites/table_tennis.svg");
+        // CSpriteLibrary.addSprite("table_tennis","./sprites/tabletennis_net.svg");
+        CSpriteLibrary.addSprite("table_tennis","./sprites/tennis_net.svg");
+        // CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
+        // CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
         
         CSpriteLibrary.addSprite("but_exit","./sprites/but_exit.png");
         CSpriteLibrary.addSprite("audio_icon","./sprites/audio_icon.png");
@@ -166,7 +170,8 @@ function CMain(oData) {
         CSpriteLibrary.addSprite("ball_panel","./sprites/ball_panel.png");
         
         CSpriteLibrary.addSprite("ball","./sprites/ball.png");
-        CSpriteLibrary.addSprite("stake","./sprites/stake.png");
+        // CSpriteLibrary.addSprite("stake","./sprites/stake.png");
+        CSpriteLibrary.addSprite("stake","./sprites/ball.svg");
         CSpriteLibrary.addSprite("ball_generator","./sprites/ball_generator.png");
         
         CSpriteLibrary.addSprite("holes_occluder","./sprites/holes_occluder.png");
@@ -175,7 +180,8 @@ function CMain(oData) {
         CSpriteLibrary.addSprite("basket_display","./sprites/basket_display.jpg");
         CSpriteLibrary.addSprite("hand_anim","./sprites/hand_anim.png");
         
-        for(let i = 0; i < settings.NUM_IMAGES_BACKGROUNDS; i += 1) {
+        CSpriteLibrary.addSprite("basket_prize","./sprites/prize/prize.svg");
+        for(let i = 0; i < settings.getBasketImageNumber(); i += 1) {
             CSpriteLibrary.addSprite("image_"+i,"./sprites/prize/image_"+i+".png");
         }
         
@@ -272,7 +278,7 @@ function CMain(oData) {
     settings.setEnableCheckOrientation(oData.check_orientation)
     // settings.ENABLE_CHECK_ORIENTATION = oData.check_orientation;
     
-    settings.NUM_IMAGES_BACKGROUNDS = oData.total_images_backgrounds_in_folder;
+    settings.setBasketImageNumber(oData.total_images_backgrounds_in_folder)
     
     this.initContainer();
 }
