@@ -23,7 +23,7 @@ function CMain(oData) {
     // var _oHelp;
     // var _oGame;
 
-    this.oStage = null
+    this.stage = null
     this.preloader = null
 
     this.state = {
@@ -46,13 +46,13 @@ function CMain(oData) {
     this.initContainer = () => {
         // s_oCanvas = document.getElementById("canvas");
         if (document.getElementById("canvas")) {
-            this.oStage = new createjs.Stage(document.getElementById("canvas"));
-            this.oStage.preventSelection = true;
-            createjs.Touch.enable(this.oStage);
+            this.stage = new createjs.Stage(document.getElementById("canvas"));
+            this.stage.preventSelection = true;
+            createjs.Touch.enable(this.stage);
             
             // s_bMobile = $.browser.mobile;
             if($.browser.mobile === false) {
-                this.oStage.enableMouseOver(settings.FPS);  
+                this.stage.enableMouseOver(settings.FPS);  
                 $('body').on('contextmenu', '#canvas', function(e){ return false; });
             }
             
@@ -74,7 +74,7 @@ function CMain(oData) {
     };
 
     this.getStage = () => {
-        return this.oStage;
+        return this.stage;
     }
 
     this.getFullscreen = () => {
@@ -152,7 +152,7 @@ function CMain(oData) {
         CSpriteLibrary.addSprite("but_no","./sprites/but_no.png");
         
         CSpriteLibrary.addSprite("bg_menu","./sprites/bg_menu.jpg"); 
-        CSpriteLibrary.addSprite("bg_game","./sprites/bg_game.jpg");
+        CSpriteLibrary.addSprite("bg_game","./sprites/game_background.svg");
         CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
         CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
         
@@ -193,10 +193,11 @@ function CMain(oData) {
     this._onAllImagesLoaded = () => { 
     };
     
-    this._onRemovePreloader = () => {
+    this.onRemovePreloader = () => {
         this.preloader.unload();
         // s_oSoundtrack = playSound('soundtrack', 1, true);
-        playSound('soundtrack', 1, true);
+        // Sound off
+        // playSound('soundtrack', 1, true);
         this.gotoMenu();
     };
     
@@ -205,12 +206,12 @@ function CMain(oData) {
     };
     
     this.gotoMenu = () => {
-        this.state.menu = new CMenu(true);
+        this.state.menu = new CMenu(true, this);
         this.state.gameStatus = settings.STATE_MENU;
     };
 
     this.gotoGame = () => {
-        this.state.game = new CGame(true, this.state.initData);   						
+        this.state.game = new CGame(true, this.state.initData, this);   						
         this.state.gameStatus = settings.STATE_GAME;
     };
     
@@ -258,7 +259,7 @@ function CMain(oData) {
             this.state.game.update();
         }
         
-        this.oStage.update(event);
+        this.stage.update(event);
     };
     
     // s_oMain = this;
@@ -266,8 +267,10 @@ function CMain(oData) {
     // _oData = oData;
     
     settings.ENABLE_CREDITS = true;
-    settings.ENABLE_FULLSCREEN = oData.fullscreen;
-    settings.ENABLE_CHECK_ORIENTATION = oData.check_orientation;
+    // settings.ENABLE_FULLSCREEN = oData.fullscreen;
+    settings.setEnableFullScreen(oData.check_orientation)
+    settings.setEnableCheckOrientation(oData.check_orientation)
+    // settings.ENABLE_CHECK_ORIENTATION = oData.check_orientation;
     
     settings.NUM_IMAGES_BACKGROUNDS = oData.total_images_backgrounds_in_folder;
     

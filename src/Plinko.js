@@ -5,7 +5,7 @@ import './game/js/detectBrowser.js'
 import CMain from './game/js/CMain.js'
 import {
   getParamValue,
-  isIOS,
+  // isIOS,
   sizeHandler
 } from './game/js/ctl_utils.js'
 
@@ -119,13 +119,15 @@ class Plinko extends Component {
       }
     });
 
-    if (isIOS()) { 
-      setTimeout(function() {
-        sizeHandler();
-      },200); 
-    } else {
-      sizeHandler(); 
-    } 
+    // if (isIOS()) { 
+    //   setTimeout(function() {
+    //     sizeHandler();
+    //   },200); 
+    // } else {
+    //   sizeHandler(); 
+    // } 
+
+    sizeHandler(); 
   }
   render() {
     return (

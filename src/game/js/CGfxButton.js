@@ -7,7 +7,7 @@ import {
 } from './ctl_utils.js'
 import settings from './settings.js'
 
-function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
+function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
     var _bDisabled;
     
     var _iScaleFactor;
@@ -24,7 +24,7 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
     var _oListenerMouseUp;
     var _oListenerMouseOver;
     
-    this._init = function(iXPos,iYPos,oSprite, oParentContainer) {
+    this._init = function(iXPos, iYPos, oSprite, oParentContainer) {
         _bDisabled = false;
         
         _iScaleFactor = 1;
@@ -35,7 +35,7 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
         _oButton = new createjs.Container();
         _oButton.x = iXPos;
         _oButton.y = iYPos; 
-        _oButton.scaleX =   _oButton.scaleY = _iScaleFactor;
+        _oButton.scaleX = _oButton.scaleY = _iScaleFactor;
         oParentContainer.addChild(_oButton);
         
         _oButtonSprite = createBitmap( oSprite);      
@@ -70,7 +70,7 @@ function CGfxButton(iXPos,iYPos,oSprite, oParentContainer) {
     };
     
     this._initListener = function() {
-        if($.browser.mobile) {
+        if ($.browser.mobile) {
             _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
             _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
         } else {

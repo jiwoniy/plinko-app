@@ -6,92 +6,95 @@ import {
 import CSpriteLibrary from './sprite_lib.js'
 import settings from './settings.js'
 
-function CCell(iX, iY, oParentContainer, iRow, iCol, oStakeContainer) {
-    // var _oParent;
-    var _oCell;
-    var _oDebugHighlight;
-    var _oStake;
-    
-    this._init = function(iX, iY, oParentContainer, iRow, iCol, oStakeContainer){
-        
-        _oCell = new createjs.Container();
-        _oCell.x = iX;
-        _oCell.y = iY;
-        _oCell.alpha = 0;
-        oParentContainer.addChild(_oCell);
+function CCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer) {
+    this.container = null
+    this.hightlightShape = null
+    this.stakeSprite = null
 
-        var iWidth = 100;
-        var iHeight = 100;
-        _oDebugHighlight = new createjs.Shape();
-        _oDebugHighlight.graphics.beginFill("rgba(255,255,255,0.51)").drawRect(-iWidth/2, -iHeight/2, iWidth, iHeight);
-        _oDebugHighlight.visible = false;
-        _oDebugHighlight.rotation = 45;
-        _oCell.addChild(_oDebugHighlight);
-        
-        var oSprite = CSpriteLibrary.getSprite('stake');
-        _oStake = createBitmap(oSprite);
-        _oStake.regX = oSprite.width/2;
-        _oStake.x = iX;
-        _oStake.y = iY + 60;
-        oParentContainer.addChild(_oStake);
+    this.initCell = function(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer) {
+        this.parentContainer = parentContainer
+        this.container = new createjs.Container();
+        this.container.x = xPosition;
+        this.container.y = yPosition;
+        this.container.alpha = 0;
+        this.parentContainer.addChild(this.container);
+
+        const stakeSprite = CSpriteLibrary.getSprite('stake');
+        this.stakeSprite = createBitmap(stakeSprite);
+        this.stakeSprite.regX = stakeSprite.width / 2;
+        this.stakeSprite.x = xPosition;
+        this.stakeSprite.y = yPosition + 60;
+        this.parentContainer.addChild(this.stakeSprite);
+
+        const iWidth = 100;
+        const iHeight = 100;
+        this.hightlightShape = new createjs.Shape();
+        this.hightlightShape.graphics
+            .beginFill("rgba(255,255,255,0.51)")
+            .drawRect(-iWidth / 2, -iHeight / 2, iWidth, iHeight);
+        this.hightlightShape.visible = false;
+        this.hightlightShape.rotation = 45;
+        this.container.addChild(this.hightlightShape);
         
         /////////ACTIVATE THIS FUNCTION TO CHECK BALL PATH
         //this._debug();
     };
     
-    this.unload = function(){
-        oParentContainer.removeChild(_oCell);
+    this.unload = () => {
+        this.parentContainer.removeChild(this.container);
     };
     
-    this.getCenterPos = function(){
-        return {x: iX, y:iY};
+    this.getCenterPos = () => {
+        return { x: xPosition, y: yPosition };
     };
     
-    this.getPivotPos = function(){
-        return {x: iX, y:iY + settings.CELL_PIVOT_FROM_CENTER};
+    this.getPivotPos = () => {
+        return { x: xPosition, y: yPosition + settings.CELL_PIVOT_FROM_CENTER} ;
     };
     
-    this.getCenterOfBallOnPivot = function(){
-        return {x: iX, y:iY + settings.CELL_PIVOT_FROM_CENTER - settings.BALL_RADIUS};
+    this.getCenterOfBallOnPivot = () => {
+        return { x: xPosition, y: yPosition + settings.CELL_PIVOT_FROM_CENTER - settings.getBallRadius() };
     };
     
-    this.checkBallOverlap = function(oPos){
-        var iXDiff = oPos.x - iX;
-        var iYDiff = oPos.y - iY;
-        var iBallRad = settings.BALL_RADIUS * settings.BALL_RADIUS;
+    this.checkBallOverlap = (oPos) => {
+        var iXDiff = oPos.x - xPosition;
+        var iYDiff = oPos.y - yPosition;
+        var iBallRad = settings.getBallRadius() * settings.getBallRadius();
         
-        return (iXDiff*iXDiff + iYDiff*iYDiff < iBallRad);
+        return (iXDiff * iXDiff + iYDiff * iYDiff < iBallRad);
         //return _oCell.hitTest(oPos.x, oPos.y);
     };
     
-    this.removeStake = function(){
-        _oStake.visible = false;
+    this.removeStake = () => {
+        if (this.stakeSprite) {
+            this.stakeSprite.visible = false;
+        }
     };
     
-    this.highlight = function(bVal){
-        _oDebugHighlight.visible = bVal;
+    this.highlight = (bVal) => {
+        this.hightlightShape.visible = bVal;
     };
     
-    this._debug = function(){
-        _oCell.alpha = 1;
+    // this._debug = () => {
+    //     this.container.alpha = 1;
         
-        var szFormat = "bold 30px Arial";
-        var oDebugTextStroke = new createjs.Text(iRow +","+iCol,szFormat, "#000000");
-        oDebugTextStroke.textAlign = "center";
-        oDebugTextStroke.textBaseline = "middle";
-        oDebugTextStroke.lineWidth = 200;
-        oDebugTextStroke.outline = 4;
-        _oCell.addChild(oDebugTextStroke);
+    //     var szFormat = 'bold 30px Arial';
+    //     var oDebugTextStroke = new createjs.Text(rows +","+cols,szFormat, "#000000");
+    //     oDebugTextStroke.textAlign = "center";
+    //     oDebugTextStroke.textBaseline = "middle";
+    //     oDebugTextStroke.lineWidth = 200;
+    //     oDebugTextStroke.outline = 4;
+    //     this.container.addChild(oDebugTextStroke);
         
-        var oDebugText = new createjs.Text(oDebugTextStroke.text,szFormat, "#ffffff");
-        oDebugText.textAlign = oDebugTextStroke.textAlign;
-        oDebugText.textBaseline = oDebugTextStroke.textBaseline;
-        oDebugText.lineWidth = oDebugTextStroke.lineWidth;
-        _oCell.addChild(oDebugText);
-    };
+    //     var oDebugText = new createjs.Text(oDebugTextStroke.text,szFormat, "#ffffff");
+    //     oDebugText.textAlign = oDebugTextStroke.textAlign;
+    //     oDebugText.textBaseline = oDebugTextStroke.textBaseline;
+    //     oDebugText.lineWidth = oDebugTextStroke.lineWidth;
+    //     this.container.addChild(oDebugText);
+    // };
     
     // _oParent = this;
-    this._init(iX, iY, oParentContainer, iRow, iCol, oStakeContainer);
+    this.initCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer);
 }
 
 export default CCell;

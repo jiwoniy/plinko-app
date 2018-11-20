@@ -10,12 +10,14 @@ import {
 import CSlot from './CSlot.js'
 
 function CInsertTubeController(oParentContainer) {
-    var _aSlot;
-    var _oController;
+    // var _aSlot;
+    // var _oController;
+    this.slots = []
+    this.container = null
 
-    this._init = (oParentContainer) => {
-        _oController = new createjs.Container();
-        oParentContainer.addChild(_oController);
+    this.initInsertTubeController = (oParentContainer) => {
+        this.container = new createjs.Container();
+        oParentContainer.addChild(this.container);
         
         const holesOccluderSprite = CSpriteLibrary.getSprite('holes_occluder');
         const oBaseBoard = createBitmap(holesOccluderSprite);
@@ -23,11 +25,11 @@ function CInsertTubeController(oParentContainer) {
         oBaseBoard.regY = holesOccluderSprite.height / 2;
         oBaseBoard.x = settings.getCanvasWidth() / 2;
         oBaseBoard.y = 408;
-        _oController.addChild(oBaseBoard);
+        this.container.addChild(oBaseBoard);
         
         const holesBoardOccluderSprite = CSpriteLibrary.getSprite('hole_board_occluder');
         const aTubePos = [];
-        for(let i = 0; i < settings.NUM_INSERT_TUBE; i += 1) {
+        for(let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
             
             aTubePos.push({x: 288+i*140, y:356});
             
@@ -36,48 +38,47 @@ function CInsertTubeController(oParentContainer) {
             oTube.regY = holesBoardOccluderSprite.height / 2;
             oTube.x = aTubePos[i].x;
             oTube.y = aTubePos[i].y;
-            _oController.addChild(oTube);
+            this.container.addChild(oTube);
         }
         
-        _aSlot = [];
         // var oSprite = CSpriteLibrary.getSprite('bg_number');
-        for(let i = 0; i< settings.NUM_INSERT_TUBE; i += 1) {
-            var oSlot = new CSlot(aTubePos[i].x, aTubePos[i].y+ 20, 90, 100, _oController);
+        for(let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
+            const oSlot = new CSlot(aTubePos[i].x, aTubePos[i].y+ 20, 90, 100, this.container);
             oSlot.addEventListenerWithParams(settings.ON_MOUSE_UP, this._onSlot, this, i);
             
-            _aSlot.push(oSlot);
+            this.slots.push(oSlot);
         }
         
         this.hideSlots();
     };
     
     this.unload = () => {
-        oParentContainer.removeChild(_oController);
+        oParentContainer.removeChild(this.container);
     };
     
     this.checkBallOverlap = (oPos) => {
         var bOverlap = false;
-        for(let i = 0; i < settings.NUM_INSERT_TUBE; i += 1) {
-            bOverlap = _aSlot[i].checkOverlap(oPos);
+        for(let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
+            bOverlap = this.slots[i].checkOverlap(oPos);
             if(bOverlap){
-                return {pos: _aSlot[i].getPos(), index:i};
+                return { pos: this.slots[i].getPos(), index: i };
             }
         }
     };
     
-    this.getSlotPos = (iIndex) => {
-        return _aSlot[iIndex].getPos();
+    this.getSlotPos = (index) => {
+        return this.slots[index].getPos();
     };
     
     this.hideSlots = () => {
-        for(let i = 0; i < settings.NUM_INSERT_TUBE; i += 1) {
-            _aSlot[i].setVisible(false);
+        for (let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
+            this.slots[i].setVisible(false);
         }
     };
     
     this.showSlots = () => {
-        for(let i = 0; i < settings.NUM_INSERT_TUBE; i += 1) {
-            _aSlot[i].setVisible(true);
+        for (let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
+            this.slots[i].setVisible(true);
         }
     };
     
@@ -85,7 +86,7 @@ function CInsertTubeController(oParentContainer) {
         gameInstance().launch(iIndex)
     };
     
-    this._init(oParentContainer);
+    this.initInsertTubeController(oParentContainer);
 }
 
 export default CInsertTubeController;

@@ -31,7 +31,7 @@ function CBallGenerator(oParentContainer) {
         oParentContainer.addChild(_oFrontContainer)
         
         _iBallInTube = 3;
-        _iOffsetFromBall = (settings.BALL_RADIUS * 2) - 20;
+        _iOffsetFromBall = (settings.getBallRadius() * 2) - 20;
         _pStartPoint = {x: 182, y: 264};
         // this.state.ball = [];
         for(let i = 0; i < _iBallInTube; i += 1) {

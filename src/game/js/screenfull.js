@@ -65,12 +65,52 @@ var fn = (function () {
 
 	return false;
 })();
-var eventNameMap = {
+
+const eventNameMap = {
 	change: fn.fullscreenchange,
 	error: fn.fullscreenerror
 };
 
-var screenfull = {
+// Object.defineProperties(screenfull, {
+// 	isFullscreen: {
+// 		get: function () {
+// 			return Boolean(document[fn.fullscreenElement]);
+// 		}
+// 	},
+// 	element: {
+// 		enumerable: true,
+// 		get: function () {
+// 			return document[fn.fullscreenElement];
+// 		}
+// 	},
+// 	enabled: {
+// 		enumerable: true,
+// 		get: function () {
+// 			// Coerce to boolean in case of old WebKit
+// 			return Boolean(document[fn.fullscreenEnabled]);
+// 		}
+// 	}
+// });
+
+const screenfull = {
+	isFullscreen: {
+		get: function () {
+			return Boolean(document[fn.fullscreenElement]);
+		}
+	},
+	element: {
+		enumerable: true,
+		get: function () {
+			return document[fn.fullscreenElement];
+		}
+	},
+	enabled: {
+		enumerable: true,
+		get: function () {
+			// Coerce to boolean in case of old WebKit
+			return Boolean(document[fn.fullscreenEnabled]);
+		}
+	},
 	request: function (elem) {
 		var request = fn.requestFullscreen;
 

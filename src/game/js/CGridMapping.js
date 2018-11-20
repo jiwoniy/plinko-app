@@ -6,72 +6,65 @@ var DIR_TOPLEFT = "DIR_TOPLEFT";
 var DIR_BOTLEFT = "DIR_BOTLEFT";
 var DIR_SELF = "DIR_SELF";
 
-function CGridMapping(aMatrix) {
-    var _iRow;
-    var _iCol;
-    
-    var _aMatrixMap;
-    var _aRadiusMap;
-    
-    var _aPrecomputedStartPath;
-    
-    this._init = (aMatrix) => {
-        _iRow = settings.getMatrixRow();
-        _iCol = settings.getMatrixCol();
-        
-        _aRadiusMap = [];
-        
-        _aMatrixMap = [];
-        for(let i = 0; i < aMatrix.length; i += 1) {
-            _aMatrixMap[i] = [];
-            for(let j = 0; j < aMatrix[i].length; j += 1) {
-                _aMatrixMap[i][j] = [];
-            }
-        }
-        
-        this._buildMap();
-        _aPrecomputedStartPath = [];
-        for(let i = 0; i < aMatrix[0].length; i += 1) {
-            _aPrecomputedStartPath[i] = this.getAllPathFrom({row:0, col:i});
-        }
-    };
-    
-    this._buildMap = () => {
-        for(let i = 0; i < aMatrix.length; i += 1) {
-            for(let j = 0; j < aMatrix[i].length; j += 1) {
-                _aMatrixMap[i][j][DIR_BOTRIGHT] = this._setNeighbor(i,j,DIR_BOTRIGHT);
-                _aMatrixMap[i][j][DIR_BOTLEFT] = this._setNeighbor(i,j,DIR_BOTLEFT);
-                _aMatrixMap[i][j][DIR_SELF] = this._setNeighbor(i,j,DIR_SELF);
+function CGridMapping(boardMatrix) {
+    this.state = {
+        row: settings.getMatrixRow(),
+        col: settings.getMatrixCol()
+    }
 
+    this.precomputedStartPath = []
+    this.radiusMap = []
+    this.matrixMap = []
+
+    this.initGridMapping = (boardMatrix) => {
+        // initialize matrixMap
+        for(let i = 0; i < boardMatrix.length; i += 1) {
+            this.matrixMap[i] = [];
+            for(let j = 0; j < boardMatrix[i].length; j += 1) {
+                this.matrixMap[i][j] = [];
             }
         }
         
+        this.buildPathMap();
+        for (let i = 0; i < boardMatrix[0].length; i += 1) {
+            this.precomputedStartPath[i] = this.getAllPathFrom({ row: 0, col: i });
+        }
     };
     
-    this._setNeighbor = (r, c, iDir) => {
+    this.buildPathMap = () => {
+        for (let i = 0; i < boardMatrix.length; i += 1) {
+            for (let j = 0; j < boardMatrix[i].length; j += 1) {
+                this.matrixMap[i][j][DIR_BOTRIGHT] = this.setNeighbor(i, j, DIR_BOTRIGHT);
+                this.matrixMap[i][j][DIR_BOTLEFT] = this.setNeighbor(i, j, DIR_BOTLEFT);
+                this.matrixMap[i][j][DIR_SELF] = this.setNeighbor(i, j, DIR_SELF);
+            }
+        }
+    };
+    
+    this.setNeighbor = (r, c, direction) => {
         var oNextDir = null;
-        switch(iDir){
+        switch (direction) {
             ////r%2 IS USED TO DETECT INDEX COLUMN FOR AN "ODD-ROW" HORIZONTAL LAYOUT HEX GRID. FOR EXAMPLE, IF ROW IS ODD, THE TOPRIGHT NEIGHBOR IS = COL+1. IF ROW IS EVEN, THE TOPRIGHT NEIGHBOR IS = COL. 
             case DIR_TOPRIGHT: {
-                if (r > 0 && c < _iCol - (r % 2)) {
+                if (r > 0 && c < this.state.col - (r % 2)) {
                     oNextDir = { row: r - 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_BOTRIGHT: {
-                if(r < _iRow - 1 && c + (r % 2) < _iCol) {
+                if (r < this.state.row - 1 && c + (r % 2) < this.state.col) {
                     oNextDir = { row: r + 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_TOPLEFT: {
-                if(r > 0 && c - ((r - 1) % 2) >= 0) {
+                if (r > 0 && c - ((r - 1) % 2) >= 0) {
                     oNextDir = { row: r - 1, col: c - ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_BOTLEFT: {
-                if (r < _iRow - 1 && c >= r % 2) {
+                if (r < this.state.row - 1 && c >= r % 2) {
                     oNextDir = { row: r + 1, col: c - (r % 2) };
                 }
                 break;
@@ -87,43 +80,43 @@ function CGridMapping(aMatrix) {
         return oNextDir;
     };
     
-    this._getNeighborByDir = (iRow, iCol, iDir) => {
-        return _aMatrixMap[iRow][iCol][iDir];
-    };
+    // this._getNeighborByDir = (iRow, iCol, iDir) => {
+    //     return this.matrixMap[iRow][iCol][iDir];
+    // };
     
-    this._getAllNeighbor = (iRow, iCol) => {
-        const aNeighborList = [];
+    // this._getAllNeighbor = (iRow, iCol) => {
+    //     const aNeighborList = [];
         
-        for (let key in _aMatrixMap[iRow][iCol]) {
-            if(_aMatrixMap[iRow][iCol][key]!== null){
-                aNeighborList.push(_aMatrixMap[iRow][iCol][key]);
-            }
-        }
+    //     for (let key in this.matrixMap[iRow][iCol]) {
+    //         if(this.matrixMap[iRow][iCol][key]!== null){
+    //             aNeighborList.push(this.matrixMap[iRow][iCol][key]);
+    //         }
+    //     }
         
-        return aNeighborList;
-    };
+    //     return aNeighborList;
+    // };
     
-    this._getMainDiagonal = (iRow, iCol, aBoard) => {
-        var aList = [];
+    // this._getMainDiagonal = (iRow, iCol, aBoard) => {
+    //     var aList = [];
         
-        var szColor = aBoard[iRow][iCol].getColor();
+    //     var szColor = aBoard[iRow][iCol].getColor();
         
-        this._findInDirection(iRow, iCol, DIR_BOTRIGHT, aList, 99, szColor, aBoard);
-        this._findInDirection(iRow, iCol, DIR_TOPLEFT, aList, 99, szColor, aBoard);
+    //     this._findInDirection(iRow, iCol, DIR_BOTRIGHT, aList, 99, szColor, aBoard);
+    //     this._findInDirection(iRow, iCol, DIR_TOPLEFT, aList, 99, szColor, aBoard);
         
-        return aList;
-    };
+    //     return aList;
+    // };
     
-    this._getSecondDiagonal = (iRow, iCol, aBoard) => {
-        var aList = [];
+    // this._getSecondDiagonal = (iRow, iCol, aBoard) => {
+    //     var aList = [];
         
-        var szColor = aBoard[iRow][iCol].getColor();
+    //     var szColor = aBoard[iRow][iCol].getColor();
         
-        this._findInDirection(iRow, iCol, DIR_BOTLEFT, aList, 99, szColor, aBoard);
-        this._findInDirection(iRow, iCol, DIR_TOPRIGHT, aList, 99, szColor, aBoard);
+    //     this._findInDirection(iRow, iCol, DIR_BOTLEFT, aList, 99, szColor, aBoard);
+    //     this._findInDirection(iRow, iCol, DIR_TOPRIGHT, aList, 99, szColor, aBoard);
 
-        return aList;
-    };
+    //     return aList;
+    // };
     
     // this._getRow = function(iRow, iCol, aBoard){
     //     var aList = [];
@@ -147,19 +140,18 @@ function CGridMapping(aMatrix) {
     //     return aList;
     // };
     
-    this._getStraightByDirAndRadius = function(iRow, iCol, szDir, iRadius, aBoard){
-        var aList = [];
-        _aRadiusMap = [];
+    // this._getStraightByDirAndRadius = function(iRow, iCol, szDir, iRadius, aBoard) {
+    //     var aList = [];
+    //     this.radiusMap = [];
 
-        _aRadiusMap.push({radius:iRadius, direction: null});
+    //     this.radiusMap.push({radius:iRadius, direction: null});
         
-        var szColor = aBoard[iRow][iCol].getColor();
+    //     var szColor = aBoard[iRow][iCol].getColor();
         
-        this._findInDirection(iRow, iCol, szDir, aList, iRadius, szColor, aBoard);
-
+    //     this._findInDirection(iRow, iCol, szDir, aList, iRadius, szColor, aBoard);
         
-        return aList;
-    };
+    //     return aList;
+    // };
     
     // this._getStraightRowByRadius = function(iRow, iCol, iRadius){
     //     var aList = new Array();
@@ -186,101 +178,100 @@ function CGridMapping(aMatrix) {
     //     return aList;
     // };
     
-    this._findInDirection = function(iRow, iCol, iDir, aList, iRadius, szColor, aBoard){
+    // this._findInDirection = function(iRow, iCol, iDir, aList, iRadius, szColor, aBoard) {
 
-        var iCountRadius = iRadius-1;
+    //     var iCountRadius = iRadius-1;
         
-        if(_aMatrixMap[iRow][iCol][iDir] !== null && iCountRadius>=0){
-            var iNextRow = _aMatrixMap[iRow][iCol][iDir].row;
-            var iNextCol = _aMatrixMap[iRow][iCol][iDir].col;
+    //     if(this.matrixMap[iRow][iCol][iDir] !== null && iCountRadius>=0){
+    //         var iNextRow = this.matrixMap[iRow][iCol][iDir].row;
+    //         var iNextCol = this.matrixMap[iRow][iCol][iDir].col;
 
-            if(szColor){
-                var szNextColor = aBoard[iNextRow][iNextCol].getColor();
-                if(szNextColor === szColor){
-                    return;
-                }else if (szNextColor === null){
-                    aList.push({row: iNextRow, col: iNextCol});
-                    _aRadiusMap.push({radius:iCountRadius, direction: iDir});
+    //         if(szColor){
+    //             var szNextColor = aBoard[iNextRow][iNextCol].getColor();
+    //             if(szNextColor === szColor){
+    //                 return;
+    //             } else if (szNextColor === null) {
+    //                 aList.push({row: iNextRow, col: iNextCol});
+    //                 this.radiusMap.push({radius:iCountRadius, direction: iDir});
 
-                    this._findInDirection(iNextRow, iNextCol, iDir, aList, iCountRadius, szColor, aBoard);
-                } else {
-                    aList.push({row: iNextRow, col: iNextCol});
-                    _aRadiusMap.push({radius:iCountRadius, direction: iDir});
-                }
-            } else {
-                aList.push({row: iNextRow, col: iNextCol});
-                _aRadiusMap.push({radius:iCountRadius, direction: iDir});
+    //                 this._findInDirection(iNextRow, iNextCol, iDir, aList, iCountRadius, szColor, aBoard);
+    //             } else {
+    //                 aList.push({row: iNextRow, col: iNextCol});
+    //                 this.radiusMap.push({radius:iCountRadius, direction: iDir});
+    //             }
+    //         } else {
+    //             aList.push({row: iNextRow, col: iNextCol});
+    //             this.radiusMap.push({radius:iCountRadius, direction: iDir});
+    //             this._findInDirection(iNextRow, iNextCol, iDir, aList, iCountRadius, szColor, aBoard);
+    //         }
+    //     }
+    // };
 
-                this._findInDirection(iNextRow, iNextCol, iDir, aList, iCountRadius, szColor, aBoard);
-            }
-        }
+    this.getAllPathFrom = (cellPosition) => {
+        return this.findAllPathDFS(this.matrixMap[cellPosition.row][cellPosition.col], [], []);
     };
 
-    this.getAllPathFrom = function(oPos){
-        return this._findAllPathDFS(_aMatrixMap[oPos.row][oPos.col], [], []);
-    };
-
-    this.getRandomPathFrom = (oPos) => {
-        var aAllPath = this.getAllPathFrom(oPos);
+    // this.getRandomPathFrom = (oPos) => {
+    //     const aAllPath = this.getAllPathFrom(oPos);
         
-        let aRandomPath = [];
-        if(aAllPath.length > 0){
-            var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
-            aRandomPath = aAllPath[iRandomIndex];
-        }
+    //     let aRandomPath = [];
+    //     if(aAllPath.length > 0){
+    //         var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
+    //         aRandomPath = aAllPath[iRandomIndex];
+    //     }
 
-        return aRandomPath;
-    };
+    //     return aRandomPath;
+    // };
 
     //////WITHOUT STOP TO DEST NODE
-    this.getAllPathFromTo = (oStartPos, oEndPos) => {
-        var aAllPath = this.getAllPathFrom(oStartPos);
+    // this.getAllPathFromTo = (oStartPos, oEndPos) => {
+    //     var aAllPath = this.getAllPathFrom(oStartPos);
         
-        for(var i=aAllPath.length-1; i>=0; i--){
-            var bNodeFound = false;
-            for(var j=0; j<aAllPath[i].length; j++){
-                if(aAllPath[i][j].row === oEndPos.row && aAllPath[i][j].col === oEndPos.col){
-                    bNodeFound = true;
-                    break;
-                }
-            }
-            if(!bNodeFound){
-                aAllPath.splice(i,1);
-            }
-        }
+    //     for(var i=aAllPath.length-1; i>=0; i--){
+    //         var bNodeFound = false;
+    //         for(var j=0; j<aAllPath[i].length; j++){
+    //             if(aAllPath[i][j].row === oEndPos.row && aAllPath[i][j].col === oEndPos.col){
+    //                 bNodeFound = true;
+    //                 break;
+    //             }
+    //         }
+    //         if(!bNodeFound){
+    //             aAllPath.splice(i,1);
+    //         }
+    //     }
 
-        return aAllPath;
-    };
+    //     return aAllPath;
+    // };
 
     //////WITHOUT STOP TO DEST NODE
-    this.getRandomPathFromTo = (oStartPos, oEndPos) => {
-        var aAllPath = this.getAllPathFromTo(oStartPos, oEndPos);
+    // this.getRandomPathFromTo = (oStartPos, oEndPos) => {
+    //     var aAllPath = this.getAllPathFromTo(oStartPos, oEndPos);
         
-        let aRandomPath = [];
-        if(aAllPath.length > 0){
-            var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
-            aRandomPath = aAllPath[iRandomIndex];
-        }
+    //     let aRandomPath = [];
+    //     if(aAllPath.length > 0){
+    //         var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
+    //         aRandomPath = aAllPath[iRandomIndex];
+    //     }
 
-        return aRandomPath;
-    };
+    //     return aRandomPath;
+    // };
 
-    this.getRandomPathFromCol = function(iCol){
-        var aAllPath = _aPrecomputedStartPath[iCol];
+    // this.getRandomPathFromCol = function(iCol) {
+    //     var aAllPath = this.precomputedStartPath[iCol];
         
-        var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
-        var aRandomPath = aAllPath[iRandomIndex];
+    //     var iRandomIndex = Math.floor(Math.random()*(aAllPath.length-1));
+    //     var aRandomPath = aAllPath[iRandomIndex];
 
-        return aRandomPath;
-    };
+    //     return aRandomPath;
+    // };
     
-    this.getRandomPathFromColToCol = function(startIndex, destIndex) {    
+    this.getRandomPathFrom = function(startIndex, destIndex) {    
         const aAllPath = [];
-        const iLastIndex = _aMatrixMap.length - 1;
+        const lastIndex = this.matrixMap.length - 1;
         
-        for(let i = 0; i < _aPrecomputedStartPath[startIndex].length; i += 1) {
-            const aPath = _aPrecomputedStartPath[startIndex][i];
-            if (aPath[iLastIndex].col === destIndex){
+        for(let i = 0; i < this.precomputedStartPath[startIndex].length; i += 1) {
+            const aPath = this.precomputedStartPath[startIndex][i];
+            if (aPath[lastIndex].col === destIndex){
                 aAllPath.push(aPath);
             }
         }
@@ -294,43 +285,39 @@ function CGridMapping(aMatrix) {
         return aRandomPath;
     };
 
-    this._findAllPathDFS = function(branch, path, basket){
+    this.findAllPathDFS = (branch, path, basket) => {
         var fork = path.slice(0);
-        var i = 0;
-        var chld = this._getChildren(branch);
+        var chld = this.getChildren(branch);
         var len = chld.length;
         fork.push(branch[DIR_SELF]);    ////SET THE INFO YOU WANT TO GET FROM THE NODES
         if (len === 0) { 
           basket.push(fork);
           return basket;
         }
-        for (i; i < len; i++){
-            this._findAllPathDFS(chld[i], fork, basket);
+
+        for (let i = 0; i < len; i += 1) {
+            this.findAllPathDFS(chld[i], fork, basket);
         } 
         return basket;
     };
 
-    this._getChildren = function(aNode){
-        var aChildren = [];
+    this.getChildren = function(node) {
+        const child = [];
 
-        for (var key in aNode) {
-            if(aNode[key]!== null && (key === DIR_BOTLEFT || key === DIR_BOTRIGHT)){
-                var iRow = aNode[key].row;
-                var iCol = aNode[key].col;
-                aChildren.push(_aMatrixMap[iRow][iCol]);
+        for (let key in node) {
+            if(node[key]!== null && (key === DIR_BOTLEFT || key === DIR_BOTRIGHT)) {
+                const row = node[key].row;
+                const col = node[key].col;
+                child.push(this.matrixMap[row][col]);
             }
         }
         
-        return aChildren;
+        return child;
     };
     
-    this._init(aMatrix);
-    
+    this.initGridMapping(boardMatrix);
     // s_oGridMapping = this;
 }
-
-// var s_oGridMapping;
-// export default CGridMapping;
 
 const Singleton = (() => {
     let instance = null;

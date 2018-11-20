@@ -8,9 +8,6 @@ import {
     createBitmap,
     sizeHandler
 } from './ctl_utils.js'
-import {
-    mainInstance,
-} from './CMain.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CGfxButton from './CGfxButton.js'
 import CCreditsPanel from './CCreditsPanel.js'
@@ -18,35 +15,43 @@ import CToggle from './CToggle.js'
 import settings from './settings.js'
 import screenfull from './screenfull.js'
 
-function CMenu() {
-    var _oBg;
+function CMenu(mainInstance) {
+    // var _oBg;
     var _oButPlay;
     var _oFade;
-    var _oAudioToggle;
+    // var _oAudioToggle;
     var _oCreditsBut;
     var _oButFullscreen;
     
-    var _fRequestFullScreen = null;
-    var _fCancelFullScreen = null;
+    // var _fRequestFullScreen = null;
+    // var _fCancelFullScreen = null;
     
     var _pStartPosCredits;
     var _pStartPosAudio;
     var _pStartPosFullscreen;
+
+    this.audioToggle = null
+    this.mainInstance = mainInstance
+
+    const doc = window.document;
+    const docEl = doc.documentElement;
+    this.requestFullscreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    this.cancelFullscreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
     
     this._init = function() {
-        _oBg = createBitmap(CSpriteLibrary.getSprite('bg_menu'));
-        
-        mainInstance().getStage().addChild(_oBg);
+        const backgroundMenuSprite = createBitmap(CSpriteLibrary.getSprite('bg_menu'));
+        this.mainInstance.getStage().addChild(backgroundMenuSprite);
+
         const logoMenuSprite = CSpriteLibrary.getSprite('logo_menu');
         var oLogo = createBitmap(logoMenuSprite);
         oLogo.regX = logoMenuSprite.width / 2;
         oLogo.regY = logoMenuSprite.height / 2;
         oLogo.x = settings.getCanvasWidth() / 2
         oLogo.y = 500;
-        mainInstance().getStage().addChild(oLogo);
+        this.mainInstance.getStage().addChild(oLogo);
 
         const playButtonSprite = CSpriteLibrary.getSprite('but_play');
-        _oButPlay = new CGfxButton((settings.getCanvasWidth() / 2), settings.getCanvasHeight() - 540, playButtonSprite, mainInstance().getStage());
+        _oButPlay = new CGfxButton((settings.getCanvasWidth() / 2), settings.getCanvasHeight() - 540, playButtonSprite, this.mainInstance.getStage());
         _oButPlay.addEventListener(settings.ON_MOUSE_UP, this._onButPlayRelease, this);
         _oButPlay.pulseAnimation();
      
@@ -55,27 +60,22 @@ function CMenu() {
         const pSecondPos = { x: pFirstPos.x + creditsButtonSprite.width + 10,y: creditsButtonSprite.height/2 + 10 };
         _pStartPosCredits = { x: pFirstPos.x, y: pFirstPos.y };
         if (settings.ENABLE_CREDITS) {
-            _oCreditsBut = new CGfxButton(_pStartPosCredits.x, _pStartPosCredits.y, creditsButtonSprite, mainInstance().getStage());
+            _oCreditsBut = new CGfxButton(_pStartPosCredits.x, _pStartPosCredits.y, creditsButtonSprite, this.mainInstance.getStage());
             _oCreditsBut.addEventListener(settings.ON_MOUSE_UP, this._onCreditsBut, this);
         }
      
         if (settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
             const audioIconSprite = CSpriteLibrary.getSprite('audio_icon');
             _pStartPosAudio = {x: settings.getCanvasWidth() - (audioIconSprite.width / 4) - 10, y: (audioIconSprite.height / 2) + 10};            
-            _oAudioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
-            _oAudioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
+            this.audioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, this.mainInstance.getAudioActive(), this.mainInstance.getStage());
+            this.audioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
         }
 
-        const doc = window.document;
-        const docEl = doc.documentElement;
-        _fRequestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-        _fCancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+        // if (settings.getEnableFullScreen() === false) {
+        //     _fRequestFullScreen = false;
+        // }
 
-        if (settings.ENABLE_FULLSCREEN === false) {
-            _fRequestFullScreen = false;
-        }
-
-        if (_fRequestFullScreen && screenfull.enabled) {
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
             if (settings.ENABLE_CREDITS) {
                 _pStartPosFullscreen = pSecondPos;
             } else {
@@ -84,14 +84,14 @@ function CMenu() {
             
             const fullscreenButtonSprite = CSpriteLibrary.getSprite("but_fullscreen")
             //_pStartPosFullscreen = {x:_pStartPosCredits.x + oSprite.width/2 + 10,y:(oSprite.height/2) + 10};
-            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenButtonSprite, mainInstance().getFullscreen(), mainInstance().getStage());
+            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenButtonSprite, this.mainInstance.getFullscreen(), this.mainInstance.getStage());
             _oButFullscreen.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
         }
 
         _oFade = new createjs.Shape();
         _oFade.graphics.beginFill("black").drawRect(0,0, settings.getCanvasWidth(), settings.getCanvasHeight());
         
-        mainInstance().getStage().addChild(_oFade);
+        this.mainInstance.getStage().addChild(_oFade);
         
         createjs.Tween.get(_oFade).to({alpha:0}, 1000).call(function(){_oFade.visible = false;});  
         
@@ -99,73 +99,71 @@ function CMenu() {
         
     };
     
-    this.unload = function(){
+    this.unload = () => {
         _oButPlay.unload(); 
         _oButPlay = null;
         _oFade.visible = false;
         
-        if(settings.ENABLE_CREDITS){
+        if (settings.ENABLE_CREDITS) {
             _oCreditsBut.unload();
         }
         
-        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
-            _oAudioToggle.unload();
-            _oAudioToggle = null;
+        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
+            this.audioToggle.unload();
+            this.audioToggle = null;
         }
         
-        if (_fRequestFullScreen && screenfull.enabled){
+        if (settings.getEnableFullScreen() && screenfull.enabled){
                 _oButFullscreen.unload();
         }
         
-        mainInstance().getStage().removeAllChildren();
-        _oBg = null;
+        this.mainInstance.getStage().removeAllChildren();
+        // _oBg = null;
         // s_oMenu = null;
     };
     
-    this.refreshButtonPos = function(iNewX,iNewY){
-        if(settings.ENABLE_CREDITS){
+    this.refreshButtonPos = (iNewX, iNewY) => {
+        if (settings.ENABLE_CREDITS) {
             _oCreditsBut.setPosition(_pStartPosCredits.x + iNewX,iNewY + _pStartPosCredits.y);
         }
-        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
-            _oAudioToggle.setPosition(_pStartPosAudio.x - iNewX,iNewY + _pStartPosAudio.y);
+        if (settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+            this.audioToggle.setPosition(_pStartPosAudio.x - iNewX,iNewY + _pStartPosAudio.y);
         }
-        if (_fRequestFullScreen && screenfull.enabled){
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
                 _oButFullscreen.setPosition(_pStartPosFullscreen.x + iNewX, _pStartPosFullscreen.y + iNewY);
         }
     };
     
-    this._onAudioToggle = function() {
-        Howler.mute(mainInstance().getAudioActive());
-        mainInstance().setAudioActive(!mainInstance().getAudioActive())
+    this._onAudioToggle = () => {
+        Howler.mute(this.mainInstance.getAudioActive());
+        this.mainInstance.setAudioActive(!this.mainInstance.getAudioActive())
     };
     
-    this._onCreditsBut = function(){
+    this._onCreditsBut = function() {
         new CCreditsPanel();
     };
     
-    this.resetFullscreenBut = function(){
-        if (_fRequestFullScreen && screenfull.enabled){
-            _oButFullscreen.setActive(mainInstance().getFullscreen());
+    this.resetFullscreen = function() {
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
+            _oButFullscreen.setActive(this.mainInstance.getFullscreen());
         }
     };
         
-    this._onFullscreenRelease = function(){
-	if(mainInstance().getFullscreen()) { 
-		_fCancelFullScreen.call(window.document);
-	}else{
-		_fRequestFullScreen.call(window.document.documentElement);
-	}
+    this._onFullscreenRelease = function() {
+        if (this.mainInstance.getFullscreen()) { 
+            this.cancelFullscreen.call(window.document);
+        } else {
+            this.requestFullscreen.call(window.document.documentElement);
+        }
 	
-	sizeHandler();
+	    sizeHandler();
     };
     
-    this._onButPlayRelease = function(){
-        
+    this._onButPlayRelease = function() {
         this.unload();
 
-        $(mainInstance()).trigger("start_session");
-        mainInstance().gotoGame();
-        
+        $(this.mainInstance).trigger("start_session");
+        this.mainInstance.gotoGame();
     };
 	
     // s_oMenu = this;
@@ -178,14 +176,14 @@ function CMenu() {
 const Singleton = (() => {
     let instance = null;
   
-    function createInstance() {
-        return new CMenu();
+    function createInstance(mainInstance) {
+        return new CMenu(mainInstance);
     }
   
     return {
-      getInstance(isConstructor) {
+      getInstance(isConstructor, mainInstance) {
         if (isConstructor) {
-            instance = createInstance();
+            instance = createInstance(mainInstance);
         }
         // } else if (!isConstructor && !instance) {
         //     instance = createInstance();

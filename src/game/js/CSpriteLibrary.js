@@ -32,7 +32,8 @@ CSpriteLibrary.prototype.addSprite = function(szKey, szPath) {
         return;
     }
     
-    this._oLibSprites[szKey] = { szPath:szPath, oSprite: new Image() };
+    const img = new Image()
+    this._oLibSprites[szKey] = { szPath:szPath, oSprite: img };
     this._iNumSprites++;
 }
 

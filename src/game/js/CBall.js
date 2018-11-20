@@ -62,7 +62,7 @@ function CBall(oPos, oParentContainer) {
         var iTime = 1000;
         
         createjs.Tween.get(_oBall).to({ x: oPos.x }, iTime, createjs.Ease.sineOut);
-        createjs.Tween.get(_oBall).to({ y: oPos.y-400 }, iTime / 2, createjs.Ease.cubicOut).to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
+        createjs.Tween.get(_oBall).to({ y: oPos.y - 400 }, iTime / 2, createjs.Ease.cubicOut).to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
             gameInstance().getFallPath();
         });
     };

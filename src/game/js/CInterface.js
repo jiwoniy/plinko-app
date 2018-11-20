@@ -21,28 +21,45 @@ import {
  import screenfull from './screenfull.js'
 
 function CInterface(oBgContainer, gameInstance) {
-    var _oAudioToggle;
-    var _oButExit;
-    var _oButFullscreen;
-    var _oGUIExpandible;
+    // var _oAudioToggle;
+    // var _oButExit;
+    // var _oButFullscreen;
+    // var _oGUIExpandible;
     
-    var _iCurHandPos;
+    // var _iCurHandPos;
     
-    var _oBallNum;
-    var _oHandAnim;
+    // var _oBallNum;
+    // var _oHandAnim;
 
-    var _fRequestFullScreen = null;
-    var _fCancelFullScreen = null;
+    // var _fRequestFullScreen = null;
+    // var _fCancelFullScreen = null;
     
     var _pStartPosExit;
     var _pStartPosAudio;
     var _pStartPosFullscreen;
+
+    this.guiExpandibleContainer = null
+    this.exitButtonContainer = null
+    this.audioToggle = null
+    this.fullscreenContainer = null
+    this.ballNum = null
+
+    this.state = {
+        handAim: null,
+        currentHandPosition: 0,
+        // requestFullScreen: null
+    }
+
+    const doc = window.document;
+    const docEl = doc.documentElement;
+    this.requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    this.cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
     
-    this._init = (oBgContainer) => {
+    this.initInterface = (oBgContainer) => {
         const handAnimSprite = CSpriteLibrary.getSprite('hand_anim');
         const iWidth = handAnimSprite.width / 6;
         const iHeight = handAnimSprite.height / 4;
-        const oSpriteSheet = new createjs.SpriteSheet({
+        const spriteSheet = new createjs.SpriteSheet({
             framerate: 20,
             images: [handAnimSprite], 
             // width, height & registration point of each sprite
@@ -70,49 +87,43 @@ function CInterface(oBgContainer, gameInstance) {
                     [517, 697, 256, 230, 0, 0, 0],
                     [775, 697, 256, 230, 0, 0, 0]
                 ],
-            animations: {'idle': [0,21]}
+            animations: { 'idle': [0,21] }
        });
 
-        _iCurHandPos = 0;
-        _oHandAnim = createSprite(oSpriteSheet, 'idle', iWidth / 2, iHeight / 2, iWidth, iHeight);
+        this.state.handAim = createSprite(spriteSheet, 'idle', iWidth / 2, iHeight / 2, iWidth, iHeight);
 
-        const oPos = gameInstance.getSlotPosition(_iCurHandPos);
-        _oHandAnim.x = oPos.x;
-        _oHandAnim.y = oPos.y;
-        _oHandAnim.regX = (iWidth / 2) - 30;
-        _oHandAnim.regY = iHeight / 2;
-        _oHandAnim.on("animationend", this._moveHand);
-        mainInstance().getStage().addChild(_oHandAnim);
+        const oPos = gameInstance.getSlotPosition(this.state.currentHandPosition);
+        this.state.handAim.x = oPos.x;
+        this.state.handAim.y = oPos.y;
+        this.state.handAim.regX = (iWidth / 2) - 30;
+        this.state.handAim.regY = iHeight / 2;
+        this.state.handAim.on('animationend', this._moveHand);
+        mainInstance().getStage().addChild(this.state.handAim);
                
         const exitButtonSprite = CSpriteLibrary.getSprite('but_exit');
         _pStartPosExit = { x: settings.getCanvasWidth() - (exitButtonSprite.width / 2) - 10, y: (exitButtonSprite.height / 2) + 10 };
-        _oButExit = new CGfxButton(_pStartPosExit.x, _pStartPosExit.y, exitButtonSprite, mainInstance().getStage());
-        _oButExit.addEventListener(settings.ON_MOUSE_UP, this._onExit, this);
+        this.exitButtonContainer = new CGfxButton(_pStartPosExit.x, _pStartPosExit.y, exitButtonSprite, mainInstance().getStage());
+        this.exitButtonContainer.addEventListener(settings.ON_MOUSE_UP, this._onExit, this);
         
         let oExitX = _pStartPosExit.x - (exitButtonSprite.width) - 10;
         _pStartPosAudio = {x: oExitX, y: (exitButtonSprite.height / 2) + 10};
         
         if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
             const audioIconSprite = CSpriteLibrary.getSprite('audio_icon');
-            _oAudioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
-            _oAudioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
+            this.audioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
+            this.audioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
             oExitX = _pStartPosAudio.x - (audioIconSprite.width/2) - 10;
         }
-
-        const doc = window.document;
-        const docEl = doc.documentElement;
-        _fRequestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-        _fCancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
         
-        if(settings.ENABLE_FULLSCREEN === false) {
-            _fRequestFullScreen = false;
-        }
+        // if(settings.getEnableFullScreen() === false) {
+        //     this.state.requestFullScreen = false;
+        // }
         
-        if (_fRequestFullScreen && screenfull.enabled){
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
             const fullscreenSprite = CSpriteLibrary.getSprite("but_fullscreen")
             _pStartPosFullscreen = {x: oExitX,y: (fullscreenSprite.height / 2) + 10};
-            _oButFullscreen = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenSprite, mainInstance().getFullscreen(), mainInstance().getStage());
-            _oButFullscreen.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
+            this.fullscreenContainer = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenSprite, mainInstance().getFullscreen(), mainInstance().getStage());
+            this.fullscreenContainer.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
         }
         
         //////////////////////// BET CONTROLLER /////////////////////////
@@ -127,20 +138,20 @@ function CInterface(oBgContainer, gameInstance) {
         oBallNumBg.regY = ballPanelSprite.height / 2;
         oControllerContainer.addChild(oBallNumBg);
 
-        _oBallNum = new createjs.Text(settings.getNumBall()," 40px "+ settings.PRIMARY_FONT, "#ffffff");
-        _oBallNum.x = oBallNumBg.x;
-        _oBallNum.y = oBallNumBg.y-2;
-        _oBallNum.textAlign = "center";
-        _oBallNum.textBaseline = "middle";
-        _oBallNum.lineWidth = 400;
-        oControllerContainer.addChild(_oBallNum);
+        this.ballNum = new createjs.Text(settings.getNumBall()," 40px "+ settings.PRIMARY_FONT, "#ffffff");
+        this.ballNum.x = oBallNumBg.x;
+        this.ballNum.y = oBallNumBg.y-2;
+        this.ballNum.textAlign = 'center';
+        this.ballNum.textBaseline = 'middle';
+        this.ballNum.lineWidth = 400;
+        oControllerContainer.addChild(this.ballNum);
         
         const settingsSprite = CSpriteLibrary.getSprite('but_settings');
-        _oGUIExpandible = new CGUIExpandible(_pStartPosExit.x, _pStartPosExit.y, settingsSprite, mainInstance().getStage());
-        _oGUIExpandible.addButton(_oButExit);
-        _oGUIExpandible.addButton(_oAudioToggle);
-        if (_fRequestFullScreen && screenfull.enabled){
-            _oGUIExpandible.addButton(_oButFullscreen);
+        this.guiExpandibleContainer = new CGUIExpandible(_pStartPosExit.x, _pStartPosExit.y, settingsSprite, mainInstance().getStage());
+        this.guiExpandibleContainer.addButton(this.exitButtonContainer);
+        this.guiExpandibleContainer.addButton(this.audioToggle);
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
+            this.guiExpandibleContainer.addButton(this.fullscreenContainer);
         }
         
         this.refreshButtonPos(s_iOffsetX, s_iOffsetY);
@@ -148,24 +159,24 @@ function CInterface(oBgContainer, gameInstance) {
     
     this.unload = () => {
         if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
-            _oAudioToggle.unload();
-            _oAudioToggle = null;
+            this.audioToggle.unload();
+            this.audioToggle = null;
         }
 
-        _oButExit.unload();
-        if (_fRequestFullScreen && screenfull.enabled) {
-            _oButFullscreen.unload();
+        this.exitButtonContainer.unload();
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
+            this.fullscreenContainer.unload();
         }        
 
-        _oGUIExpandible.unload();
+        this.guiExpandibleContainer.unload();
     };
     
     this.refreshButtonPos = (iNewX,iNewY) => {
-        _oGUIExpandible.refreshPos(iNewX,iNewY);
+        // this.guiExpandibleContainer.refreshPos(iNewX, iNewY);
     };
 
     this.refreshBallNum = (iValue) => {
-        _oBallNum.text = iValue;
+        this.ballNum.text = iValue;
     };
     
     this.hideControls = () => {
@@ -177,21 +188,20 @@ function CInterface(oBgContainer, gameInstance) {
     };
     
     this.setHelpVisible = (bVal) => {
-       _oHandAnim.visible = bVal;
+       this.state.handAim.visible = bVal;
        if (bVal) {
-           _oHandAnim.gotoAndPlay('idle');
+        this.state.handAim.gotoAndPlay('idle');
        }
     };
     
     this._moveHand = () => {
-        _iCurHandPos += 1;
-        if(_iCurHandPos === settings.NUM_INSERT_TUBE) {
-            _iCurHandPos = 0;
+        this.state.currentHandPosition += 1;
+        if(this.state.currentHandPosition === settings.getInsertTubeNumber()) {
+            this.state.currentHandPosition = 0;
         }
-        const oPos = gameInstance.getSlotPosition(_iCurHandPos);
-        _oHandAnim.x = oPos.x;
-        _oHandAnim.y = oPos.y;
-
+        const oPos = gameInstance.getSlotPosition(this.state.currentHandPosition);
+        this.state.handAim.x = oPos.x;
+        this.state.handAim.y = oPos.y;
     };  
     
     this._onButRestartRelease = () => {
@@ -208,23 +218,23 @@ function CInterface(oBgContainer, gameInstance) {
         new CAreYouSurePanel(gameInstance.onExit);
     };
     
-    this.resetFullscreenBut = () => {
-        if (_fRequestFullScreen && screenfull.enabled){
-            _oButFullscreen.setActive(mainInstance().getFullscreen());
+    this.resetFullscreen = () => {
+        if (settings.getEnableFullScreen() && screenfull.enabled) {
+            this.fullscreenContainer.setActive(mainInstance().getFullscreen());
         }
     };
         
     this._onFullscreenRelease = () => {
-        if(mainInstance().getFullscreen()) { 
-            _fCancelFullScreen.call(window.document);
+        if(mainInstance().getFullscreen()) {
+            this.cancelFullScreen.call(window.document);
         } else {
-            _fRequestFullScreen.call(window.document.documentElement);
+            this.requestFullScreen.call(window.document.documentElement);
         }
 	
 	    sizeHandler();
     };
         
-    this._init(oBgContainer);
+    this.initInterface(oBgContainer);
 }
 
 const Singleton = (() => {

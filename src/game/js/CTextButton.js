@@ -22,14 +22,14 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     var _oTextBack;
     var _oButtonBg;
     
-    this._init =function(iXPos, iYPos, pSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
+    this._init = function(iXPos, iYPos, pSprite, szText, szFont, szColor, iFontSize, bStandard, oParentContainer) {
         _bDisable = false;
         
         _aCbCompleted = [];
         _aCbOwner = [];
         _oButtonBg = createBitmap(pSprite);           
 
-        var iStepShadow = Math.ceil(iFontSize/20);
+        var iStepShadow = Math.ceil(iFontSize / 20);
 
         _oTextBack = new createjs.Text(szText,"bold "+iFontSize+"px "+szFont, "#000000");
         _oTextBack.textAlign = 'center';
@@ -120,7 +120,7 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     };
     
     this.buttonRelease = function() {
-        if(_bDisable){
+        if (_bDisable) {
             return;
         }
         _oButton.scaleX = 1;
@@ -132,7 +132,7 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     };
     
     this.buttonDown = function() {
-        if(_bDisable){
+        if (_bDisable) {
             return;
         }
         
@@ -141,7 +141,7 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
 
         playSound("click",1,false);
 
-       if(_aCbCompleted[settings.ON_MOUSE_DOWN]) {
+       if (_aCbCompleted[settings.ON_MOUSE_DOWN]) {
            _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN]);
        }
     };
@@ -158,18 +158,16 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
     this.enable = function() {
         _bDisable = false;
         
-        if(!bStandard){
+        if (!bStandard) {
             _oButtonBg.gotoAndStop("state_true");
         }
-
     };
     
     this.disable = function() {
         _bDisable = true;
-        if(!bStandard) {
+        if (!bStandard) {
             _oButtonBg.gotoAndStop("state_false");
         }
-
     };
     
     this.fadeOut = function() {

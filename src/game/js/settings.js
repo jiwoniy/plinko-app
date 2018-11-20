@@ -1,10 +1,14 @@
+// import {
+//   getSize
+// } from './ctl_utils.js'
+
 const settings = () => {
   // let CANVAS_WIDTH = 1280;
   // let CANVAS_HEIGHT = 1920;
-  // let canvasWidth = 375
-  // let canvasHeight = 667
   let canvasWidth = 1280
   let canvasHeight = 1920
+  // let canvasWidth = getSize('Width')
+  // let canvasHeight = getSize('Height')
 
   const GAME_NAME = 'plinko';
 
@@ -22,8 +26,10 @@ const settings = () => {
   const matrixRow = 13;
   const matrixCol = 7;
 
-  let BALL_RADIUS = null;
-  let NUM_INSERT_TUBE = null;
+  // let BALL_RADIUS = null;
+  let ballRadius = null
+  let insertTubeNumber = null
+  // let NUM_INSERT_TUBE = null;
 
   const STATE_LOADING = 0;
   const STATE_MENU    = 1;
@@ -40,7 +46,8 @@ const settings = () => {
   const NUM_DIFFERENT_BALLS = 5;
   let ANIMATION_SPEED;
 
-  const CELL_SIZE = 140;
+  // const CELL_SIZE = 140;
+  const cellSize = 140
   const CELL_PIVOT_FROM_CENTER = 90;
 
   const BALL_FALL_MAX_ANGLE = 0.5;
@@ -55,8 +62,10 @@ const settings = () => {
   let PRIZE = [];
   let PRIZE_PROBABILITY = null;
 
-  let ENABLE_FULLSCREEN = null;
-  let ENABLE_CHECK_ORIENTATION = null;
+  // let ENABLE_FULLSCREEN = null;
+  let enableFullscreen = true;
+  // let ENABLE_CHECK_ORIENTATION = null;
+  let enableCheckOrientation = null
   // let AD_SHOW_COUNTER = null;
 
   let NUM_IMAGES_BACKGROUNDS = null;
@@ -109,8 +118,17 @@ const settings = () => {
     getMatrixRow: () => matrixRow,
     getMatrixCol: () => matrixCol,
 
-    BALL_RADIUS,
-    NUM_INSERT_TUBE,
+    // BALL_RADIUS,
+    getBallRadius: () => ballRadius,
+    setBallRadius: (value) => {
+      ballRadius = value
+    },
+    // NUM_INSERT_TUBE,
+
+    getInsertTubeNumber: () => insertTubeNumber,
+    setInsertTubeNumber: (value) => {
+      insertTubeNumber = value
+    },
 
     NUM_DIFFERENT_BALLS,
     ANIMATION_SPEED,
@@ -126,8 +144,8 @@ const settings = () => {
     // START_PLAYER_MONEY,
 
     // BET,
-
-    CELL_SIZE,
+    getCellSize: () => cellSize,
+    // CELL_SIZE,
     CELL_PIVOT_FROM_CENTER ,
     BALL_FALL_MAX_ANGLE,
     BALL_FALL_MAX_ROTATION,
@@ -140,8 +158,17 @@ const settings = () => {
 
     // PRIZE,
     PRIZE_PROBABILITY,
-    ENABLE_FULLSCREEN,
-    ENABLE_CHECK_ORIENTATION,
+    // ENABLE_FULLSCREEN,
+    getEnableFullScreen: () => enableFullscreen,
+    setEnableFullScreen: (value) => {
+      enableFullscreen = value
+    },
+
+    getEnableCheckOrientation: () => enableCheckOrientation,
+    setEnableCheckOrientation: (value) => {
+      enableCheckOrientation = value
+    },
+    // ENABLE_CHECK_ORIENTATION,
     NUM_IMAGES_BACKGROUNDS,
     // SHOW_CREDITS,
   }
