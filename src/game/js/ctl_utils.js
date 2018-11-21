@@ -19,7 +19,7 @@ var s_iOffsetY;
 // var s_bIsIphone = false;
 
 $(window).resize(function() {
-	sizeHandler();
+	// sizeHandler();
 });
 
 // function trace(szMsg){
@@ -68,15 +68,15 @@ function getSize(Name) {
 
 window.addEventListener("orientationchange", onOrientationChange);
 
-function onOrientationChange(){
+function onOrientationChange() {
     if (window.matchMedia("(orientation: portrait)").matches) {
        // you're in PORTRAIT mode	   
-	   sizeHandler();
+	//    sizeHandler();
     }
 
     if (window.matchMedia("(orientation: landscape)").matches) {
        // you're in LANDSCAPE mode   
-	   sizeHandler();
+	//    sizeHandler();
     }
 }
 
@@ -635,6 +635,54 @@ function NoClickDelay(el) {
 //     return array;
 // }
 
+const checkGameState = () => {
+    let hidden = "hidden";
+  
+    // Standards:
+    if (hidden in document) {
+        document.addEventListener("visibilitychange", onchange);
+    } else if ((hidden = "mozHidden") in document) {
+        document.addEventListener("mozvisibilitychange", onchange);
+    } else if ((hidden = "webkitHidden") in document) {
+      document.addEventListener("webkitvisibilitychange", onchange);
+    } else if ((hidden = "msHidden") in document) {
+      document.addEventListener("msvisibilitychange", onchange);
+    } else if ('onfocusin' in document) {
+      // IE 9 and lower:
+      document.onfocusin = document.onfocusout = onchange;
+    } else {
+      // All others:
+      window.onpageshow = window.onpagehide 
+        = window.onfocus = window.onblur = onchange;
+    }
+        
+    function onchange (evt) {
+      const v = 'visible';
+      const h = 'hidden';
+      const evtMap = { 
+        focus: v,
+        focusin: v,
+        pageshow:v,
+        blur: h,
+        focusout: h,
+        pagehide: h 
+      };
+  
+      evt = evt || window.event;
+  
+      if (evt.type in evtMap) {
+        document.body.className = evtMap[evt.type];
+      } else {
+        document.body.className = this[hidden] ? "hidden" : "visible";
+        if (document.body.className === "hidden") {
+          mainInstance().stopUpdate();
+        } else {
+          mainInstance().startUpdate();
+        }
+      }
+    }
+  }
+
 NoClickDelay.prototype = {
     handleEvent: function(e) {
         switch (e.type) {
@@ -681,47 +729,47 @@ NoClickDelay.prototype = {
     }
 };
 
-(function() {
-    var hidden = "hidden";
+// (function() {
+//     var hidden = "hidden";
 
-    // Standards:
-    if (hidden in document)
-        document.addEventListener("visibilitychange", onchange);
-    else if ((hidden = "mozHidden") in document)
-        document.addEventListener("mozvisibilitychange", onchange);
-    else if ((hidden = "webkitHidden") in document)
-        document.addEventListener("webkitvisibilitychange", onchange);
-    else if ((hidden = "msHidden") in document)
-        document.addEventListener("msvisibilitychange", onchange);
-    // IE 9 and lower:
-    else if ('onfocusin' in document)
-        document.onfocusin = document.onfocusout = onchange;
-    // All others:
-    else
-        window.onpageshow = window.onpagehide 
-            = window.onfocus = window.onblur = onchange;
+//     // Standards:
+//     if (hidden in document)
+//         document.addEventListener("visibilitychange", onchange);
+//     else if ((hidden = "mozHidden") in document)
+//         document.addEventListener("mozvisibilitychange", onchange);
+//     else if ((hidden = "webkitHidden") in document)
+//         document.addEventListener("webkitvisibilitychange", onchange);
+//     else if ((hidden = "msHidden") in document)
+//         document.addEventListener("msvisibilitychange", onchange);
+//     // IE 9 and lower:
+//     else if ('onfocusin' in document)
+//         document.onfocusin = document.onfocusout = onchange;
+//     // All others:
+//     else
+//         window.onpageshow = window.onpagehide 
+//             = window.onfocus = window.onblur = onchange;
 
-    function onchange (evt) {
-        var v = 'visible', h = 'hidden',
-            evtMap = { 
-                focus:v, focusin:v, pageshow:v, blur:h, focusout:h, pagehide:h 
-            };
+//     function onchange (evt) {
+//         var v = 'visible', h = 'hidden',
+//             evtMap = { 
+//                 focus:v, focusin:v, pageshow:v, blur:h, focusout:h, pagehide:h 
+//             };
 
-        evt = evt || window.event;
+//         evt = evt || window.event;
 		
-        if (evt.type in evtMap){
-            document.body.className = evtMap[evt.type];
-        }else{        
-            document.body.className = this[hidden] ? "hidden" : "visible";
+//         if (evt.type in evtMap){
+//             document.body.className = evtMap[evt.type];
+//         }else{        
+//             document.body.className = this[hidden] ? "hidden" : "visible";
 
-			if(document.body.className === "hidden"){
-				mainInstance().stopUpdate();
-			}else{
-				mainInstance().startUpdate();
-			}
-		}
-    }
-})();
+// 			if(document.body.className === "hidden"){
+// 				mainInstance().stopUpdate();
+// 			}else{
+// 				mainInstance().startUpdate();
+// 			}
+// 		}
+//     }
+// })();
 
 // function ctlArcadeResume() {
 //     if(mainInstance() !== null) {
@@ -807,5 +855,6 @@ export {
     s_iOffsetY,
     s_iScaleFactor,
     rotateVector2D,
-    isIOS
+    isIOS,
+    checkGameState
 }

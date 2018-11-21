@@ -33,6 +33,7 @@ const BlockGameStyle = {
 class Plinko extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       parent: window.parent,
     };

@@ -3,7 +3,7 @@ import { Howl, Howler } from 'howler';
 
 import createjs from './createjs.js'
 
-import { playSound } from './ctl_utils.js'
+import { checkGameState, playSound } from './ctl_utils.js'
 import CPreloader from './CPreloader.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CMenu from './CMenu.js'
@@ -23,6 +23,7 @@ function CMain(oData) {
     // var _oHelp;
     // var _oGame;
 
+    // this.isActive = false
     this.stage = null
     this.preloader = null
 
@@ -70,6 +71,8 @@ function CMain(oData) {
             
             // _oPreloader = new CPreloader();
             this.preloader = new CPreloader({ parentMainInstance: this });
+
+            checkGameState()
         }
     };
 

@@ -1,12 +1,23 @@
-import React, { Component } from 'react';
-import Plinko from './Plinko';
+import React from 'react';
+import { connect } from 'react-redux';
 
-class App extends Component {
-  render() {
-    return (
-      <Plinko />
-    );
+import SignIn from './components/SignIn/SignIn'
+import Plinko from './Plinko';
+import { selector as authSelector } from './redux/auth';
+
+const mapStateToProps = state => {
+  return {
+    isAuthentication: () => authSelector.isAuthentication(state)
+  };
+};
+
+
+function App (props) {
+  const { isAuthentication } = props
+  if (isAuthentication()) {
+    return <Plinko />
   }
+  return <SignIn />
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
