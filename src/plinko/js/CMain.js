@@ -11,18 +11,6 @@ import CGame from './CGame.js'
 import settings from './settings.js'
 
 function CMain(oData) {
-    // var _bUpdate;
-    // var _iCurResource = 0;
-    // var RESOURCE_TO_LOAD = 0;
-    // var _iState = settings.STATE_LOADING;
-    // var _oData;
-    
-    // var _oPreloader;
-    // var _oMenu;
-    // var _oModeMenu;
-    // var _oHelp;
-    // var _oGame;
-
     // this.isActive = false
     this.stage = null
     this.preloader = null
@@ -118,12 +106,12 @@ function CMain(oData) {
     this._initSounds = () => {
         const aSoundsInfo = [];
         
-        aSoundsInfo.push({path: './sounds/',filename:'soundtrack',loop:true,volume:1, ingamename: 'soundtrack'});
-        aSoundsInfo.push({path: './sounds/',filename:'press_button',loop:false,volume:1, ingamename: 'click'});
-        aSoundsInfo.push({path: './sounds/',filename:'game_over',loop:false,volume:1, ingamename: 'game_over'});
-        aSoundsInfo.push({path: './sounds/',filename:'ball_collision',loop:false,volume:1, ingamename: 'ball_collision'});
-        aSoundsInfo.push({path: './sounds/',filename:'ball_in_basket',loop:false,volume:1, ingamename: 'ball_in_basket'});
-        aSoundsInfo.push({path: './sounds/',filename:'ball_in_basket_negative',loop:false,volume:1, ingamename: 'ball_in_basket_negative'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'soundtrack',loop:true,volume:1, ingamename: 'soundtrack'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'press_button',loop:false,volume:1, ingamename: 'click'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'game_over',loop:false,volume:1, ingamename: 'game_over'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'ball_collision',loop:false,volume:1, ingamename: 'ball_collision'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'ball_in_basket',loop:false,volume:1, ingamename: 'ball_in_basket'});
+        aSoundsInfo.push({path: '/plinko/sounds/',filename:'ball_in_basket_negative',loop:false,volume:1, ingamename: 'ball_in_basket_negative'});
 
         this.state.loadResources += aSoundsInfo.length;
 
@@ -144,48 +132,48 @@ function CMain(oData) {
     this._loadImages = () => {
         CSpriteLibrary.init( this._onImagesLoaded,this._onAllImagesLoaded, this );
 
-        CSpriteLibrary.addSprite("logo_game","./sprites/logo_game.png");
-        CSpriteLibrary.addSprite("logo_menu","./sprites/logo_menu.png");
+        CSpriteLibrary.addSprite("logo_game","/plinko/sprites/logo_game.png");
+        CSpriteLibrary.addSprite("logo_menu","/plinko/sprites/logo_menu.png");
         
-        CSpriteLibrary.addSprite("but_play","./sprites/but_play.png");
-        CSpriteLibrary.addSprite("msg_box","./sprites/msg_box.png");
-        CSpriteLibrary.addSprite("ctl_logo","./sprites/ctl_logo.png");
-        CSpriteLibrary.addSprite("but_credits","./sprites/but_credits.png");
-        CSpriteLibrary.addSprite("but_yes","./sprites/but_yes.png");
-        CSpriteLibrary.addSprite("but_no","./sprites/but_no.png");
+        CSpriteLibrary.addSprite("but_play","/plinko/sprites/but_play.png");
+        CSpriteLibrary.addSprite("msg_box","/plinko/sprites/msg_box.png");
+        CSpriteLibrary.addSprite("ctl_logo","/plinko/sprites/ctl_logo.png");
+        CSpriteLibrary.addSprite("but_credits","/plinko/sprites/but_credits.png");
+        CSpriteLibrary.addSprite("but_yes","/plinko/sprites/but_yes.png");
+        CSpriteLibrary.addSprite("but_no","/plinko/sprites/but_no.png");
         
-        CSpriteLibrary.addSprite("bg_menu","./sprites/bg_menu.jpg"); 
+        CSpriteLibrary.addSprite("bg_menu","/plinko/sprites/bg_menu.jpg"); 
         // CSpriteLibrary.addSprite("bg_game","./sprites/game_background.svg");
-        CSpriteLibrary.addSprite("bg_game","./sprites/table_tennis_bg.svg");
+        CSpriteLibrary.addSprite("bg_game","/plinko/sprites/table_tennis_bg.svg");
         // CSpriteLibrary.addSprite("table_tennis","./sprites/table_tennis.svg");
         // CSpriteLibrary.addSprite("table_tennis","./sprites/tabletennis_net.svg");
-        CSpriteLibrary.addSprite("table_tennis","./sprites/tennis_net.svg");
+        CSpriteLibrary.addSprite("table_tennis","/plinko/sprites/tennis_net.svg");
         // CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
         // CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
         
-        CSpriteLibrary.addSprite("but_exit","./sprites/but_exit.png");
-        CSpriteLibrary.addSprite("audio_icon","./sprites/audio_icon.png");
-        CSpriteLibrary.addSprite("but_fullscreen","./sprites/but_fullscreen.png");
-        CSpriteLibrary.addSprite("but_restart","./sprites/but_restart.png"); 
-        CSpriteLibrary.addSprite("but_home","./sprites/but_home.png"); 
-        CSpriteLibrary.addSprite("but_settings","./sprites/but_settings.png");  
+        CSpriteLibrary.addSprite("but_exit","/plinko/sprites/but_exit.png");
+        CSpriteLibrary.addSprite("audio_icon","/plinko/sprites/audio_icon.png");
+        CSpriteLibrary.addSprite("but_fullscreen","/plinko/sprites/but_fullscreen.png");
+        CSpriteLibrary.addSprite("but_restart","/plinko/sprites/but_restart.png"); 
+        CSpriteLibrary.addSprite("but_home","/plinko/sprites/but_home.png"); 
+        CSpriteLibrary.addSprite("but_settings","/plinko/sprites/but_settings.png");  
         
-        CSpriteLibrary.addSprite("ball_panel","./sprites/ball_panel.png");
+        CSpriteLibrary.addSprite("ball_panel","/plinko/sprites/ball_panel.png");
         
-        CSpriteLibrary.addSprite("ball","./sprites/ball.png");
+        CSpriteLibrary.addSprite("ball","/plinko/sprites/ball.png");
         // CSpriteLibrary.addSprite("stake","./sprites/stake.png");
-        CSpriteLibrary.addSprite("stake","./sprites/ball.svg");
-        CSpriteLibrary.addSprite("ball_generator","./sprites/ball_generator.png");
+        CSpriteLibrary.addSprite("stake","/plinko/sprites/ball.svg");
+        CSpriteLibrary.addSprite("ball_generator","/plinko/sprites/ball_generator.png");
         
-        CSpriteLibrary.addSprite("holes_occluder","./sprites/holes_occluder.png");
-        CSpriteLibrary.addSprite("hole_board_occluder","./sprites/hole_board_occluder.png");
+        CSpriteLibrary.addSprite("holes_occluder","/plinko/sprites/holes_occluder.png");
+        CSpriteLibrary.addSprite("hole_board_occluder","/plinko/sprites/hole_board_occluder.png");
         
-        CSpriteLibrary.addSprite("basket_display","./sprites/basket_display.jpg");
-        CSpriteLibrary.addSprite("hand_anim","./sprites/hand_anim.png");
+        CSpriteLibrary.addSprite("basket_display","/plinko/sprites/basket_display.jpg");
+        CSpriteLibrary.addSprite("hand_anim","./plinko/sprites/hand_anim.png");
         
-        CSpriteLibrary.addSprite("basket_prize","./sprites/prize/prize.svg");
+        CSpriteLibrary.addSprite("basket_prize","/plinko/sprites/prize/prize.svg");
         for(let i = 0; i < settings.getBasketImageNumber(); i += 1) {
-            CSpriteLibrary.addSprite("image_"+i,"./sprites/prize/image_"+i+".png");
+            CSpriteLibrary.addSprite("image_"+i,"/plinko/sprites/prize/image_"+i+".png");
         }
         
         this.state.loadResources += CSpriteLibrary.getNumSprites();
@@ -207,7 +195,8 @@ function CMain(oData) {
         // s_oSoundtrack = playSound('soundtrack', 1, true);
         // Sound off
         // playSound('soundtrack', 1, true);
-        this.gotoMenu();
+        // this.gotoMenu();
+        this.gotoGame();
     };
     
     this.onAllPreloaderImagesLoaded = () => {

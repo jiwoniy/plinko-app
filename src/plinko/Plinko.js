@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import $ from 'jquery'
 
-import './plinko/js/detectBrowser.js'
-import CMain from './plinko/js/CMain.js'
+import './js/detectBrowser.js'
+import CMain from './js/CMain.js'
 import {
   getParamValue,
   // isIOS,
   sizeHandler
-} from './plinko/js/ctl_utils.js'
+} from './js/ctl_utils.js'
 
 import {
   TEXT_SHARE_IMAGE,
@@ -15,10 +15,10 @@ import {
   TEXT_SHARE_MSG1,
   TEXT_SHARE_MSG2,
   TEXT_SHARE_SHARE1,
-} from './plinko/js/CLang.js'
+} from './js/CLang.js'
 
-import './plinko/css/main.css'
-import './plinko/css/orientation_utils.css'
+import 'plinko/css/main.css'
+import 'plinko/css/orientation_utils.css'
 
 const BlockGameStyle = {
   position: 'fixed',
@@ -40,7 +40,8 @@ class Plinko extends Component {
   }
 
   componentDidMount () {
-    var oMain = CMain(true, {
+    // Menu -> Game
+    const mainInstance = CMain(true, {
       num_ball: 3,
       //INSTANT_WIN_WHEEL_SETTINGS sets the win occurrence of each prize in the wheel.
       //      -background: THE BACKGROUND IMAGE NAME IN sprites/prize FOLDER (the images name MUST ALWAYS BE image_#)
@@ -66,50 +67,49 @@ class Plinko extends Component {
       //
      });
      
-     
-    $(oMain).on("start_session", function(evt) {
+    $(mainInstance).on("start_session", function(evt) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeStartSession();
       }
     });
 
-    $(oMain).on("end_session", function(evt) {
+    $(mainInstance).on("end_session", function(evt) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeEndSession();
       }
     });
 
-    $(oMain).on("restart_level", function(evt, iLevel) {
+    $(mainInstance).on("restart_level", function(evt, iLevel) {
       if(getParamValue('ctl-arcade') === "true"){
         this.state.parent.__ctlArcadeRestartLevel({level:iLevel});
       }
     });
 
-    $(oMain).on("save_score", function(evt,iScore, szMode) {
+    $(mainInstance).on("save_score", function(evt,iScore, szMode) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeSaveScore({score:iScore, mode: szMode});
       }
     });
 
-    $(oMain).on("start_level", function(evt, iLevel) {
+    $(mainInstance).on("start_level", function(evt, iLevel) {
       if(getParamValue('ctl-arcade') === "true"){
         this.state.parent.__ctlArcadeStartLevel({level:iLevel});
       }
     });
 
-    $(oMain).on("end_level", function(evt,iLevel) {
+    $(mainInstance).on("end_level", function(evt,iLevel) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeEndLevel({level:iLevel});
       }
     });
 
-    $(oMain).on("show_interlevel_ad", function(evt) {
+    $(mainInstance).on("show_interlevel_ad", function(evt) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeShowInterlevelAD();
       }
     });
 
-    $(oMain).on("share_event", function(evt, iScore) {
+    $(mainInstance).on("share_event", function(evt, iScore) {
       if(getParamValue('ctl-arcade') === "true") {
         this.state.parent.__ctlArcadeShareEvent({
           img: TEXT_SHARE_IMAGE,

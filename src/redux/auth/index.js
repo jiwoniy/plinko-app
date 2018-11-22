@@ -1,23 +1,18 @@
 import * as selector from './selectors.js';
 
-export const SIGN_TEST = 'SIGN_TEST';
-// export const TOGGLE_TODO = "TOGGLE_TODO";
-// export const SET_FILTER = "SET_FILTER";
+export const SET_AUTH_AUTHENTICATION = 'SET_AUTH_AUTHENTICATION';
 
-// Authentication
-// Authorization
 const initialState = {
-  authentication: false,
+  authentication: true,
   token: {}
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case SIGN_TEST: {
-      // const { id, content } = action.payload;
+    case SET_AUTH_AUTHENTICATION: {
       return {
         ...state,
-        authentication: true,
+        authentication: action.payload,
       };
     }
     default:

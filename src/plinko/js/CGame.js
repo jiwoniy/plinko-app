@@ -288,7 +288,8 @@ function CGame(oData, mainInstance) {
         $(this).trigger('end_level', 1);
         
         this.unload();
-        this.mainInstance.gotoMenu();
+        // this.mainInstance.gotoMenu();
+        this.mainInstance.gotoGame();
     };
     
     this._onExitHelp = () => {

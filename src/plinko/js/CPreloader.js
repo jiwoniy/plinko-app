@@ -30,11 +30,11 @@ function CPreloader({ parentMainInstance }) {
     this.spriteLibrary = new CSpriteLibrary()
 
     this.spriteLibrary.init(this._onImagesLoaded, this._onAllImagesLoaded, this);
-    this.spriteLibrary.addSprite("progress_bar", "./sprites/progress_bar.png");
-    this.spriteLibrary.addSprite('plinko_background', "./sprites/plinko_background.svg");
+    this.spriteLibrary.addSprite("progress_bar", "/plinko/sprites/progress_bar.png");
+    this.spriteLibrary.addSprite('plinko_background', "/plinko/sprites/plinko_background.svg");
     // this.spriteLibrary.addSprite('200x200', "./sprites/200x200.jpg");
     // this.spriteLibrary.addSprite("but_start", "./sprites/but_start.png");
-    this.spriteLibrary.addSprite("play_button", "./sprites/play_button.svg");
+    this.spriteLibrary.addSprite("play_button", "/plinko/sprites/play_button.svg");
     this.spriteLibrary.loadSprites();
 
     this.container = new createjs.Container();

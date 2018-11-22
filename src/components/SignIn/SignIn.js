@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    signIn: () => dispatch({ type: "SIGN_TEST" }),
+    setAuthFlag: (payload) => dispatch({ type: "SET_AUTH_AUTHENTICATION", payload }),
   };
 };
 
@@ -45,17 +45,15 @@ class SignIn extends Component {
     }    
   }
   
-  handleClick = (e) => {
-    console.log('--click--')
-    console.log(this.props)
-    const { signIn } = this.props
-    signIn()
+  handleSignIn = (e) => {
+    const { setAuthFlag } = this.props
+    setAuthFlag(true)
   }
 
   render () {
     return <div className="SignIn">
     <div className="contents">
-      <img className="title" src="/signIn/title.svg" alt="title" />
+      <img className="title" src="/plinko/signIn/title.svg" alt="title" />
 
       <div className="input_container">
         <input
@@ -87,8 +85,10 @@ class SignIn extends Component {
 
       <div className="button_container">
         <button
-          onClick={this.handleClick}
-        > SignIn </button>
+          onClick={this.handleSignIn}
+        > 
+          SignIn
+        </button>
         <button> SignUp </button>
       </div>
 

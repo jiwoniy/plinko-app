@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import SignIn from './components/SignIn/SignIn'
-import Plinko from './Plinko';
-import { selector as authSelector } from './redux/auth';
+import SignIn from 'components/SignIn/SignIn'
+import Plinko from 'plinko/Plinko';
+import { selector as authSelector } from 'redux/auth';
 
 const mapStateToProps = state => {
   return {
     isAuthentication: () => authSelector.isAuthentication(state)
   };
 };
-
 
 function App (props) {
   const { isAuthentication } = props
