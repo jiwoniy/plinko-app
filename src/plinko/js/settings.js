@@ -15,10 +15,10 @@ const settings = () => {
 
   let EDGEBOARD_X = 150;
   let EDGEBOARD_Y = 200;
-  const tubuStartPosition = {
-    x: 100,
-    y: 150
-  }
+  // const tubuStartPosition = {
+  //   x: 100,
+  //   y: 150
+  // }
 
   const FPS           = 24;
   const FPS_TIME      = 1000 / FPS;
@@ -52,8 +52,10 @@ const settings = () => {
   let ANIMATION_SPEED;
 
   // const CELL_SIZE = 140;
-  let cellSize = 35 // base 375 widht 
-  const CELL_PIVOT_FROM_CENTER = 90;
+  let cellSize = 31 // base 375 widht 
+  // const CELL_PIVOT_FROM_CENTER = 90;
+  // const CELL_PIVOT_FROM_CENTER = 30;
+  const cellPivotFronCenter = 30;
 
   const BALL_FALL_MAX_ANGLE = 0.5;
   const BALL_FALL_MAX_ROTATION = 80;
@@ -125,8 +127,24 @@ const settings = () => {
       return value
     },
 
-    getTubeStartPosition: () => {
-      return tubuStartPosition
+    // getTubeStartPosition: () => {
+    //   return tubuStartPosition
+    // },
+
+    get10PercentWidth: () => {
+      return canvasWidth * 0.1
+    },
+
+    get80PercentWidth: () => {
+      return canvasWidth * 0.8
+    },
+
+    get10PercentHeight: () => {
+      return canvasHeight * 0.1
+    },
+
+    getCellPivotFronCenter: () => {
+      return cellPivotFronCenter
     },
 
     EDGEBOARD_X,
@@ -184,7 +202,7 @@ const settings = () => {
 
     // BET,
     // CELL_SIZE,
-    CELL_PIVOT_FROM_CENTER ,
+    // CELL_PIVOT_FROM_CENTER ,
     BALL_FALL_MAX_ANGLE,
     BALL_FALL_MAX_ROTATION,
     BALL_FALL_ROTATION_ATTENUATION_FACTOR,

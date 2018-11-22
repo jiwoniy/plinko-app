@@ -15,7 +15,7 @@ function CGUIExpandible(xPosition, yPosition, oSprite, oParentContainer) {
     var _oExpandedPos;
 
     this.guiContainer = null
-    this.menuButton = null
+    this.settingButton = null
 
     this.state = {
         menuExpanded: false
@@ -37,16 +37,15 @@ function CGUIExpandible(xPosition, yPosition, oSprite, oParentContainer) {
         _oFrontContainer = new createjs.Container();
         this.guiContainer.addChild(_oFrontContainer);
         
-        this.menuButton = new CGfxButton(0,0,oSprite, _oFrontContainer);
-        this.menuButton.addEventListener(settings.ON_MOUSE_UP, this._onMenu, this);
+        this.settingButton = new CGfxButton(0,0,oSprite, _oFrontContainer);
+        this.settingButton.addEventListener(settings.ON_MOUSE_UP, this.onSetting, this);
         
-        var oStart = {x: 0, y: 120};
-        _oExpandedPos = {start: oStart, offset: 120};
-        
+        var oStart = { x: 0, y: 120 };
+        _oExpandedPos = { start: oStart, offset: 120 };
     };
     
     this.unload = () => {
-        this.menuButton.unload();
+        this.settingButton.unload();
         oParentContainer.removeChild(this.guiContainer);
     };
     
@@ -67,7 +66,7 @@ function CGUIExpandible(xPosition, yPosition, oSprite, oParentContainer) {
         _aButtons.push(oButton);
     };
     
-    this._onMenu = () => {
+    this.onSetting = () => {
         this.state.menuExpanded = !this.state.menuExpanded;
         
         if (this.state.menuExpanded) {

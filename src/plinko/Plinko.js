@@ -19,7 +19,7 @@ import {
 
 import 'plinko/css/main.css'
 import 'plinko/css/orientation_utils.css'
-import CanvasStyles from 'plinko/css/canvas.scss'
+// import CanvasStyles from 'plinko/css/canvas.scss'
 
 const BlockGameStyle = {
   position: 'fixed',

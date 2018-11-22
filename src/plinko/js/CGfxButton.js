@@ -24,7 +24,7 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
     var _oListenerMouseUp;
     var _oListenerMouseOver;
     
-    this._init = function(iXPos, iYPos, oSprite, oParentContainer) {
+    this.initialze = function(iXPos, iYPos, oSprite, oParentContainer) {
         _bDisabled = false;
         
         _iScaleFactor = 1;
@@ -43,7 +43,7 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
         _oButtonSprite.regY = oSprite.height/2;
         _oButton.addChild(_oButtonSprite);        
         
-        this._initListener();
+        this.initListener();
     };
     
     this.unload = function() {
@@ -69,7 +69,7 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
         _bDisabled = !bVal;
     };
     
-    this._initListener = function() {
+    this.initListener = () => {
         if ($.browser.mobile) {
             _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
             _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
@@ -182,7 +182,7 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
     };
         
     _oParent = this;
-    this._init(iXPos,iYPos,oSprite, oParentContainer);
+    this.initialze(iXPos,iYPos,oSprite, oParentContainer);
     
     return this;
 }

@@ -18,8 +18,6 @@ import CInterface from './CInterface.js'
 import settings from './settings.js'
 
 function CGame(oData, mainInstance) {
-    let _iNumBallRemaining;
-
     this.mainInstance = mainInstance
     this.interfaceInstance = null
     this.insertTubeController = null
@@ -31,6 +29,7 @@ function CGame(oData, mainInstance) {
 
     this.state = {
         board: [],
+        ballCount: 0,
         initData: oData || {},
         endPanel: null,
         _aProbability: [],
@@ -42,11 +41,10 @@ function CGame(oData, mainInstance) {
         setVolume('soundtrack', 0.3);
         
         // _bStartGame=true;
-        _iNumBallRemaining = settings.getNumBall();
+        this.state.ballCount = settings.getNumBall();
         
         const gameBackground = createBitmap(CSpriteLibrary.getSprite('bg_game'));
         this.mainInstance.getStage().addChild(gameBackground);
-        
 
         this.backgroundContainer = new createjs.Container();
         this.mainInstance.getStage().addChild(this.backgroundContainer);
@@ -88,9 +86,10 @@ function CGame(oData, mainInstance) {
             for (let currentCol = 0; currentCol < allCol - ((currentRow + 1) % 2); currentCol += 1) {
                 let xPosition;
                 if (currentRow % 2 === 0) {
-                    xPosition = currentCol * settings.getCellGapSize();
+                    xPosition = + (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
                 } else {
-                    xPosition = - (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
+                    xPosition = currentCol * settings.getCellGapSize();
+                    // xPosition = - (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
                 }
                 const yPosition = currentRow * settings.getCellGapSize() / 2;
                 this.state.board[currentRow][currentCol] = new CCell(xPosition,
@@ -104,16 +103,8 @@ function CGame(oData, mainInstance) {
         }
 
         settings.setInsertTubeNumber(this.state.board[0].length)
-
-        // this.boardContainer.setBounds(-82, 60, 864, 902)
-        // console.log(this.boardContainer.getBounds())
-    
-        this.boardContainer.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
-        this.boardContainer.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
-        this.boardContainer.x = settings.getCanvasWidth() / 2;
-        this.boardContainer.y = (settings.getCanvasHeight() / 2);
-
-        // console.log(this.boardContainer)
+        this.boardContainer.x = settings.getCanvasWidth() / 2 - this.boardContainer.getBounds().width / 2
+        this.boardContainer.y =  settings.getCanvasHeight() / 2 - this.boardContainer.getBounds().height / 2;
 
         // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
         // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
@@ -137,17 +128,16 @@ function CGame(oData, mainInstance) {
     
     this.launch = (startIndex) => {
         this.state.currentBallIndex = startIndex;
-        _iNumBallRemaining -= 1;
+        this.state.ballCount -= 1;
         
         this.setBall();
-        
         this.insertTubeController.hideSlots();
         this.ballGenerator.shiftBallAnimation();
 
-        var oDestBall = this.getBallPivotCellPos(0, startIndex);
+        const oDestBall = this.getBallPivotCellPos(0, startIndex);
         this.state.currentBall.launchAnim(oDestBall);
         
-        this.interfaceInstance.refreshBallNum(_iNumBallRemaining);
+        this.interfaceInstance.refreshBallNum(this.state.ballCount);
         this.interfaceInstance.hideControls();
     };
 
@@ -159,11 +149,13 @@ function CGame(oData, mainInstance) {
         this.setCurrentBall(this.ballGenerator.getNextBall())
         // this.state.currentBall = this.ballGenerator.getNextBall();
 
-        const oCurBallPos = this.state.currentBall.getPos();
-        const oNewPos = this.boardContainer.globalToLocal(oCurBallPos.x * s_iScaleFactor, oCurBallPos.y * s_iScaleFactor);
+        const startBallPos = this.state.currentBall.getPos();
+        const movePos = this.boardContainer.globalToLocal(
+            startBallPos.x * s_iScaleFactor,
+            startBallPos.y * s_iScaleFactor);
 
         this.boardContainer.addChild(this.state.currentBall.getSprite());
-        this.state.currentBall.setPos(oNewPos);
+        this.state.currentBall.setPos(movePos);
     };
     
     this.getFallPath = () => {
@@ -199,7 +191,7 @@ function CGame(oData, mainInstance) {
             return; 
         }
         
-        if (_iNumBallRemaining === 0) {
+        if (this.state.ballCount === 0) {
             this.gameOver(iPrizeWin, false);
         }
     };

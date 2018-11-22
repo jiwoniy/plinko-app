@@ -41,6 +41,7 @@ function CMain(oData) {
             settings.setCanvasHeight()
             settings.setCanvasWidth()
             this.stage = new createjs.Stage(canvasElement);
+
             this.stage.preventSelection = true;
             createjs.Touch.enable(this.stage);
             
@@ -165,6 +166,7 @@ function CMain(oData) {
         
         CSpriteLibrary.addSprite("ball_panel","/plinko/sprites/ball_panel.png");
         
+        CSpriteLibrary.addSprite("racket","/plinko/sprites/table_tennis_racket.svg");
         CSpriteLibrary.addSprite("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
         CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.svg");
@@ -199,7 +201,7 @@ function CMain(oData) {
         this.preloader.unload();
         // s_oSoundtrack = playSound('soundtrack', 1, true);
         // Sound off
-        // playSound('soundtrack', 1, true);
+        playSound('soundtrack', 1, true);
         // this.gotoMenu();
         this.gotoGame();
     };

@@ -16,7 +16,7 @@ function CBall(ballPosition, oParentContainer) {
         ballSpriteBitmap: null
     }
     
-    this._init = function(ballPosition, oParentContainer) {
+    this.initBall = function(ballPosition, oParentContainer) {
         this.container = new createjs.Container();
         this.container.x = ballPosition.x;
         this.container.y = ballPosition.y;
@@ -56,31 +56,36 @@ function CBall(ballPosition, oParentContainer) {
         this.container.y = oPos.y;
     };
     
-    this.setPosToPivot = () => {
-        this.container.regY = this.ballSpriteBitmap / 2;
-    };
+    // this.setPosToPivot = () => {
+    //     this.container.regY = this.ballSpriteBitmap / 2;
+    // };
     
     this.launchAnim = (oPos) => {
         const iTime = 1000;
         
-        createjs.Tween.get(this.container).to({ x: oPos.x }, iTime, createjs.Ease.sineOut);
-        createjs.Tween.get(this.container).to({ y: oPos.y - 400 }, iTime / 2, createjs.Ease.cubicOut).to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
-            gameInstance().getFallPath();
-        });
+        createjs.Tween
+            .get(this.container)
+            .to({ x: oPos.x }, iTime, createjs.Ease.sineOut);
+        createjs.Tween
+            .get(this.container)
+            .to({ y: oPos.y - 300 }, iTime / 2, createjs.Ease.cubicOut)
+            .to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
+                gameInstance().getFallPath();
+            });
     };
     
     this.startPathAnim = (aPath, iStartTime) => {
         // _iStartAnimTime = iStartTime;
-        this._jumpBall(aPath, iStartTime);
+        this.jumpBall(aPath, iStartTime);
     };
     
-    this._jumpBall = (aPath, iTime) => {
+    this.jumpBall = (aPath, iTime) => {
         playSound('ball_collision', 1, false);
         
-        var aCurCell = aPath.splice(0,1);
+        var aCurCell = aPath.splice(0, 1);
         
         if(aPath.length === 1) {
-            this._lastJumpBallAnim(aPath, iTime);
+            this.lastJumpBallAnim(aPath, iTime);
             return;
         }
         
@@ -92,10 +97,10 @@ function CBall(ballPosition, oParentContainer) {
             .to({x:oNextPos.x}, iTime/*, createjs.Ease.cubicOut*/)
         createjs.Tween
             .get(this.container)
-            .to({y:oCurPos.y-10}, iTime/4, createjs.Ease.cubicOut)
-            .to({y:oNextPos.y}, iTime*3/4, createjs.Ease.cubicIn)
+            .to({ y: oCurPos.y - 10 }, iTime / 4, createjs.Ease.cubicOut)
+            .to({ y: oNextPos.y }, iTime * 3 / 4, createjs.Ease.cubicIn)
             .call(() => {
-            this._jumpBall(aPath, iTime);
+            this.jumpBall(aPath, iTime);
         });
 
     };
@@ -129,29 +134,29 @@ function CBall(ballPosition, oParentContainer) {
             });
     };
     
-    this._lastFallBallAnim = (aPath, iTime) => {
-        var oParams = this._getFallParams(aPath, iTime);
+    // this._lastFallBallAnim = (aPath, iTime) => {
+    //     var oParams = this._getFallParams(aPath, iTime);
         
-        var iFloor = oParams.posy + 170;
+    //     var iFloor = oParams.posy + 170;
         
-        createjs.Tween
-            .get(this.state.ballSpriteBitmap)
-            .to({rotation:oParams.rotation}, iTime, createjs.Ease.sineIn);
-        createjs.Tween
-            .get(this.container, {override:true})
-            .to({x:oParams.posx}, iTime, createjs.Ease.sineIn);
-        createjs.Tween
-            .get(this.container).to({y:iFloor}, iTime, createjs.Ease.cubicIn)
-            .call(() => {
-                createjs.Tween
-                    .get(this.container)
-                    .to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut)
-                    .to({y:iFloor}, iTime, createjs.Ease.bounceOut);
-                gameInstance().ballArrived(aPath[0].col);
-            });
-    };
+    //     createjs.Tween
+    //         .get(this.state.ballSpriteBitmap)
+    //         .to({rotation:oParams.rotation}, iTime, createjs.Ease.sineIn);
+    //     createjs.Tween
+    //         .get(this.container, {override:true})
+    //         .to({x:oParams.posx}, iTime, createjs.Ease.sineIn);
+    //     createjs.Tween
+    //         .get(this.container).to({y:iFloor}, iTime, createjs.Ease.cubicIn)
+    //         .call(() => {
+    //             createjs.Tween
+    //                 .get(this.container)
+    //                 .to({y:iFloor - 100}, iTime/2, createjs.Ease.cubicOut)
+    //                 .to({y:iFloor}, iTime, createjs.Ease.bounceOut);
+    //             gameInstance().ballArrived(aPath[0].col);
+    //         });
+    // };
     
-    this._lastJumpBallAnim = (aPath, iTime) => {
+    this.lastJumpBallAnim = (aPath, iTime) => {
         var oNextPos = gameInstance().getBallPivotCellPos(aPath[0].row, aPath[0].col);
         var iFloor = oNextPos.y + 192;
         
@@ -182,7 +187,7 @@ function CBall(ballPosition, oParentContainer) {
     };
     
     // _oParent = this;
-    this._init(ballPosition, oParentContainer);
+    this.initBall(ballPosition, oParentContainer);
 }
 
 export default CBall;

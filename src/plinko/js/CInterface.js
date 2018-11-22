@@ -135,6 +135,7 @@ function CInterface(oBgContainer, gameInstance) {
         oControllerContainer.addChild(this.ballNum);
         
         const settingsSprite = CSpriteLibrary.getSprite('but_settings');
+        
         this.guiExpandibleContainer = new CGUIExpandible(this.exitButtonPos.x, this.exitButtonPos.y, settingsSprite, mainInstance().getStage());
         this.guiExpandibleContainer.addButton(this.exitButtonContainer);
         this.guiExpandibleContainer.addButton(this.audioToggle);

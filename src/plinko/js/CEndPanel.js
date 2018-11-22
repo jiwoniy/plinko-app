@@ -19,107 +19,108 @@ import {
     TEXT_GAMEOVER,
   } from './CLang.js'
 
-function CEndPanel(iPrizeIndex, bHasWin) {
-    var _oButExit;
-    var _oFade;
-    var _oPanelContainer;
+function CEndPanel(prizeIndex, isWin) {
+    // var _oFade;
     // var _oParent;
-    var _oListener;
+    // var _oListener;
     
     // var _pStartPanelPos;
-    
-    this._init = (iPrizeIndex, bHasWin) => {
-        _oFade = new createjs.Shape();
-        _oFade.graphics.beginFill("black").drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
-        _oFade.alpha = 0;
-        _oListener = _oFade.on("mousedown",function(){});
-        mainInstance().getStage().addChild(_oFade);
-        
-        createjs.Tween.get(_oFade).to({alpha:0.7},500);
-        
-        _oPanelContainer = new createjs.Container();        
-        mainInstance().getStage().addChild(_oPanelContainer);
-        
-        const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
-        const panel = createBitmap(msgBoxSprite);        
-        panel.regX = msgBoxSprite.width / 2;
-        panel.regY = msgBoxSprite.height / 2;
-        _oPanelContainer.addChild(panel);
-        
-        _oPanelContainer.x = settings.getCanvasWidth() / 2;
-        _oPanelContainer.y = settings.getCanvasHeight() + (msgBoxSprite.height / 2);
-        // _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
-        createjs.Tween.get(_oPanelContainer).to({y: (settings.getCanvasHeight() / 2) - 40},500, createjs.Ease.quartIn);
 
-        if (bHasWin) {
-            const oTitle = new createjs.Text(TEXT_WIN," 60px "+ settings.PRIMARY_FONT, "#ffffff");
-            oTitle.y = -(msgBoxSprite.height / 2) + 140;
-            oTitle.textAlign = "center";
-            oTitle.textBaseline = "middle";
-            oTitle.lineWidth = 400;
-            oTitle.lineHeight = 70;
-            _oPanelContainer.addChild(oTitle);
+    this.exitButton = null
+    this.fadeShape = null
+    this.panelContainer = null
+    
+    this.initEndPanel = (prizeIndex, isWin) => {
+        this.fadeShape = new createjs.Shape();
+        this.fadeShape.graphics
+            .beginFill("black")
+            .drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
+
+        this.fadeShape.alpha = 0;
+        // _oListener = this.fadeShape.on('mousedown',function(){});
+        mainInstance().getStage().addChild(this.fadeShape);
+        
+        createjs.Tween
+            .get(this.fadeShape)
+            .to({ alpha: 0.7 }, 500);
+        
+        this.panelContainer = new createjs.Container();        
+        mainInstance().getStage().addChild(this.panelContainer);
+        
+        // const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
+        // const panel = createBitmap(msgBoxSprite);        
+        // panel.regX = msgBoxSprite.width / 2;
+        // panel.regY = msgBoxSprite.height / 2;
+        // this.panelContainer.addChild(panel);
+        // panel.on('click', this.redeem);
+        // panel.cursor = "pointer";
+        
+        // _oPanelContainer.x = settings.getCanvasWidth() / 2;
+        // _oPanelContainer.y = settings.getCanvasHeight() + (msgBoxSprite.height / 2);
+        // _pStartPanelPos = {x: _oPanelContainer.x, y: _oPanelContainer.y};
+        createjs.Tween
+            .get(this.panelContainer)
+            .to({ y: (settings.getCanvasHeight() / 2)} , 500, createjs.Ease.quartIn);
+
+        if (isWin) {
+            const textDisplay = new createjs.Text(TEXT_WIN, `30px ${settings.PRIMARY_FONT}`, "#ffffff");
+            // textDisplay.textAlign = "center";
+            // textDisplay.textBaseline = "middle";
+            textDisplay.x = (settings.getCanvasWidth() / 2) - (textDisplay.getBounds().width / 2)
+            textDisplay.y = 70
+            this.panelContainer.addChild(textDisplay);
             
-            const szPrize = settings.getPrize()[iPrizeIndex].background;
+            const szPrize = settings.getPrize()[prizeIndex].background;
             const prizeSprite = CSpriteLibrary.getSprite(szPrize);
-            const oPrize = createBitmap(prizeSprite);        
-            oPrize.regX = prizeSprite.width / 2;
-            oPrize.regY = prizeSprite.height / 2;
+            const prizeBitmap = createBitmap(prizeSprite); 
+            prizeBitmap.x = (settings.getCanvasWidth() / 2) - (prizeBitmap.getBounds().width / 2)
+            prizeBitmap.y = 100
+            this.panelContainer.addChild(prizeBitmap);
+            // oPrize.regX = prizeSprite.width / 2;
+            // oPrize.regY = prizeSprite.height / 2;
             
-            const oRedeem = new createjs.Text(TEXT_REDEEM," 60px "+ settings.PRIMARY_FONT, "#ffffff");
-            oRedeem.y = 140;
-            oRedeem.textAlign = "center";
-            oRedeem.textBaseline = "middle";
-            oRedeem.lineWidth = 600;
-            _oPanelContainer.addChild(oRedeem);
-            
-            _oPanelContainer.addChild(oPrize);
-            
-            panel.on("click",this.redeem);
-            panel.cursor = "pointer";
+            const redeemDisplay = new createjs.Text(TEXT_REDEEM," 30px "+ settings.PRIMARY_FONT, "#ffffff");
+            redeemDisplay.x = (settings.getCanvasWidth() / 2) - (redeemDisplay.getBounds().width / 2)
+            redeemDisplay.y = 140;
+            // oRedeem.textAlign = "center";
+            // oRedeem.textBaseline = "middle";
+            // oRedeem.lineWidth = 300;
+            this.panelContainer.addChild(redeemDisplay);
         } else {
-            const oTitle = new createjs.Text(TEXT_GAMEOVER," 60px "+ settings.PRIMARY_FONT, "#ffffff");
-            oTitle.y = -(msgBoxSprite.height / 2) + 140;
-            oTitle.textAlign = "center";
-            oTitle.textBaseline = "middle";
-            oTitle.lineWidth = 600;
-            oTitle.lineHeight = 70;
-            _oPanelContainer.addChild(oTitle);
+            const textDisplay = new createjs.Text(TEXT_GAMEOVER," 30px "+ settings.PRIMARY_FONT, "#ffffff");
+            textDisplay.x = (settings.getCanvasWidth() / 2) - (textDisplay.getBounds().width / 2)
+            textDisplay.textBaseline = "middle";
+            this.panelContainer.addChild(textDisplay);
             
-            _oButExit = new CGfxButton(0, 80, CSpriteLibrary.getSprite('but_home'), _oPanelContainer);
-            _oButExit.addEventListener(settings.ON_MOUSE_UP, this._onExit, this);
+            this.exitButton = new CGfxButton(settings.getCanvasWidth() / 2, 80, CSpriteLibrary.getSprite('but_home'), this.panelContainer);
+            this.exitButton.addEventListener(settings.ON_MOUSE_UP, this.onExit, this);
         }
 
         
-        $(mainInstance()).trigger("save_score",iPrizeIndex);        
-        
-        
-    
-        $(mainInstance()).trigger("share_event",iPrizeIndex);
-        
+        $(mainInstance()).trigger("save_score", prizeIndex);        
+        $(mainInstance()).trigger("share_event", prizeIndex);
     };
     
     this.unload = () => {
-        _oFade.off("mousedown",_oListener);
-        mainInstance().getStage().removeChild(_oFade);
-        mainInstance().getStage().removeChild(_oPanelContainer);
+        // this.fadeShape.off('mousedown', _oListener);
+        mainInstance().getStage().removeChild(this.fadeShape);
+        mainInstance().getStage().removeChild(this.panelContainer);
         
-        if (!bHasWin) {
-            _oButExit.unload();
+        if (!isWin) {
+            this.exitButton.unload();
         }
     };
 
     this.redeem = () => {
-        this._onExit();
-        if(settings.getPrize()[iPrizeIndex].redeemlink !== ""){
-            window.open(settings.getPrize()[iPrizeIndex].redeemlink);
+        this.onExit();
+        if(settings.getPrize()[prizeIndex].redeemlink !== "") {
+            window.open(settings.getPrize()[prizeIndex].redeemlink);
         }
-        
     };  
     
-    this._onExit = () => {
-        if(settings.getPrize()[iPrizeIndex].redeemlink !== ""){
-            window.open(settings.getPrize()[iPrizeIndex].redeemlink);
+    this.onExit = () => {
+        if (settings.getPrize()[prizeIndex].redeemlink !== "") {
+            window.open(settings.getPrize()[prizeIndex].redeemlink);
         }
         
         $(mainInstance()).trigger("show_interlevel_ad");
@@ -129,8 +130,7 @@ function CEndPanel(iPrizeIndex, bHasWin) {
         gameInstance().onExit();
     };
     
-    // _oParent = this;
-    this._init(iPrizeIndex, bHasWin);
+    this.initEndPanel(prizeIndex, isWin);
 
     return this;
 }

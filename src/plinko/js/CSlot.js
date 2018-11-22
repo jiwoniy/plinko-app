@@ -3,10 +3,12 @@ import createjs from './createjs.js'
 
 import {
     playSound,
+    createBitmap
  } from './ctl_utils.js'
+ import CSpriteLibrary from './sprite_lib.js'
  import settings from './settings.js'
 
-function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
+function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, index) {
     // var _bDisabled;
         
     var _aCbCompleted;
@@ -23,7 +25,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
 
     this.parentContainer = null
     this.buttonContainer = null
-    this.clickContainer = null
+    this.clickShape = null
     this.listener = {
         mouseDown: null,
         mouseUp: null,
@@ -34,24 +36,35 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
         scaleFactor: 1
     }
     
-    this.initSlot = function(iXPos ,iYPos, parentContainer) {                
+    this.initSlot = function(xPosition ,yPosition, parentContainer) {                
         _aCbCompleted = [];
         _aCbOwner = [];
         
         this.parentContainer = parentContainer
         this.buttonContainer = new createjs.Container();
-        this.buttonContainer.x = iXPos;
-        this.buttonContainer.y = iYPos; 
+        this.buttonContainer.x = xPosition;
+        this.buttonContainer.y = yPosition; 
         this.buttonContainer.scaleX = this.state.scaleFactor; 
         this.buttonContainer.scaleY = this.state.scaleFactor;
         parentContainer.addChild(this.buttonContainer);
 
-       
-        this.clickContainer = new createjs.Shape();
-        this.clickContainer.graphics
+        this.clickShape = new createjs.Shape();
+        const racketSprite = CSpriteLibrary.getSprite('racket');
+        createBitmap(racketSprite);
+
+        const racket = createBitmap(racketSprite, slotWidth, slotHeight)
+        
+        racket.x = xPosition / 2
+        racket.y = -(yPosition / 2)
+        // racket.regX = slotWidth
+        // TODO
+        this.buttonContainer.addChild(racket);
+    
+        this.clickShape.graphics
             .beginFill("rgba(255,255,255,0.01)")
-            .drawRect(-iWidth / 2, -iHeight / 2, iWidth, iHeight);
-            this.buttonContainer.addChild(this.clickContainer);
+            // .beginFill("black")
+            .drawRect(xPosition / 2, - (yPosition / 2), slotWidth, slotHeight);
+        this.buttonContainer.addChild(this.clickShape);
         
         this.initListener();
     };
@@ -139,13 +152,13 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
         }  
     };
     
-    this.addText = function(szText){
-        var oScoreText = new createjs.Text(szText," 50px "+ settings.PRIMARY_FONT, "#ffffff");
-        oScoreText.textAlign = "center";
-        oScoreText.textBaseline = "middle";
-        oScoreText.lineWidth = 200;
-        this.buttonContainer.addChild(oScoreText);
-    };
+    // this.addText = function(szText){
+    //     var oScoreText = new createjs.Text(szText," 50px "+ settings.PRIMARY_FONT, "#ffffff");
+    //     oScoreText.textAlign = "center";
+    //     oScoreText.textBaseline = "middle";
+    //     oScoreText.lineWidth = 200;
+    //     this.buttonContainer.addChild(oScoreText);
+    // };
     
     this.pulseAnimation =  () => {
         createjs.Tween
@@ -205,7 +218,7 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
     };
         
     // _oParent = this;
-    this.initSlot(iXPos,iYPos, parentContainer);
+    this.initSlot(xPosition, yPosition, parentContainer);
 }
 
 export default CSlot;
