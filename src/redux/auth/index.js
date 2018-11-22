@@ -1,6 +1,6 @@
 import * as selector from './selectors.js';
 
-export const ADD_TODO = 'ADD_TODO';
+export const SIGN_TEST = 'SIGN_TEST';
 // export const TOGGLE_TODO = "TOGGLE_TODO";
 // export const SET_FILTER = "SET_FILTER";
 
@@ -13,10 +13,11 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case ADD_TODO: {
+    case SIGN_TEST: {
       // const { id, content } = action.payload;
       return {
         ...state,
+        authentication: true,
       };
     }
     default:

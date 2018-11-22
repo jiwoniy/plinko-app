@@ -53,7 +53,7 @@ canvas {
 }
 
 /***************FONTS*******************/
-@font-face {
+/* @font-face {
     font-family: 'impact';
     src: url('impact.eot');
     src: url('impact.eot?#iefix') format('embedded-opentype'),
@@ -62,7 +62,7 @@ canvas {
          url('impact.svg#impact') format('svg');
     font-weight: normal;
     font-style: normal;
-}
+} */
 
 .check-fonts {
     position: fixed;

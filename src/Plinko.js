@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import $ from 'jquery'
 
-import './game/js/detectBrowser.js'
-import CMain from './game/js/CMain.js'
+import './plinko/js/detectBrowser.js'
+import CMain from './plinko/js/CMain.js'
 import {
   getParamValue,
   // isIOS,
   sizeHandler
-} from './game/js/ctl_utils.js'
+} from './plinko/js/ctl_utils.js'
 
 import {
   TEXT_SHARE_IMAGE,
@@ -15,10 +15,10 @@ import {
   TEXT_SHARE_MSG1,
   TEXT_SHARE_MSG2,
   TEXT_SHARE_SHARE1,
-} from './game/js/CLang.js'
+} from './plinko/js/CLang.js'
 
-import './game/css/main.css'
-import './game/css/orientation_utils.css'
+import './plinko/css/main.css'
+import './plinko/css/orientation_utils.css'
 
 const BlockGameStyle = {
   position: 'fixed',

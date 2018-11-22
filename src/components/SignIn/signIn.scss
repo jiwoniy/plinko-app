@@ -1,0 +1,95 @@
+.SignIn {
+  overflow: hidden;
+  /* height: 100%; */
+  width: 100%;
+  /* width: 100vw; */
+  height: 100vh;
+
+  background-image: url('/signIn/background_signIn.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.SignIn > .contents {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contents > .title {
+  // width: 80%;
+  margin-bottom: 55px;
+}
+
+.contents > .input_container {
+  // width: 80%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  
+  input[type="text"], input[type="password"] {
+    margin: 9px;
+    border: none;
+    width: 15rem;
+    height: 30px;
+    box-shadow: 5px 5px #888888;
+  }
+
+  .checkbox__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    input[type="checkbox"] {
+      display: none;
+    }
+  
+    input[type="checkbox"]:checked + label {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-radius: 15px;
+      background-color: yellow;
+      
+      cursor: pointer;
+    }
+  
+    input[type="checkbox"] + label {
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ffffff;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+  }
+}
+
+.contents > .button_container {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    margin: 5px;
+    border: none;
+    width: 7rem;
+    height: 40px;
+    box-shadow: 5px 5px #888888;
+  }
+}
+
+.SignIn > .social_container {
+  position: absolute;
+  top: 80%;
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+}
