@@ -6,77 +6,93 @@ import {
  } from './ctl_utils.js'
  import settings from './settings.js'
 
-function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
-    
-    var _bDisabled;
-    
-    var _iScaleFactor;
-    
+function CSlot(iXPos,iYPos, iWidth, iHeight, parentContainer) {
+    // var _bDisabled;
+        
     var _aCbCompleted;
     var _aCbOwner;
     var _aParams = [];
     
-    var _oButton;
-    var _oClickArea;
+    // var _oButton;
+    // var _oClickArea;
     // var _oTween;
-    var _oParent;
-    var _oListenerMouseDown;
-    var _oListenerMouseUp;
-    var _oListenerMouseOver;
+    // var _oParent;
+    // var _oListenerMouseDown;
+    // var _oListenerMouseUp;
+    // var _oListenerMouseOver;
+
+    this.parentContainer = null
+    this.buttonContainer = null
+    this.clickContainer = null
+    this.listener = {
+        mouseDown: null,
+        mouseUp: null,
+        mouseOver: null
+    }
+    this.state = {
+        disable: false,
+        scaleFactor: 1
+    }
     
-    this._init =function(iXPos,iYPos, oParentContainer){
-        _bDisabled = false;
-        
-        _iScaleFactor = 1;
-        
+    this.initSlot = function(iXPos ,iYPos, parentContainer) {                
         _aCbCompleted = [];
         _aCbOwner = [];
         
-        _oButton = new createjs.Container();
-        _oButton.x = iXPos;
-        _oButton.y = iYPos; 
-        _oButton.scaleX =   _oButton.scaleY = _iScaleFactor;
-        oParentContainer.addChild(_oButton);
+        this.parentContainer = parentContainer
+        this.buttonContainer = new createjs.Container();
+        this.buttonContainer.x = iXPos;
+        this.buttonContainer.y = iYPos; 
+        this.buttonContainer.scaleX = this.state.scaleFactor; 
+        this.buttonContainer.scaleY = this.state.scaleFactor;
+        parentContainer.addChild(this.buttonContainer);
 
        
-        _oClickArea = new createjs.Shape();
-        _oClickArea.graphics.beginFill("rgba(255,255,255,0.01)").drawRect(-iWidth/2, -iHeight/2, iWidth, iHeight);
-        _oButton.addChild(_oClickArea);
+        this.clickContainer = new createjs.Shape();
+        this.clickContainer.graphics
+            .beginFill("rgba(255,255,255,0.01)")
+            .drawRect(-iWidth / 2, -iHeight / 2, iWidth, iHeight);
+            this.buttonContainer.addChild(this.clickContainer);
         
-        this._initListener();
+        this.initListener();
     };
     
-    this.unload = function(){
-        if($.browser.mobile){
-            _oButton.off("mousedown", _oListenerMouseDown);
-            _oButton.off("pressup" , _oListenerMouseUp);
+    this.unload = () => {
+        if ($.browser.mobile) {
+            this.buttonContainer.off("mousedown", this.listener.mouseDown);
+            this.buttonContainer.off("pressup" , this.listener.mouseUp);
         } else {
-            _oButton.off("mousedown", _oListenerMouseDown);
-            _oButton.off("mouseover", _oListenerMouseOver);
-            _oButton.off("pressup" , _oListenerMouseUp);
+            this.buttonContainer.off("mousedown", this.listener.mouseDown);
+            this.buttonContainer.off("mouseover", this.listener.mouseOver);
+            this.buttonContainer.off("pressup" , this.listener.mouseUp);
         }
         
-        _oButton.parent.removeChild(_oButton);
+        this.buttonContainer.parent.removeChild(this.buttonContainer);
         
         //oParentContainer.removeChild(_oButton);
     };
     
-    this.setVisible = function(bVisible){
-        _oButton.visible = bVisible;
+    this.setVisible = (bVisible) => {
+        this.buttonContainer.visible = bVisible;
     };
     
-    this.setClickable = function(bVal){
-        _bDisabled = !bVal;
+    this.setClickable = (value) => {
+        this.state.disable = !value;
     };
     
-    this._initListener = function(){
-        if($.browser.mobile){
-            _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
-            _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
+    this.initListener = () => {
+        if ($.browser.mobile) {
+
+            this.listener = {
+                mouseDown: null,
+                mouseUp: null,
+                mouseOver: null
+            }
+            this.listener.mouseDown = this.buttonContainer.on("mousedown", this.buttonDown);
+            this.listener.mouseUp = this.buttonContainer.on("pressup", this.buttonRelease);
         } else {
-            _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
-            _oListenerMouseOver = _oButton.on("mouseover", this.buttonOver);
-            _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
+            this.listener.mouseDown = this.buttonContainer.on("mousedown", this.buttonDown);
+            this.listener.mouseOver = this.buttonContainer.on("mouseover", this.buttonOver);
+            this.listener.mouseUp = this.buttonContainer.on("pressup", this.buttonRelease);
         }   
     };
     
@@ -85,44 +101,41 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
         _aCbOwner[iEvent] = cbOwner; 
     };
     
-    this.addEventListenerWithParams = function(iEvent, cbCompleted, cbOwner, aParams) {
+    this.addEventListenerWithParams = (iEvent, cbCompleted, cbOwner, aParams) => {
         _aCbCompleted[iEvent]=cbCompleted;
         _aCbOwner[iEvent] = cbOwner;
         _aParams = aParams;
     };
     
-    this.buttonRelease = function(){
-        if(_bDisabled){
-            return;
-        }
-        _oButton.scaleX = _iScaleFactor;
-        _oButton.scaleY = _iScaleFactor;
+    this.buttonRelease = () => {
+        if (!this.state.disable) {
+            this.buttonContainer.scaleX = this.state.scaleFactor;
+            this.buttonContainer.scaleY = this.state.scaleFactor;
 
-        if(_aCbCompleted[settings.ON_MOUSE_UP]){
-            _aCbCompleted[settings.ON_MOUSE_UP].call(_aCbOwner[settings.ON_MOUSE_UP], _aParams);
+        if (_aCbCompleted[settings.ON_MOUSE_UP]) {
+                _aCbCompleted[settings.ON_MOUSE_UP].call(_aCbOwner[settings.ON_MOUSE_UP], _aParams);
+            }   
         }
     };
     
-    this.buttonDown = function(){
-        if(_bDisabled){
-            return;
-        }
-        _oButton.scaleX = _iScaleFactor * 0.9;
-        _oButton.scaleY = _iScaleFactor * 0.9;
+    this.buttonDown = () => {
+        if (!this.state.disable) {
+            this.buttonContainer.scaleX = this.state.scaleFactor * 0.9;
+            this.buttonContainer.scaleY = this.state.scaleFactor * 0.9;
 
-        playSound("click", 1, false);
+            playSound("click", 1, false);
 
-       if(_aCbCompleted[settings.ON_MOUSE_DOWN]) {
-           _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN], _aParams);
-       }
-    };
-    
-    this.buttonOver = function(evt){
-        if(!$.browser.mobile){
-            if(_bDisabled){
-                return;
+            if (_aCbCompleted[settings.ON_MOUSE_DOWN]) {
+                _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN], _aParams);
             }
-            evt.target.cursor = "pointer";
+        }
+    };
+    
+    this.buttonOver = (evt) => {
+        if (!$.browser.mobile) {
+            if (!this.state.disable) {
+                evt.target.cursor = "pointer";
+            }
         }  
     };
     
@@ -131,60 +144,68 @@ function CSlot(iXPos,iYPos, iWidth, iHeight, oParentContainer) {
         oScoreText.textAlign = "center";
         oScoreText.textBaseline = "middle";
         oScoreText.lineWidth = 200;
-        _oButton.addChild(oScoreText);
+        this.buttonContainer.addChild(oScoreText);
     };
     
-    this.pulseAnimation = function () {
-        createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
-            _oParent.pulseAnimation();
+    this.pulseAnimation =  () => {
+        createjs.Tween
+            .get(this.buttonContainer)
+            .to({scaleX: this.state.scaleFactor * 1.1, scaleY: this.state.scaleFactor * 1.1}, 850, createjs.Ease.quadOut)
+            .to({scaleX: this.state.scaleFactor, scaleY: this.state.scaleFactor }, 650, createjs.Ease.quadIn)
+            .call(() => {
+            this.parentContainer.pulseAnimation();
         });
         // _oTween = createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
         //     _oParent.pulseAnimation();
         // });
     };
 
-    this.trembleAnimation = function () {
-        createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
-            _oParent.trebleAnimation();
+    this.trembleAnimation = () => {
+        createjs.Tween
+            .get(this.buttonContainer)
+            .to({rotation: 5}, 75, createjs.Ease.quadOut)
+            .to({rotation: -5}, 140, createjs.Ease.quadIn)
+            .to({rotation: 0}, 75, createjs.Ease.quadIn)
+            .wait(750)
+            .call(() => {
+            this.parentContainer.trebleAnimation();
         });
         // _oTween = createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
         //     _oParent.trebleAnimation();
         // });
     };
     
-    this.setPosition = function(iXPos,iYPos) {
-         _oButton.x = iXPos;
-         _oButton.y = iYPos;
+    this.setPosition = (iXPos,iYPos) => {
+        this.buttonContainer.x = iXPos;
+        this.buttonContainer.y = iYPos;
     };
     
-    this.setX = function(iXPos) {
-         _oButton.x = iXPos;
+    this.setX = (iXPos) => {
+        this.buttonContainer.x = iXPos;
     };
     
-    this.setY = function(iYPos) {
-         _oButton.y = iYPos;
+    this.setY = (iYPos) => {
+        this.buttonContainer.y = iYPos;
     };
     
-    this.getButtonImage = function() {
-        return _oButton;
+    this.getButtonImage = () => {
+        return this.buttonContainer;
     };
 
-    this.getX = function() {
-        return _oButton.x;
+    this.getX = () => {
+        return this.buttonContainer.x;
     };
     
-    this.getY = function() {
-        return _oButton.y;
+    this.getY = () => {
+        return this.buttonContainer.y;
     };
         
-    this.getPos = function() {
-        return {x: _oButton.x, y: _oButton.y};
+    this.getPos = () => {
+        return {x: this.buttonContainer.x, y: this.buttonContainer.y};
     };
         
-    _oParent = this;
-    this._init(iXPos,iYPos, oParentContainer);
-    
-    // return this;
+    // _oParent = this;
+    this.initSlot(iXPos,iYPos, parentContainer);
 }
 
 export default CSlot;

@@ -142,22 +142,11 @@ function sizeHandler() {
         }
         
         const w = getSize('Width');
-        _checkOrientation(w, h);
-
-        // console.log(`w: ${w}`)
-        // console.log(`h: ${h}`)
-
-        // console.log(`settings.getCanvasWidth(): ${settings.getCanvasWidth()}`)
-        // console.log(`settings.getCanvasHeight(): ${settings.getCanvasHeight()}`)
+        // _checkOrientation(w, h);
 
         let deviceMinRatio = Math.min((h / settings.getCanvasHeight()), (w / settings.getCanvasWidth()));
-
-        // console.log(`multiplier: ${deviceMinRatio}`)
         let destW = settings.getCanvasWidth() * deviceMinRatio;
         let destH = settings.getCanvasHeight() * deviceMinRatio;
-
-        // console.log(`destH < h: ${destH < h}`)
-        // console.log(`destW < w: ${destW < w}`)
             
         // 기기 사이즈와 app의 원본 사이즈(1280, 1920) 의 비율을 맞추기 위한 작업같은데...
         // let sizeGap = 0;
@@ -178,56 +167,58 @@ function sizeHandler() {
         // console.log(`destW: ${destW}`)
         // console.log(`destH: ${destH}`)
 
-        let fOffsetY = ((h / 2) - (destH / 2));
-        let fOffsetX = ((w / 2) - (destW / 2));
+        // let fOffsetY = ((h / 2) - (destH / 2));
+        // let fOffsetX = ((w / 2) - (destW / 2));
 
-        // console.log(`fOffsetY: ${fOffsetY}`)
-        // console.log(`fOffsetX: ${fOffsetX}`)
-        let fGameInverseScaling = (settings.getCanvasWidth() / destW);
+        // let fGameInverseScaling = (settings.getCanvasWidth() / destW);
 
-        // console.log(`fGameInverseScaling: ${fGameInverseScaling}`)
-
-        if (fOffsetX * fGameInverseScaling < - settings.EDGEBOARD_X ||  
-            fOffsetY * fGameInverseScaling < - settings.EDGEBOARD_Y) {
-            let deviceMinRatioWithEdge = Math.min( h / (settings.getCanvasHeight() - (settings.EDGEBOARD_Y * 2)), w / (settings.getCanvasWidth() - (settings.EDGEBOARD_X * 2)));
-            destW = settings.getCanvasWidth() * deviceMinRatioWithEdge;
-            destH = settings.getCanvasHeight() * deviceMinRatioWithEdge;
-            fOffsetY = ( h - destH ) / 2;
-            fOffsetX = ( w - destW ) / 2;
+        // if (fOffsetX * fGameInverseScaling < - settings.EDGEBOARD_X ||  
+        //     fOffsetY * fGameInverseScaling < - settings.EDGEBOARD_Y) {
+        //     let deviceMinRatioWithEdge = Math.min( h / (settings.getCanvasHeight() - (settings.EDGEBOARD_Y * 2)), w / (settings.getCanvasWidth() - (settings.EDGEBOARD_X * 2)));
+        //     destW = settings.getCanvasWidth() * deviceMinRatioWithEdge;
+        //     destH = settings.getCanvasHeight() * deviceMinRatioWithEdge;
+        //     fOffsetY = ( h - destH ) / 2;
+        //     fOffsetX = ( w - destW ) / 2;
             
-            fGameInverseScaling = (settings.getCanvasWidth() / destW);
-        }
+        //     fGameInverseScaling = (settings.getCanvasWidth() / destW);
+        // }
 
-        s_iOffsetX = (-1 * fOffsetX * fGameInverseScaling);
-        s_iOffsetY = (-1 * fOffsetY * fGameInverseScaling);
+        // s_iOffsetX = (-1 * fOffsetX * fGameInverseScaling);
+        // s_iOffsetY = (-1 * fOffsetY * fGameInverseScaling);
         
-        if (fOffsetY >= 0) {
-            s_iOffsetY = 0;
-        }
+        // if (fOffsetY >= 0) {
+        //     s_iOffsetY = 0;
+        // }
         
-        if (fOffsetX >= 0) {
-            s_iOffsetX = 0;
-        }
+        // if (fOffsetX >= 0) {
+        //     s_iOffsetX = 0;
+        // }
             
-        if (interfaceInstance() !== null) {
-            interfaceInstance().refreshButtonPos(s_iOffsetX, s_iOffsetY);
-        }
+        // if (interfaceInstance() !== null) {
+        //     interfaceInstance().refreshButtonPos(s_iOffsetX, s_iOffsetY);
+        // }
         // if (menuInstance() !== null) {
         //     console.log('--menuInstance--')
         //     menuInstance().refreshButtonPos(s_iOffsetX, s_iOffsetY);
         // }
 
         // if (isIOS()) {
-        const canvas = document.getElementById('canvas');
+        // const canvas = document.getElementById('canvas');
+
+        // mainInstance().getStage().canvas.width = destW * 2;
+        // mainInstance().getStage().canvas.height = destH * 2;
+
+        // mainInstance().getStage().canvas.width = 375;
+        // mainInstance().getStage().canvas.height = 667
+        // canvas.style.width =  `${destW}px`;
+        // canvas.style.height = `${destH}px`;
+
+        // canvas.style.width =  `${w}px`;
+        // canvas.style.height = `${h}px`;
         
-        mainInstance().getStage().canvas.width = destW * 2;
-        mainInstance().getStage().canvas.height = destH * 2;
-        canvas.style.width =  `${destW}px`;
-        canvas.style.height = `${destH}px`;
-        
-        const iScale = Math.min(destW / settings.getCanvasWidth(), destH / settings.getCanvasHeight());
-        s_iScaleFactor = iScale * 2;
-        mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor;  
+        // const iScale = Math.min(destW / settings.getCanvasWidth(), destH / settings.getCanvasHeight());
+        // s_iScaleFactor = iScale * 2;
+        // mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor;  
 
         // } else if ($.browser.mobile || isChrome()) {
         //     $("#canvas").css("width", destW+"px");
@@ -240,15 +231,15 @@ function sizeHandler() {
         //     mainInstance().getStage().scaleX = mainInstance().getStage().scaleY = s_iScaleFactor; 
         // }
             
-        $("#canvas").css("left", `${fOffsetX}px`);
-        $("#canvas").css("top", `${fOffsetY}px`);
+        // $("#canvas").css("left", `${fOffsetX}px`);
+        // $("#canvas").css("top", `${fOffsetY}px`);
         // if (fOffsetY < 0) {
         //     $("#canvas").css("top", fOffsetY+"px");
         // } else {
         //     $("#canvas").css("top", "0px");
         // }
 
-        fullscreenHandler();
+        // fullscreenHandler();
 	}
 };
 
@@ -856,5 +847,6 @@ export {
     s_iScaleFactor,
     rotateVector2D,
     isIOS,
-    checkGameState
+    checkGameState,
+    fullscreenHandler
 }

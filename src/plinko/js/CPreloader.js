@@ -42,49 +42,10 @@ function CPreloader({ parentMainInstance }) {
 }
 
 CPreloader.prototype.attachSprites = function () {
-    // const backgroundShape = new createjs.Shape();
-    // backgroundShape.graphics
-    //     .beginFill('black')
-    //     .drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
-    // this.container.addChild(backgroundShape);
-
-    // const backgroundSprite = this.spriteLibrary.getSprite('200x200');
     const backgroundSprite = this.spriteLibrary.getSprite('plinko_background');
+
     const backgroundBitmap = createBitmap(backgroundSprite);
-
-    // backgroundBitmap.regX = backgroundSprite.width * 0.5;
-    // backgroundBitmap.regY = backgroundSprite.height * 0.5;
-    // backgroundBitmap.x = settings.getCanvasWidth() / 2;
-    // backgroundBitmap.y = (settings.getCanvasHeight() / 2) - 180;
     this.container.addChild(backgroundBitmap);
-
-    // const iconMask = new createjs.Shape();
-    // backgroundSprite.width = 360
-    // backgroundSprite.height = 640
-    // console.log(backgroundSprite.width)
-    // console.log(settings.getCanvasWidth())
-    // iconMask.graphics
-        // .beginFill('rgba(0,0,0,0.01)')
-        // .beginBitmapFill(backgroundSprite, 'no-repeat')
-        // .drawRoundRect(backgroundBitmap.x - 100, backgroundBitmap.y - 100, 200, 200, 10);
-        // .drawRoundRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight(), 10);
-    // this.container.addChild(iconMask);
-    // backgroundBitmap.mask = iconMask;
-
-    // this.playButtonShape = new createjs.Shape();
-    // const playButtonSprite = this.spriteLibrary.getSprite('play_button');
-    // // const playButtonBitmap = createBitmap(playButtonSprite);
-
-    // this.playButtonShape.graphics
-    //     // .beginFill('black')
-    //     .beginBitmapFill(playButtonSprite, 'no-repeat')
-    //     .drawRect(0, 0, 800, 600);
-    // // this.playButtonShape.setVisible(false);
-    // this.playButtonShape.on('mousedown',function(){
-    //     console.log('---')
-    // });
-
-    // this.container.addChild(this.playButtonShape);
 
     const progressBarSprite = this.spriteLibrary.getSprite('progress_bar');
     this._oProgressBar = createBitmap(progressBarSprite);
@@ -109,17 +70,6 @@ CPreloader.prototype.attachSprites = function () {
     this._oLoadingText.textAlign = "center";
     this.container.addChild(this._oLoadingText);
     
-    // this._oButStart = new CTextButton((settings.getCanvasWidth() / 2),
-    //     settings.getCanvasHeight() / 2,
-    //     playButtonSprite,
-    //     TEXT_PRELOADER_CONTINUE,
-    //     'Arial', '#000', 50, true,
-    //     this.container);        
-    // this.playButtonBitmap.addEventListener(settings.ON_MOUSE_UP, this._onButStartRelease, this);
-    // this._oButStart.setVisible(false);
-    // this._oButStart.setTextHeight(60);
-    // this.playButtonBitmap.hideShadow();
-    
     this.fadeShape = new createjs.Shape();
     this.fadeShape.graphics
         .beginFill('black')
@@ -138,10 +88,10 @@ CPreloader.prototype.setPlayButton = function () {
 
     this.playButtonShape.graphics
         .beginBitmapFill(playButtonSprite, 'no-repeat')
-        .drawRect(0, 0, 614, 380);
+        .drawRect(0, 0, settings.getCanvasWidth(), settings.getCanvasHeight());
 
     this.playButtonShape.x = (settings.getCanvasWidth() * 0.5) - (playButtonSprite.width / 2);
-    this.playButtonShape.y = (settings.getCanvasHeight() * 0.5) - (playButtonSprite.height / 2);;
+    this.playButtonShape.y = (settings.getCanvasHeight() * 0.5) - (playButtonSprite.height / 2);
 
     this.playButtonShape.on('mousedown',() => {
         this._onButStartRelease()

@@ -18,25 +18,7 @@ import CInterface from './CInterface.js'
 import settings from './settings.js'
 
 function CGame(oData, mainInstance) {
-    // var _bStartGame;
-
-    // var _iColToLaunchBall;
-    var _iNumBallRemaining;
-
-    // this _aProbability;
-
-    // var _oInterface;
-    // var _oEndPanel = null;
-    // var _oParent;
-    // var _oBallGenerator;
-    // var _oInsertTubeController;
-    // var _oScoreBasketController;
-    // var _oBgContainer;
-    // var _oBoardContainer;
-    // var _oMidContainer;
-    // var _oForegroundContainer;
-    // var _aBoard;
-    // var _oCurBall = null;
+    let _iNumBallRemaining;
 
     this.mainInstance = mainInstance
     this.interfaceInstance = null
@@ -65,15 +47,6 @@ function CGame(oData, mainInstance) {
         const gameBackground = createBitmap(CSpriteLibrary.getSprite('bg_game'));
         this.mainInstance.getStage().addChild(gameBackground);
         
-        // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
-        // this.mainInstance.getStage().addChild(tabelTennisSprite);
-        
-        // const logoGameSprite = CSpriteLibrary.getSprite('logo_game');
-        // const oLogo = createBitmap(logoGameSprite);
-        // oLogo.regX = logoGameSprite.width / 2;
-        // oLogo.regY = logoGameSprite.height / 2;
-        // oLogo.x = settings.getCanvasWidth() / 2;
-        // oLogo.y = 250;
 
         this.backgroundContainer = new createjs.Container();
         this.mainInstance.getStage().addChild(this.backgroundContainer);
@@ -87,21 +60,11 @@ function CGame(oData, mainInstance) {
         const foregroundContainer = new createjs.Container();
         this.mainInstance.getStage().addChild(foregroundContainer);
 
-        // const sideLeftSprite = CSpriteLibrary.getSprite('side_left');
-        // const oSideLeft = createBitmap(sideLeftSprite);
-        // oSideLeft.x = 120;
-        // oSideLeft.y = 120;
-        // foregroundContainer.addChild(oSideLeft);
-
-        // const sideRightSprite = CSpriteLibrary.getSprite('side_right');
-        // const oSideRight = createBitmap(sideRightSprite);
-        // oSideRight.regX = sideRightSprite.width;
-        // oSideRight.x = settings.getCanvasWidth() - 100;
-        // oSideRight.y = 120;
-        // foregroundContainer.addChild(oSideRight);
         this.setBoard();
 
-        settings.setBallRadius(CSpriteLibrary.getSprite('ball').height / 2)
+        const ballSprite = CSpriteLibrary.getSprite('ball');
+        settings.setBallRadius(settings.getDeviceWidthRatio(ballSprite.width) / 2)
+
         this.ballGenerator = new CBallGenerator(this.midContainer);
         this.insertTubeController = new CInsertTubeController(this.midContainer);
         this.scoreBasketController = new CScoreBasketController(this.backgroundContainer);
@@ -110,14 +73,14 @@ function CGame(oData, mainInstance) {
         this.interfaceInstance = new CInterface(true, this.backgroundContainer, this);
         this.insertTubeController.showSlots();
 
-        $(this.mainInstance).trigger("start_level", 1);
+        $(this.mainInstance).trigger('start_level', 1);
     };
     
     this.setBoard = () => {
         const allRow = settings.getMatrixRow(); // 13
         const allCol = settings.getMatrixCol(); // 7
 
-        for(let currentRow = 0; currentRow < allRow; currentRow += 1) {
+        for (let currentRow = 0; currentRow < allRow; currentRow += 1) {
             // row
             this.state.board[currentRow] = [];
             // even - 6
@@ -125,11 +88,11 @@ function CGame(oData, mainInstance) {
             for (let currentCol = 0; currentCol < allCol - ((currentRow + 1) % 2); currentCol += 1) {
                 let xPosition;
                 if (currentRow % 2 === 0) {
-                    xPosition = currentCol * settings.getCellSize();
+                    xPosition = currentCol * settings.getCellGapSize();
                 } else {
-                    xPosition = - (settings.getCellSize() / 2) + (currentCol * settings.getCellSize());
+                    xPosition = - (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
                 }
-                const yPosition = currentRow * settings.getCellSize() / 2;
+                const yPosition = currentRow * settings.getCellGapSize() / 2;
                 this.state.board[currentRow][currentCol] = new CCell(xPosition,
                     yPosition, this.boardContainer, currentRow, currentCol/*, _oActionContainer*/);
                 
@@ -148,7 +111,9 @@ function CGame(oData, mainInstance) {
         this.boardContainer.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
         this.boardContainer.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
         this.boardContainer.x = settings.getCanvasWidth() / 2;
-        this.boardContainer.y = (settings.getCanvasHeight() / 2) - 29;
+        this.boardContainer.y = (settings.getCanvasHeight() / 2);
+
+        // console.log(this.boardContainer)
 
         // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
         // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;

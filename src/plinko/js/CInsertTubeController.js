@@ -19,32 +19,33 @@ function CInsertTubeController(oParentContainer) {
         this.container = new createjs.Container();
         oParentContainer.addChild(this.container);
         
-        const holesOccluderSprite = CSpriteLibrary.getSprite('holes_occluder');
-        const oBaseBoard = createBitmap(holesOccluderSprite);
-        oBaseBoard.regX = holesOccluderSprite.width / 2;
-        oBaseBoard.regY = holesOccluderSprite.height / 2;
-        oBaseBoard.x = settings.getCanvasWidth() / 2;
-        oBaseBoard.y = 408;
-        this.container.addChild(oBaseBoard);
+        // const holesOccluderSprite = CSpriteLibrary.getSprite('holes_occluder');
+        // const oBaseBoard = createBitmap(holesOccluderSprite);
+        // console.log(holesOccluderSprite.width)
+        // console.log(holesOccluderSprite.height)
+        // oBaseBoard.regX = holesOccluderSprite.width / 2;
+        // oBaseBoard.regY = holesOccluderSprite.height / 2;
+        // oBaseBoard.x = settings.getCanvasWidth() / 2;
+        // oBaseBoard.y = 408;
+        // this.container.addChild(oBaseBoard);
         
-        const holesBoardOccluderSprite = CSpriteLibrary.getSprite('hole_board_occluder');
-        const aTubePos = [];
+        // const holesBoardOccluderSprite = CSpriteLibrary.getSprite('hole_board_occluder');
+        const tubePos = [];
+        const tubeStartPosition = settings.getTubeStartPosition()
         for(let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
-            
-            aTubePos.push({x: 288+i*140, y:356});
-            
-            const oTube = createBitmap(holesBoardOccluderSprite);
-            oTube.regX = holesBoardOccluderSprite.width / 2;
-            oTube.regY = holesBoardOccluderSprite.height / 2;
-            oTube.x = aTubePos[i].x;
-            oTube.y = aTubePos[i].y;
-            this.container.addChild(oTube);
+            tubePos.push({ x: tubeStartPosition.x + (i * settings.getCellGapSize()), y: tubeStartPosition.y });
+            // const oTube = createBitmap(holesBoardOccluderSprite);
+            // oTube.regX = holesBoardOccluderSprite.width / 2;
+            // oTube.regY = holesBoardOccluderSprite.height / 2;
+            // oTube.x = aTubePos[i].x;
+            // oTube.y = aTubePos[i].y;
+            // this.container.addChild(oTube);
         }
         
         // var oSprite = CSpriteLibrary.getSprite('bg_number');
         for(let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
-            const oSlot = new CSlot(aTubePos[i].x, aTubePos[i].y+ 20, 90, 100, this.container);
-            oSlot.addEventListenerWithParams(settings.ON_MOUSE_UP, this._onSlot, this, i);
+            const oSlot = new CSlot(tubePos[i].x, tubePos[i].y + 20, 90, 100, this.container);
+            oSlot.addEventListenerWithParams(settings.ON_MOUSE_UP, this.onSlot, this, i);
             
             this.slots.push(oSlot);
         }
@@ -82,7 +83,7 @@ function CInsertTubeController(oParentContainer) {
         }
     };
     
-    this._onSlot = (iIndex) => {
+    this.onSlot = (iIndex) => {
         gameInstance().launch(iIndex)
     };
     

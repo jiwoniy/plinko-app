@@ -1,12 +1,13 @@
-// import {
-//   getSize
-// } from './ctl_utils.js'
+import {
+  getSize
+} from './ctl_utils.js'
 
 const settings = () => {
   // let CANVAS_WIDTH = 1280;
   // let CANVAS_HEIGHT = 1920;
-  let canvasWidth = 1280
-  let canvasHeight = 1920
+  let canvasWidth = 0
+  let canvasHeight = 0
+
   // let canvasWidth = getSize('Width')
   // let canvasHeight = getSize('Height')
 
@@ -14,6 +15,10 @@ const settings = () => {
 
   let EDGEBOARD_X = 150;
   let EDGEBOARD_Y = 200;
+  const tubuStartPosition = {
+    x: 100,
+    y: 150
+  }
 
   const FPS           = 24;
   const FPS_TIME      = 1000 / FPS;
@@ -47,7 +52,7 @@ const settings = () => {
   let ANIMATION_SPEED;
 
   // const CELL_SIZE = 140;
-  const cellSize = 140
+  let cellSize = 35 // base 375 widht 
   const CELL_PIVOT_FROM_CENTER = 90;
 
   const BALL_FALL_MAX_ANGLE = 0.5;
@@ -89,7 +94,40 @@ const settings = () => {
     // CANVAS_WIDTH,
     // CANVAS_HEIGHT,
     getCanvasWidth: () => canvasWidth,
+    setCanvasWidth: () => {
+      const canvasElement = document.getElementById("canvas");
+      const width = getSize('Width')
+      canvasElement.width = width
+      canvasWidth = width
+    },
     getCanvasHeight: () => canvasHeight,
+    setCanvasHeight: () => {
+      const canvasElement = document.getElementById("canvas");
+      const height = getSize('Height')
+      canvasElement.height = height
+      canvasHeight = height
+    },
+
+    getDeviceWidthRatio: (imageWidth) => {
+      const origin = 375
+      const value = (imageWidth * canvasWidth) / origin
+      return value
+    },
+    getDeviceHeightRatio: (imageHeight) => {
+      const origin = 667
+      const value = (imageHeight * canvasHeight) / origin
+      return value
+    },
+    getCellGapSize: () => {
+      const originCellSize = cellSize
+      const origin = 375
+      const value = (originCellSize * canvasWidth) / origin
+      return value
+    },
+
+    getTubeStartPosition: () => {
+      return tubuStartPosition
+    },
 
     EDGEBOARD_X,
     EDGEBOARD_Y,
@@ -145,7 +183,6 @@ const settings = () => {
     // START_PLAYER_MONEY,
 
     // BET,
-    getCellSize: () => cellSize,
     // CELL_SIZE,
     CELL_PIVOT_FROM_CENTER ,
     BALL_FALL_MAX_ANGLE,
@@ -179,47 +216,5 @@ const settings = () => {
   }
 }
 
-// var CANVAS_WIDTH = 1920;
-// let CANVAS_HEIGHT = 1080;
-
-// var EDGEBOARD_X = 250;
-// var EDGEBOARD_Y = 80;
-
-// var FPS_TIME      = 1000/24;
-// var DISABLE_SOUND_MOBILE = false;
-
-// var PRIMARY_FONT = "Lora";
-// var SECONDARY_FONT = "Arial";
-// var PRIMARY_FONT_COLOUR = "#FFFFFF";
-
-// var STATE_LOADING = 0;
-// var STATE_MENU    = 1;
-// var STATE_HELP    = 1;
-// var STATE_GAME    = 3;
-
-// var ON_MOUSE_DOWN  = 0;
-// var ON_MOUSE_UP    = 1;
-// var ON_MOUSE_OVER  = 2;
-// var ON_MOUSE_OUT   = 3;
-// var ON_DRAG_START  = 4;
-// var ON_DRAG_END    = 5;
-
-// var NUM_DIFFERENT_BALLS = 5;
-// var ANIMATION_SPEED;
-
-// // var WIN_OCCURRENCE = new Array();
-// // var WIN_OCCURRENCE = [];
-// // var PAYOUTS = []
-// const payOuts = []
-
-// var BANK;
-// var START_PLAYER_MONEY; 
-
-// // var BET = [];
-// var BET = [0.10, 0.20, 0.30, 0.50, 1, 2, 3, 5];
-
-
-// let ENABLE_FULLSCREEN = true;
-// let ENABLE_CHECK_ORIENTATION = true;
-// let SHOW_CREDITS =  true;
+// const self = settings()
 export default settings();

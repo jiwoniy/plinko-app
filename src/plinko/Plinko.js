@@ -19,6 +19,7 @@ import {
 
 import 'plinko/css/main.css'
 import 'plinko/css/orientation_utils.css'
+import CanvasStyles from 'plinko/css/canvas.scss'
 
 const BlockGameStyle = {
   position: 'fixed',
@@ -128,12 +129,12 @@ class Plinko extends Component {
     //   sizeHandler(); 
     // } 
 
-    sizeHandler(); 
+    // sizeHandler();
   }
   render() {
     return (
-      <div>
-        <canvas id="canvas" className='ani_hack' width="1920" height="1080">
+      <div className="Plinko__container">
+        <canvas className="CanvasStyles" id="canvas">
         </canvas>
         <div data-orientation="portrait" className="orientation-msg-container">
           <p className="orientation-msg-text">Please rotate your device</p>

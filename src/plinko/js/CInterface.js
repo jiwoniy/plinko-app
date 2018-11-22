@@ -21,28 +21,14 @@ import {
  import screenfull from './screenfull.js'
 
 function CInterface(oBgContainer, gameInstance) {
-    // var _oAudioToggle;
-    // var _oButExit;
-    // var _oButFullscreen;
-    // var _oGUIExpandible;
-    
-    // var _iCurHandPos;
-    
-    // var _oBallNum;
-    // var _oHandAnim;
-
-    // var _fRequestFullScreen = null;
-    // var _fCancelFullScreen = null;
-    
-    var _pStartPosExit;
-    var _pStartPosAudio;
-    var _pStartPosFullscreen;
-
     this.guiExpandibleContainer = null
     this.exitButtonContainer = null
     this.audioToggle = null
     this.fullscreenContainer = null
     this.ballNum = null
+    this.exitButtonPos = null
+    this.audioButtonPos = null
+    this.fullscreenBUttonPos = null
 
     this.state = {
         handAim: null,
@@ -87,9 +73,11 @@ function CInterface(oBgContainer, gameInstance) {
                     [517, 697, 256, 230, 0, 0, 0],
                     [775, 697, 256, 230, 0, 0, 0]
                 ],
-            animations: { 'idle': [0,21] }
+            animations: { 'idle': [0, 21] }
        });
 
+    //    const ballSprite = CSpriteLibrary.getSprite('ball');
+    //    this.state.handAim = createBitmap(ballSprite);
         this.state.handAim = createSprite(spriteSheet, 'idle', iWidth / 2, iHeight / 2, iWidth, iHeight);
 
         const oPos = gameInstance.getSlotPosition(this.state.currentHandPosition);
@@ -97,22 +85,22 @@ function CInterface(oBgContainer, gameInstance) {
         this.state.handAim.y = oPos.y;
         this.state.handAim.regX = (iWidth / 2) - 30;
         this.state.handAim.regY = iHeight / 2;
-        this.state.handAim.on('animationend', this._moveHand);
+        // this.state.handAim.on('animationend', this._moveHand);
         mainInstance().getStage().addChild(this.state.handAim);
                
         const exitButtonSprite = CSpriteLibrary.getSprite('but_exit');
-        _pStartPosExit = { x: settings.getCanvasWidth() - (exitButtonSprite.width / 2) - 10, y: (exitButtonSprite.height / 2) + 10 };
-        this.exitButtonContainer = new CGfxButton(_pStartPosExit.x, _pStartPosExit.y, exitButtonSprite, mainInstance().getStage());
+        this.exitButtonPos = { x: settings.getCanvasWidth() - (exitButtonSprite.width / 2) - 10, y: (exitButtonSprite.height / 2) + 10 };
+        this.exitButtonContainer = new CGfxButton(this.exitButtonPos.x, this.exitButtonPos.y, exitButtonSprite, mainInstance().getStage());
         this.exitButtonContainer.addEventListener(settings.ON_MOUSE_UP, this._onExit, this);
         
-        let oExitX = _pStartPosExit.x - (exitButtonSprite.width) - 10;
-        _pStartPosAudio = {x: oExitX, y: (exitButtonSprite.height / 2) + 10};
+        let oExitX = this.exitButtonPos.x - (exitButtonSprite.width) - 10;
+        this.audioButtonPos = {x: oExitX, y: (exitButtonSprite.height / 2) + 10};
         
         if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
             const audioIconSprite = CSpriteLibrary.getSprite('audio_icon');
-            this.audioToggle = new CToggle(_pStartPosAudio.x, _pStartPosAudio.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
+            this.audioToggle = new CToggle(this.audioButtonPos.x, this.audioButtonPos.y, audioIconSprite, mainInstance().getAudioActive(), mainInstance().getStage());
             this.audioToggle.addEventListener(settings.ON_MOUSE_UP, this._onAudioToggle, this);          
-            oExitX = _pStartPosAudio.x - (audioIconSprite.width/2) - 10;
+            oExitX = this.audioButtonPos.x - (audioIconSprite.width / 2) - 10;
         }
         
         // if(settings.getEnableFullScreen() === false) {
@@ -121,8 +109,8 @@ function CInterface(oBgContainer, gameInstance) {
         
         if (settings.getEnableFullScreen() && screenfull.enabled) {
             const fullscreenSprite = CSpriteLibrary.getSprite("but_fullscreen")
-            _pStartPosFullscreen = {x: oExitX,y: (fullscreenSprite.height / 2) + 10};
-            this.fullscreenContainer = new CToggle(_pStartPosFullscreen.x, _pStartPosFullscreen.y, fullscreenSprite, mainInstance().getFullscreen(), mainInstance().getStage());
+            this.fullscreenBUttonPos = {x: oExitX,y: (fullscreenSprite.height / 2) + 10};
+            this.fullscreenContainer = new CToggle(this.fullscreenBUttonPos.x, this.fullscreenBUttonPos.y, fullscreenSprite, mainInstance().getFullscreen(), mainInstance().getStage());
             this.fullscreenContainer.addEventListener(settings.ON_MOUSE_UP, this._onFullscreenRelease, this);
         }
         
@@ -147,7 +135,7 @@ function CInterface(oBgContainer, gameInstance) {
         oControllerContainer.addChild(this.ballNum);
         
         const settingsSprite = CSpriteLibrary.getSprite('but_settings');
-        this.guiExpandibleContainer = new CGUIExpandible(_pStartPosExit.x, _pStartPosExit.y, settingsSprite, mainInstance().getStage());
+        this.guiExpandibleContainer = new CGUIExpandible(this.exitButtonPos.x, this.exitButtonPos.y, settingsSprite, mainInstance().getStage());
         this.guiExpandibleContainer.addButton(this.exitButtonContainer);
         this.guiExpandibleContainer.addButton(this.audioToggle);
 

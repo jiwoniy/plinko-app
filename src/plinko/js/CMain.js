@@ -3,7 +3,10 @@ import { Howl, Howler } from 'howler';
 
 import createjs from './createjs.js'
 
-import { checkGameState, playSound } from './ctl_utils.js'
+import {
+    checkGameState,
+    playSound,
+ } from './ctl_utils.js'
 import CPreloader from './CPreloader.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CMenu from './CMenu.js'
@@ -33,9 +36,11 @@ function CMain(oData) {
     }
 
     this.initContainer = () => {
-        // s_oCanvas = document.getElementById("canvas");
-        if (document.getElementById("canvas")) {
-            this.stage = new createjs.Stage(document.getElementById("canvas"));
+        const canvasElement = document.getElementById("canvas");
+        if (canvasElement) {
+            settings.setCanvasHeight()
+            settings.setCanvasWidth()
+            this.stage = new createjs.Stage(canvasElement);
             this.stage.preventSelection = true;
             createjs.Touch.enable(this.stage);
             
@@ -160,9 +165,9 @@ function CMain(oData) {
         
         CSpriteLibrary.addSprite("ball_panel","/plinko/sprites/ball_panel.png");
         
-        CSpriteLibrary.addSprite("ball","/plinko/sprites/ball.png");
-        // CSpriteLibrary.addSprite("stake","./sprites/stake.png");
-        CSpriteLibrary.addSprite("stake","/plinko/sprites/ball.svg");
+        CSpriteLibrary.addSprite("ball","/plinko/sprites/ball.svg");
+        // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
+        CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.svg");
         CSpriteLibrary.addSprite("ball_generator","/plinko/sprites/ball_generator.png");
         
         CSpriteLibrary.addSprite("holes_occluder","/plinko/sprites/holes_occluder.png");

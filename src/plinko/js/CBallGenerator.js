@@ -6,62 +6,48 @@ import settings from './settings.js'
 import CBall from './CBall.js'
 // import CSpriteLibrary from './sprite_lib.js'
 
-
-function CBallGenerator(oParentContainer) {
-    var _iBallInTube;
-    var _iBallInAnimation;
-    var _iOffsetFromBall;
-    
-    // var _aBall;
-    // var _oParent;
-    var _oGeneratorContainer;
-    var _oFrontContainer;
-    
-    var _pStartPoint;
-
+function CBallGenerator(parentContainer) {
+    const BALL_IN_TUBE = 3
+    const BALL_IN_ANIMATION = 2
+    // _pStartPoint = {x: 182, y: 264};
+    const tubeStartPosition = settings.getTubeStartPosition()
+    const ballStartPoint = { x: tubeStartPosition.x, y: tubeStartPosition.y }
+    this.container = null
     this.state = {
+        ballRadius: 0,
         ball: []
     }
     
-    this._init = (oParentContainer) => {
-        _oGeneratorContainer = new createjs.Container();
-        oParentContainer.addChild(_oGeneratorContainer);
+    this.initBallGenerator = (parentContainer) => {
+        this.container = new createjs.Container();
+        parentContainer.addChild(this.container);
         
-        _oFrontContainer = new createjs.Container();
-        oParentContainer.addChild(_oFrontContainer)
+        // _oFrontContainer = new createjs.Container();
+        // parentContainer.addChild(_oFrontContainer)
         
-        _iBallInTube = 3;
-        _iOffsetFromBall = (settings.getBallRadius() * 2) - 20;
-        _pStartPoint = {x: 182, y: 264};
+        this.state.ballRadius = settings.getBallRadius() * 2
         // this.state.ball = [];
-        for(let i = 0; i < _iBallInTube; i += 1) {
-            const oBallPos = {x: _pStartPoint.x - i*_iOffsetFromBall, y: _pStartPoint.y};
-            this.state.ball[i] = new CBall(oBallPos, _oGeneratorContainer);
+        for(let i = 0; i < BALL_IN_TUBE; i += 1) {
+            const ballPosition = {x: ballStartPoint.x - (i * this.state.ballRadius), y: ballStartPoint.y};
+            this.state.ball[i] = new CBall(ballPosition, this.container);
         }
-        
-        // const ballGeneratorSprite = CSpriteLibrary.getSprite('ball_generator');
-        // const generator = createBitmap(ballGeneratorSprite);
-        // generator.x = 0;
-        // generator.y = 196;
-        // _oFrontContainer.addChild(generator);
     };
     
     this.unload = () => {
-        oParentContainer.removeChild(_oGeneratorContainer);
-        oParentContainer.removeChild(_oFrontContainer);
+        parentContainer.removeChild(this.container);
+        // parentContainer.removeChild(_oFrontContainer);
     };
     
     this.shiftBallAnimation = () => {
         this.state.ball.splice(0, 1);
         
-        var iLastIndex = _iBallInTube - 1;
+        const iLastIndex = BALL_IN_TUBE - 1;
         
-        const ballPosition = { x: _pStartPoint.x - (iLastIndex * _iOffsetFromBall), y: _pStartPoint.y };
-        this.state.ball[iLastIndex] = new CBall(ballPosition, _oGeneratorContainer);
+        const ballPosition = { x: ballStartPoint.x - (iLastIndex * this.state.ballRadius), y: ballStartPoint.y };
+        this.state.ball[iLastIndex] = new CBall(ballPosition, this.container);
         
-        _iBallInAnimation = 2;
-        for(let i = 0; i < _iBallInAnimation; i += 1) {
-            const innerBallPosition = { x: _pStartPoint.x - (i * _iOffsetFromBall), y: _pStartPoint.y};
+        for(let i = 0; i < BALL_IN_ANIMATION; i += 1) {
+            const innerBallPosition = { x: ballStartPoint.x - (i * this.state.ballRadius), y: ballStartPoint.y};
             createjs.Tween.get(this.state.ball[i].getSprite(), { override: true }).wait(i*200).to({ x: innerBallPosition.x }, 1000, createjs.Ease.cubicIn);
         }
     };
@@ -71,7 +57,7 @@ function CBallGenerator(oParentContainer) {
     };
     
     // _oParent = this;
-    this._init(oParentContainer);
+    this.initBallGenerator(parentContainer);
 }
 
 export default CBallGenerator;

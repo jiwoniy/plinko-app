@@ -1,7 +1,4 @@
-/* root { 
-    display: block;
-}
-
+/*
 body {
     background-color: #000000;
     background-repeat: repeat-x;
@@ -27,19 +24,19 @@ input, input:before, input:after {
 ::selection { background: transparent;color:inherit; }
 ::-moz-selection { background: transparent;color:inherit; } */
 
-#canvas {
+/* #canvas {
     position: fixed;
-}
+} */
 
-canvas {
+/* canvas {
     image-rendering: optimizeSpeed;
     image-rendering:-o-crisp-edges;
     image-rendering:-webkit-optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
 	-ms-touch-action: none;
-}
+} */
 
-.ani_hack {
+/* .ani_hack {
     -webkit-perspective: 1000;
     -webkit-backface-visibility: hidden;
     -webkit-touch-callout: none;
@@ -49,8 +46,8 @@ canvas {
     -ms-user-select: none;
     user-select: none;
     outline: none;
-    -webkit-tap-highlight-color: transparent; /* mobile webkit */
-}
+    -webkit-tap-highlight-color: transparent;
+} */
 
 /***************FONTS*******************/
 /* @font-face {
