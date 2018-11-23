@@ -36,7 +36,7 @@ function CCreditsPanel() {
         _oPanelContainer = new createjs.Container();        
         mainInstance().getStage().addChild(_oPanelContainer);
         
-        const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
+        const msgBoxSprite = CSpriteLibrary.getImage('msg_box');
         const oPanel = createBitmap(msgBoxSprite);        
         oPanel.regX = msgBoxSprite.width / 2;
         oPanel.regY = msgBoxSprite.height / 2;
@@ -63,13 +63,13 @@ function CCreditsPanel() {
         oLink.lineWidth = 300;
         _oPanelContainer.addChild(oLink);
         
-        const ctlLogoSprite = CSpriteLibrary.getSprite('ctl_logo');
+        const ctlLogoSprite = CSpriteLibrary.getImage('ctl_logo');
         _oLogo = createBitmap(ctlLogoSprite);
         _oLogo.regX = ctlLogoSprite.width / 2;
         _oLogo.regY = ctlLogoSprite.height / 2;
         _oPanelContainer.addChild(_oLogo);
       
-        const exitButtonSprite = CSpriteLibrary.getSprite('but_exit');
+        const exitButtonSprite = CSpriteLibrary.getImage('but_exit');
         _oButExit = new CGfxButton(298, -200, exitButtonSprite, _oPanelContainer);
         _oButExit.addEventListener(settings.ON_MOUSE_UP, this.unload, this);
         

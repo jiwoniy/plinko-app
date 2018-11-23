@@ -49,6 +49,7 @@
     "react-dom": "^16.6.3",
     "react-redux": "^5.1.1",
     "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
@@ -74,7 +75,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools": "^3.4.2"
+    "redux-devtools": "^3.4.2",
+    "redux-logger": "^3.0.6"
   },
   "jest": {
     "collectCoverageFrom": [

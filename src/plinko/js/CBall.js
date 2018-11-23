@@ -23,7 +23,7 @@ function CBall(ballPosition, oParentContainer) {
 
         oParentContainer.addChild(this.container);
         
-        const ballSprite = CSpriteLibrary.getSprite('ball');
+        const ballSprite = CSpriteLibrary.getImage('ball');
         const ballWidth = settings.getDeviceWidthRatio(ballSprite.width)
         this.state.ballSpriteBitmap = createBitmap(ballSprite);
 
@@ -42,7 +42,7 @@ function CBall(ballPosition, oParentContainer) {
         return { x: this.container.x, y: this.container.y };
     };
     
-    this.getSprite = () => {
+    this.getImage = () => {
         return this.container;
     };
     

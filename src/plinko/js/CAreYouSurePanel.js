@@ -35,7 +35,7 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
         _oPanelContainer = new createjs.Container();        
         mainInstance().getStage().addChild(_oPanelContainer);
         
-        var oSprite = CSpriteLibrary.getSprite('msg_box');
+        var oSprite = CSpriteLibrary.getImage('msg_box');
         var oPanel = createBitmap(oSprite);        
         oPanel.regX = oSprite.width/2;
         oPanel.regY = oSprite.height/2;
@@ -61,10 +61,10 @@ function CAreYouSurePanel(oConfirmFunction, oNegateFunction) {
         oTitle.lineWidth = 400;
         _oPanelContainer.addChild(oTitle);
 
-        _oButYes = new CGfxButton(110, 80, CSpriteLibrary.getSprite('but_yes'), _oPanelContainer);
+        _oButYes = new CGfxButton(110, 80, CSpriteLibrary.getImage('but_yes'), _oPanelContainer);
         _oButYes.addEventListener(settings.ON_MOUSE_UP, this._onButYes, this);
 
-        _oButNo = new CGfxButton(-110, 80, CSpriteLibrary.getSprite('but_no'), _oPanelContainer);
+        _oButNo = new CGfxButton(-110, 80, CSpriteLibrary.getImage('but_no'), _oPanelContainer);
         _oButNo.addEventListener(settings.ON_MOUSE_UP, this._onButNo, this);
         _oButNo.pulseAnimation();
     };

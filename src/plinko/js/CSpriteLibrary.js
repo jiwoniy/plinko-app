@@ -27,7 +27,7 @@ CSpriteLibrary.prototype._onSpriteLoaded = function() {
     }
 }
 
-CSpriteLibrary.prototype.addSprite = function(szKey, szPath) {
+CSpriteLibrary.prototype.addImage = function(szKey, szPath) {
     if (this._oLibSprites.hasOwnProperty(szKey)) {
         return;
     }
@@ -41,7 +41,7 @@ CSpriteLibrary.prototype._onSpritesLoaded = function () {
     this._cbTotalCompleted.call(this._cbOwner);
 }
 
-CSpriteLibrary.prototype.getSprite = function (szKey) {
+CSpriteLibrary.prototype.getImage = function (szKey) {
     if (!this._oLibSprites.hasOwnProperty(szKey)) {
         return null;
     } else {
@@ -49,7 +49,7 @@ CSpriteLibrary.prototype.getSprite = function (szKey) {
     }
 }
 
-CSpriteLibrary.prototype.loadSprites = function () {
+CSpriteLibrary.prototype.loadImages = function () {
     for (var szKey in this._oLibSprites) {
         this._oLibSprites[szKey].oSprite["oSpriteLibrary"] = this;
         this._oLibSprites[szKey].oSprite.onload = function() {
@@ -59,7 +59,7 @@ CSpriteLibrary.prototype.loadSprites = function () {
     } 
 }
 
-CSpriteLibrary.prototype.getNumSprites = function () {
+CSpriteLibrary.prototype.getNumImages = function () {
     return this._iNumSprites;
 }
 

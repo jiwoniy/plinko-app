@@ -20,7 +20,7 @@ function CSpriteLibrary() {
         _cbOwner     = cbOwner;
     }
     
-    this.addSprite = function(szKey, szPath) {
+    this.addImage = function(szKey, szPath) {
         if (this._oLibSprites.hasOwnProperty(szKey)) {
             return;
         }
@@ -29,7 +29,7 @@ function CSpriteLibrary() {
         _iNumSprites++;
     }
     
-    this.getSprite = function(szKey) {
+    this.getImage = function(szKey) {
         if (!this._oLibSprites.hasOwnProperty(szKey)) {
             return null;
         } else {
@@ -48,7 +48,7 @@ function CSpriteLibrary() {
         }
     }    
 
-    this.loadSprites = function() {
+    this.loadImages = function() {
         for (var szKey in this._oLibSprites) {
             this._oLibSprites[szKey].oSprite["oSpriteLibrary"] = this;
             this._oLibSprites[szKey].oSprite.onload = function(){

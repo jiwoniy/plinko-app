@@ -7,7 +7,7 @@ import {
 } from './ctl_utils.js'
 import settings from './settings.js'
 
-function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
+function CGfxButton(iXPos, iYPos, oSprite, parentContainer) {
     var _bDisabled;
     
     var _iScaleFactor;
@@ -19,12 +19,15 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
     var _oButton;
     var _oButtonSprite;
     // var _oTween;
-    var _oParent;
+    // var _oParent;
     var _oListenerMouseDown;
     var _oListenerMouseUp;
     var _oListenerMouseOver;
+
+    this.parentContainer = null
     
-    this.initialze = function(iXPos, iYPos, oSprite, oParentContainer) {
+    this.initialze = function(iXPos, iYPos, oSprite, parentContainer) {
+        this.parentContainer = parentContainer
         _bDisabled = false;
         
         _iScaleFactor = 1;
@@ -36,7 +39,7 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
         _oButton.x = iXPos;
         _oButton.y = iYPos; 
         _oButton.scaleX = _oButton.scaleY = _iScaleFactor;
-        oParentContainer.addChild(_oButton);
+        this.parentContainer.addChild(_oButton);
         
         _oButtonSprite = createBitmap( oSprite);      
         _oButtonSprite.regX = oSprite.width/2;
@@ -134,57 +137,65 @@ function CGfxButton(iXPos, iYPos, oSprite, oParentContainer) {
         _oButton.addChild(oScoreText);
     };
     
-    this.pulseAnimation = function () {
-        createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
-            _oParent.pulseAnimation();
-        });
+    this.pulseAnimation = () => {
+        createjs.Tween
+            .get(_oButton)
+            .to({ scaleX: _iScaleFactor * 1.1, scaleY: _iScaleFactor * 1.1 }, 850, createjs.Ease.quadOut)
+            .to({ scaleX: _iScaleFactor, scaleY: _iScaleFactor }, 650, createjs.Ease.quadIn)
+            .call(() => {
+                this.pulseAnimation();
+            });
         // _oTween = createjs.Tween.get(_oButton).to({scaleX: _iScaleFactor*1.1, scaleY: _iScaleFactor*1.1}, 850, createjs.Ease.quadOut).to({scaleX: _iScaleFactor, scaleY: _iScaleFactor}, 650, createjs.Ease.quadIn).call(function () {
         //     _oParent.pulseAnimation();
         // });
     };
 
-    this.trembleAnimation = function () {
-        createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
-            _oParent.trebleAnimation();
-        });
+    this.trembleAnimation = () => {
+        createjs.Tween
+            .get(_oButton)
+            .to({rotation: 5}, 75, createjs.Ease.quadOut)
+            .to({rotation: -5}, 140, createjs.Ease.quadIn)
+            .to({rotation: 0}, 75, createjs.Ease.quadIn)
+            .wait(750).call(() => {
+                this.trebleAnimation();
+            });
         // _oTween = createjs.Tween.get(_oButton).to({rotation: 5}, 75, createjs.Ease.quadOut).to({rotation: -5}, 140, createjs.Ease.quadIn).to({rotation: 0}, 75, createjs.Ease.quadIn).wait(750).call(function () {
         //     _oParent.trebleAnimation();
         // });
     };
     
-    this.setPosition = function(iXPos,iYPos) {
+    this.setPosition = (iXPos,iYPos) => {
          _oButton.x = iXPos;
          _oButton.y = iYPos;
     };
     
-    this.setX = function(iXPos) {
+    this.setX = (iXPos) => {
          _oButton.x = iXPos;
     };
     
-    this.setY = function(iYPos) {
+    this.setY = (iYPos) => {
          _oButton.y = iYPos;
     };
     
-    this.getButtonImage = function() {
+    this.getButtonImage = () => {
         return _oButton;
     };
 
-    this.getX = function() {
+    this.getX = () => {
         return _oButton.x;
     };
     
-    this.getY = function() {
+    this.getY = () => {
         return _oButton.y;
     };
         
-    this.getPos = function() {
+    this.getPos = () => {
         return { x: _oButton.x, y: _oButton.y };
     };
         
-    _oParent = this;
-    this.initialze(iXPos,iYPos,oSprite, oParentContainer);
-    
-    return this;
+    // _oParent = this;
+    this.initialze(iXPos,iYPos,oSprite, parentContainer);
+    // return this;
 }
 
 export default CGfxButton;

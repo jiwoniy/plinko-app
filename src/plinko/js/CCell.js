@@ -19,7 +19,7 @@ function CCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContaine
         this.container.alpha = 0;
         this.parentContainer.addChild(this.container);
 
-        const stakeSprite = CSpriteLibrary.getSprite('stake');
+        const stakeSprite = CSpriteLibrary.getImage('stake');
         this.stakeSprite = createBitmap(stakeSprite);
         // this.stakeSprite.regX = stakeSprite.width / 2;
         // console.log(`xPosition: ${xPosition}`)

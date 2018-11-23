@@ -43,7 +43,7 @@ function CGame(oData, mainInstance) {
         // _bStartGame=true;
         this.state.ballCount = settings.getNumBall();
         
-        const gameBackground = createBitmap(CSpriteLibrary.getSprite('bg_game'));
+        const gameBackground = createBitmap(CSpriteLibrary.getImage('bg_game'));
         this.mainInstance.getStage().addChild(gameBackground);
 
         this.backgroundContainer = new createjs.Container();
@@ -60,7 +60,7 @@ function CGame(oData, mainInstance) {
 
         this.setBoard();
 
-        const ballSprite = CSpriteLibrary.getSprite('ball');
+        const ballSprite = CSpriteLibrary.getImage('ball');
         settings.setBallRadius(settings.getDeviceWidthRatio(ballSprite.width) / 2)
 
         this.ballGenerator = new CBallGenerator(this.midContainer);
@@ -106,7 +106,7 @@ function CGame(oData, mainInstance) {
         this.boardContainer.x = settings.getCanvasWidth() / 2 - this.boardContainer.getBounds().width / 2
         this.boardContainer.y =  settings.getCanvasHeight() / 2 - this.boardContainer.getBounds().height / 2;
 
-        // const tabelTennisSprite = createBitmap(CSpriteLibrary.getSprite('table_tennis'))
+        // const tabelTennisSprite = createBitmap(CSpriteLibrary.getImage('table_tennis'))
         // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
         // // tabelTennisSprite.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
         // tabelTennisSprite.x = settings.getCanvasWidth() / 2;
@@ -154,7 +154,7 @@ function CGame(oData, mainInstance) {
             startBallPos.x * s_iScaleFactor,
             startBallPos.y * s_iScaleFactor);
 
-        this.boardContainer.addChild(this.state.currentBall.getSprite());
+        this.boardContainer.addChild(this.state.currentBall.getImage());
         this.state.currentBall.setPos(movePos);
     };
     

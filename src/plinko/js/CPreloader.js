@@ -30,24 +30,24 @@ function CPreloader({ parentMainInstance }) {
     this.spriteLibrary = new CSpriteLibrary()
 
     this.spriteLibrary.init(this._onImagesLoaded, this._onAllImagesLoaded, this);
-    this.spriteLibrary.addSprite("progress_bar", "/plinko/sprites/progress_bar.png");
-    this.spriteLibrary.addSprite('plinko_background', "/plinko/sprites/plinko_background.svg");
+    this.spriteLibrary.addImage("progress_bar", "/plinko/sprites/progress_bar.png");
+    this.spriteLibrary.addImage('plinko_background', "/plinko/sprites/plinko_background.svg");
     // this.spriteLibrary.addSprite('200x200', "./sprites/200x200.jpg");
     // this.spriteLibrary.addSprite("but_start", "./sprites/but_start.png");
-    this.spriteLibrary.addSprite("play_button", "/plinko/sprites/play_button.svg");
-    this.spriteLibrary.loadSprites();
+    this.spriteLibrary.addImage("play_button", "/plinko/sprites/play_button.svg");
+    this.spriteLibrary.loadImages();
 
     this.container = new createjs.Container();
     this.parentMainInstance.getStage().addChild(this.container);
 }
 
 CPreloader.prototype.attachSprites = function () {
-    const backgroundSprite = this.spriteLibrary.getSprite('plinko_background');
+    const backgroundSprite = this.spriteLibrary.getImage('plinko_background');
 
     const backgroundBitmap = createBitmap(backgroundSprite);
     this.container.addChild(backgroundBitmap);
 
-    const progressBarSprite = this.spriteLibrary.getSprite('progress_bar');
+    const progressBarSprite = this.spriteLibrary.getImage('progress_bar');
     this._oProgressBar = createBitmap(progressBarSprite);
     this._oProgressBar.x = (settings.getCanvasWidth() / 2) - (progressBarSprite.width / 2);
     this._oProgressBar.y = (settings.getCanvasHeight() / 2) + 50;
@@ -84,7 +84,7 @@ CPreloader.prototype.attachSprites = function () {
 
 CPreloader.prototype.setPlayButton = function () {
     this.playButtonShape = new createjs.Shape();
-    const playButtonSprite = this.spriteLibrary.getSprite('play_button');
+    const playButtonSprite = this.spriteLibrary.getImage('play_button');
 
     this.playButtonShape.graphics
         .beginBitmapFill(playButtonSprite, 'no-repeat')

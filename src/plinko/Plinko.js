@@ -6,7 +6,7 @@ import CMain from './js/CMain.js'
 import {
   getParamValue,
   // isIOS,
-  sizeHandler
+  // sizeHandler
 } from './js/ctl_utils.js'
 
 import {
@@ -54,11 +54,11 @@ class Plinko extends Component {
       prize_settings: [
         ///// YOU CAN'T ADD MORE PRIZE SLOT
         { background: "basket_prize", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
-        { background: "image_0", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },
-        { background: "image_2", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
-        { background: "image_0", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },
-        { background: "image_3", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
-        { background: "image_0", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" }
+        { background: null, win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },
+        { background: "basket_prize", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
+        { background: "basket_prize", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" },
+        { background: "basket_prize", win_occurrence:7, prizewinning: true, redeemlink: "http://www.aaa.com/" },
+        { background: "basket_prize", win_occurrence:7, prizewinning: false, redeemlink: "http://www.aaa.com/" }
       ],
       total_images_backgrounds_in_folder: 4, 	////SET HERE THE EXACT NUMBER OF BACKGROUND IMAGES IN GAME FOLDER IF YOU WANT TO ADD MORE DIFFERENT IMAGES
       fullscreen: true,            //SET THIS TO FALSE IF YOU DON'T WANT TO SHOW FULLSCREEN BUTTON

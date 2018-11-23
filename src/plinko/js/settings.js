@@ -22,7 +22,7 @@ const settings = () => {
 
   const FPS           = 24;
   const FPS_TIME      = 1000 / FPS;
-  const DISABLE_SOUND_MOBILE = false;
+  let isAbleSound = false;
 
   const PRIMARY_FONT = 'impact';
   const SECONDARY_FONT = 'Arial';
@@ -139,8 +139,16 @@ const settings = () => {
       return canvasWidth * 0.8
     },
 
+    get5PercentHeight: () => {
+      return canvasHeight * 0.05
+    },
+
     get10PercentHeight: () => {
       return canvasHeight * 0.1
+    },
+
+    get80PercentHeight: () => {
+      return canvasHeight * 0.8
     },
 
     getCellPivotFronCenter: () => {
@@ -154,7 +162,11 @@ const settings = () => {
 
     FPS,
     FPS_TIME,
-    DISABLE_SOUND_MOBILE,
+    getIsAbleSound: () => isAbleSound,
+    setIsAbleSound: (value) => {
+      isAbleSound = value
+    },
+    // DISABLE_SOUND_MOBILE,
 
     PRIMARY_FONT,
     SECONDARY_FONT,

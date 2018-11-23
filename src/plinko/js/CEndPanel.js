@@ -47,7 +47,7 @@ function CEndPanel(prizeIndex, isWin) {
         this.panelContainer = new createjs.Container();        
         mainInstance().getStage().addChild(this.panelContainer);
         
-        // const msgBoxSprite = CSpriteLibrary.getSprite('msg_box');
+        // const msgBoxSprite = CSpriteLibrary.getImage('msg_box');
         // const panel = createBitmap(msgBoxSprite);        
         // panel.regX = msgBoxSprite.width / 2;
         // panel.regY = msgBoxSprite.height / 2;
@@ -71,7 +71,7 @@ function CEndPanel(prizeIndex, isWin) {
             this.panelContainer.addChild(textDisplay);
             
             const szPrize = settings.getPrize()[prizeIndex].background;
-            const prizeSprite = CSpriteLibrary.getSprite(szPrize);
+            const prizeSprite = CSpriteLibrary.getImage(szPrize);
             const prizeBitmap = createBitmap(prizeSprite); 
             prizeBitmap.x = (settings.getCanvasWidth() / 2) - (prizeBitmap.getBounds().width / 2)
             prizeBitmap.y = 100
@@ -92,7 +92,7 @@ function CEndPanel(prizeIndex, isWin) {
             textDisplay.textBaseline = "middle";
             this.panelContainer.addChild(textDisplay);
             
-            this.exitButton = new CGfxButton(settings.getCanvasWidth() / 2, 80, CSpriteLibrary.getSprite('but_home'), this.panelContainer);
+            this.exitButton = new CGfxButton(settings.getCanvasWidth() / 2, 80, CSpriteLibrary.getImage('but_home'), this.panelContainer);
             this.exitButton.addEventListener(settings.ON_MOUSE_UP, this.onExit, this);
         }
 

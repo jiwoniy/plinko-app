@@ -141,12 +141,12 @@ function sizeHandler() {
             h = getSize('Height');
         }
         
-        const w = getSize('Width');
+        // const w = getSize('Width');
         // _checkOrientation(w, h);
 
-        let deviceMinRatio = Math.min((h / settings.getCanvasHeight()), (w / settings.getCanvasWidth()));
-        let destW = settings.getCanvasWidth() * deviceMinRatio;
-        let destH = settings.getCanvasHeight() * deviceMinRatio;
+        // let deviceMinRatio = Math.min((h / settings.getCanvasHeight()), (w / settings.getCanvasWidth()));
+        // let destW = settings.getCanvasWidth() * deviceMinRatio;
+        // let destH = settings.getCanvasHeight() * deviceMinRatio;
             
         // 기기 사이즈와 app의 원본 사이즈(1280, 1920) 의 비율을 맞추기 위한 작업같은데...
         // let sizeGap = 0;
@@ -266,7 +266,7 @@ function _checkOrientation(width, height) {
 }
 
 function playSound(szSound,iVolume,bLoop) {
-    if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+    if (settings.getIsAbleSound() === false || $.browser.mobile === false) {
         mainInstance().getSounds()[szSound].play();
         mainInstance().getSounds()[szSound].volume(iVolume);
         mainInstance().getSounds()[szSound].loop(bLoop);
@@ -278,31 +278,31 @@ function playSound(szSound,iVolume,bLoop) {
 }
 
 // function stopSound(szSound){
-//     if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+//     if(settings.getIsAbleSound === false || $.browser.mobile === false){
 //         s_aSounds[szSound].stop();
 //     }
 // }   
 
 function setVolume(szSound, iVolume){
-    if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+    if (settings.getIsAbleSound() === false || $.browser.mobile === false) {
         mainInstance().getSounds()[szSound].volume(iVolume);
     }
 }  
 
 // function setMute(szSound, bMute){
-//     if(DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+//     if(getIsAbleSound() === false || $.browser.mobile === false){
 //         s_aSounds[szSound].mute(bMute);
 //     }
 // }
 
 // function fadeSound(szSound, from, to, duration){
-//     if(DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+//     if(getIsAbleSound === false || $.browser.mobile === false){
 //         s_aSounds[szSound].fade(from, to, duration);
 //     }
 // }
 
 // function soundPlaying(szSound){
-//     if(DISABLE_SOUND_MOBILE === false || $.browser.mobile === false){
+//     if(getIsAbleSound === false || $.browser.mobile === false){
 //         return s_aSounds[szSound].playing();
 //     }
 // }
@@ -325,19 +325,23 @@ function createBitmap(sprite, width, height) {
 	return bitMap;
 }
 
-function createSprite(oSpriteSheet, szState, iRegX, iRegY, iWidth, iHeight) {
-    let createdSprite = null
-	if (szState !== null) {
-		createdSprite = new createjs.Sprite(oSpriteSheet, szState);
-	} else {
-		createdSprite = new createjs.Sprite(oSpriteSheet);
-	}
-	
-	var hitObject = new createjs.Shape();
-	hitObject.graphics.beginFill("#000000").drawRect(-iRegX, -iRegY, iWidth, iHeight);
+function createSprite(sprite, szState = null, iRegX, iRegY, iWidth, iHeight) {
+    const touchArea = new createjs.Shape();
+    if (!sprite) {
+        return touchArea
+    }
 
-	createdSprite.hitArea = hitObject;
+    const createdSprite = new createjs.Sprite(sprite, szState);
+	// if (szState !== null) {
+	// 	createdSprite = new createjs.Sprite(oSpriteSheet, szState);
+	// } else {
+	// 	createdSprite = new createjs.Sprite(oSpriteSheet);
+	// }
 	
+    touchArea.graphics
+        .beginFill("#000000")
+        .drawRect(-iRegX, -iRegY, iWidth, iHeight);  // drawRect(x, y, w, h)
+	createdSprite.hitArea = touchArea;
 	return createdSprite;
 }
 

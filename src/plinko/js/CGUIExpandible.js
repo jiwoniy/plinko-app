@@ -55,8 +55,8 @@ function CGUIExpandible(xPosition, yPosition, oSprite, oParentContainer) {
         this.guiContainer.y = yPosition + iNewY;
     };
     
-    this.addButton = function(oObjClass) {
-        var oButton = oObjClass.getButtonImage();
+    this.addButton = (oObjClass) => {
+        const oButton = oObjClass.getButtonImage();
         
         oButton.x = 0;
         oButton.y = 0;

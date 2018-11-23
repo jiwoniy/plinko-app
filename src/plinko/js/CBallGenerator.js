@@ -52,7 +52,7 @@ function CBallGenerator(parentContainer) {
         for(let i = 0; i < BALL_IN_ANIMATION; i += 1) {
             const innerBallPosition = { x: tubeStartPosition.x - (i * this.state.ballRadius), y: tubeStartPosition.y};
             createjs.Tween
-                .get(this.state.ball[i].getSprite(), { override: true }).wait(i * 200).to({ x: innerBallPosition.x }, 1000, createjs.Ease.cubicIn);
+                .get(this.state.ball[i].getImage(), { override: true }).wait(i * 200).to({ x: innerBallPosition.x }, 1000, createjs.Ease.cubicIn);
         }
     };
     

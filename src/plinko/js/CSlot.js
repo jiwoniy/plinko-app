@@ -49,7 +49,7 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         parentContainer.addChild(this.buttonContainer);
 
         this.clickShape = new createjs.Shape();
-        const racketSprite = CSpriteLibrary.getSprite('racket');
+        const racketSprite = CSpriteLibrary.getImage('racket');
         createBitmap(racketSprite);
 
         const racket = createBitmap(racketSprite, slotWidth, slotHeight)
@@ -57,6 +57,7 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         racket.x = xPosition / 2
         racket.y = -(yPosition / 2)
         // racket.regX = slotWidth
+
         // TODO
         this.buttonContainer.addChild(racket);
     
@@ -80,8 +81,6 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         }
         
         this.buttonContainer.parent.removeChild(this.buttonContainer);
-        
-        //oParentContainer.removeChild(_oButton);
     };
     
     this.setVisible = (bVisible) => {

@@ -6,116 +6,137 @@ import {
 } from './ctl_utils.js'
 import settings from './settings.js'
 
-function CToggle(iXPos,iYPos,oSprite,bActive, oParentContainer) {
-    var _bActive;
+function CToggle(xPosition, yPosition, spriteImage, isActive, parentContainer) {
+    // var _bActive;
     
     var _oListenerMouseDown;
     var _oListenerMouseUp;
     var _oListenerMouseOver;
     
-    var _aCbCompleted;
-    var _aCbOwner;
-    var _oButton;
+    // var _aCbCompleted;
+    // var _aCbOwner;
+
+    this.button = null
+    this.state = {
+        isActive: null
+    }
     
-    this._init = function(iXPos,iYPos,oSprite,bActive, oParentContainer) {
-        _aCbCompleted = [];
-        _aCbOwner = [];
-        
-        var oData = {   
-            images: [oSprite], 
+    this.initToggle = (xPosition, yPosition, spriteImage, isActive, parentContainer) => {
+        this.callbackCompleted = [];
+        this.callbackOwner = []
+        // _aCbOwner = [];
+
+        // TODO spriteImage ==> Array
+        const spriteSheet = new createjs.SpriteSheet({
+            images: [...spriteImage], 
             // width, height & registration point of each sprite
-            frames: {width: oSprite.width/2, height: oSprite.height, regX: (oSprite.width/2)/2, regY: oSprite.height/2}, 
-            animations: {state_true:[0],state_false:[1]}
-        };
-                   
-         var oSpriteSheet = new createjs.SpriteSheet(oData);
-         
-         _bActive = bActive;
-		_oButton = createSprite(oSpriteSheet, "state_"+_bActive,(oSprite.width/2)/2,oSprite.height/2,oSprite.width/2,oSprite.height);
-         
-        _oButton.x = iXPos;
-        _oButton.y = iYPos; 
-        _oButton.stop();
+            // frames: {
+            //     width: spriteImage[0].width,
+            //     height: spriteImage[0].height,
+            //     regX: (spriteImage[0].width / 2),
+            //     regY: spriteImage[0].height / 2
+            // }, 
+            frames: [
+                [0 , 0, spriteImage[0].width, spriteImage[0].height, 0, spriteImage[0].width / 2],
+                [0 , 0, spriteImage[1].width, spriteImage[1].height, 1, spriteImage[1].width / 2],
+            ],
+            animations: {state_true:[0], state_false:[1]}
+            });
+            
+        this.state.isActive = isActive
+        this.button = createSprite(spriteSheet,
+            `state_${this.state.isActive}`,
+            spriteImage[0].width / 2,
+            // spriteImage[0].height / 2,
+            0,
+            spriteImage[0].width,
+            spriteImage[0].height,
+        );
+            
+        this.button.x = xPosition;
+        this.button.y = yPosition; 
+        this.button.stop();
         
-        oParentContainer.addChild(_oButton);
-        
-        this._initListener();
+        parentContainer.addChild(this.button);
+        this.initListener();
     };
     
-    this.unload = function() {
-        if($.browser.mobile){
-            _oButton.off("mousedown", _oListenerMouseDown);
-            _oButton.off("pressup" , _oListenerMouseUp);
+    this.unload = () => {
+        if ($.browser.mobile) {
+            this.button.off("mousedown", _oListenerMouseDown);
+            this.button.off("pressup" , _oListenerMouseUp);
         } else {
-            _oButton.off("mousedown", _oListenerMouseDown);
-            _oButton.off("mouseover", _oListenerMouseOver);
-            _oButton.off("pressup" , _oListenerMouseUp);
+            this.button.off("mousedown", _oListenerMouseDown);
+            this.button.off("mouseover", _oListenerMouseOver);
+            this.button.off("pressup" , _oListenerMouseUp);
         }
         
-        _oButton.parent.removeChild(_oButton);
+        this.button.parent.removeChild(this.button);
         //oParentContainer.removeChild(_oButton);
     };
     
-    this._initListener = function() {
-        if($.browser.mobile){
-            _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
-            _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
+    this.initListener = () => {
+        if ($.browser.mobile) {
+            _oListenerMouseDown = this.button.on("mousedown", this.buttonDown);
+            _oListenerMouseUp = this.button.on("pressup" , this.buttonRelease);
         } else {
-            _oListenerMouseDown = _oButton.on("mousedown", this.buttonDown);
-            _oListenerMouseOver = _oButton.on("mouseover", this.buttonOver);
-            _oListenerMouseUp = _oButton.on("pressup" , this.buttonRelease);
+            _oListenerMouseDown = this.button.on("mousedown", this.buttonDown);
+            _oListenerMouseOver = this.button.on("mouseover", this.buttonOver);
+            _oListenerMouseUp = this.button.on("pressup" , this.buttonRelease);
         }     
     };
     
-    this.addEventListener = function(iEvent,cbCompleted, cbOwner) {
-        _aCbCompleted[iEvent]=cbCompleted;
-        _aCbOwner[iEvent] = cbOwner; 
+    this.addEventListener = (iEvent,cbCompleted, cbOwner) => {
+        this.callbackCompleted[iEvent] = cbCompleted;
+        this.callbackOwner[iEvent] = cbOwner; 
     };
     
-    this.setActive = function(bActive) {
-        _bActive = bActive;
-        _oButton.gotoAndStop("state_"+_bActive);
+    this.setActive = (value) => {
+        this.state.isActive = value
+        this.button.gotoAndStop("state_"+value);
     };
     
-    this.buttonRelease = function() {
-        _oButton.scaleX = 1;
-        _oButton.scaleY = 1;
+    this.buttonRelease = () => {
+        this.button.scaleX = 1;
+        this.button.scaleY = 1;
         
         playSound('click', 1, false);
         
-        _bActive = !_bActive;
-        _oButton.gotoAndStop("state_"+_bActive);
+        this.state.isActive = !this.state.isActive
+        this.button.gotoAndStop("state_"+this.state.isActive);
 
-        if(_aCbCompleted[settings.ON_MOUSE_UP]){
-            _aCbCompleted[settings.ON_MOUSE_UP].call(_aCbOwner[settings.ON_MOUSE_UP],_bActive);
+        if (this.callbackCompleted[settings.ON_MOUSE_UP]) {
+            this.callbackCompleted[settings.ON_MOUSE_UP]
+                .call(this.callbackOwner[settings.ON_MOUSE_UP], this.state.isActive);
         }
     };
     
-    this.buttonDown = function() {
-        _oButton.scaleX = 0.9;
-        _oButton.scaleY = 0.9;
+    this.buttonDown = () => {
+        this.button.scaleX = 0.9;
+        this.button.scaleY = 0.9;
 
-       if(_aCbCompleted[settings.ON_MOUSE_DOWN]) {
-           _aCbCompleted[settings.ON_MOUSE_DOWN].call(_aCbOwner[settings.ON_MOUSE_DOWN]);
+       if(this.callbackCompleted[settings.ON_MOUSE_DOWN]) {
+        this.callbackCompleted[settings.ON_MOUSE_DOWN]
+            .call(this.callbackOwner[settings.ON_MOUSE_DOWN]);
        }
     };
     
-    this.buttonOver = function(evt) {
-        if(!$.browser.mobile){
-            evt.target.cursor = "pointer";
+    this.buttonOver = (evt) => {
+        if (!$.browser.mobile) {
+            evt.target.cursor = 'pointer';
         }  
     };
     
-    this.setPosition = function(iXPos,iYPos) {
-         _oButton.x = iXPos;
-         _oButton.y = iYPos;
+    this.setPosition = (iXPos,iYPos) => {
+        this.button.x = iXPos;
+        this.button.y = iYPos;
     };
     
-    this.getButtonImage = function() {
-        return _oButton;
+    this.getButtonImage = () => {
+        return this.button;
     };
     
-    this._init(iXPos,iYPos,oSprite,bActive, oParentContainer);
+    this.initToggle(xPosition, yPosition, spriteImage, isActive, parentContainer);
 }
 
 export default CToggle;

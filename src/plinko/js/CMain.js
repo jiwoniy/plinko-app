@@ -57,7 +57,7 @@ function CMain(oData) {
             createjs.Ticker.framerate = settings.FPS;
             
             if(navigator.userAgent.match(/Windows Phone/i)) {
-                settings.DISABLE_SOUND_MOBILE = true;
+                settings.setIsAbleSound(true)
             }
             
             // s_oSpriteLibrary  = new CSpriteLibrary(true);
@@ -95,7 +95,7 @@ function CMain(oData) {
     }
     
     this.preloaderReady = () => {
-        if(settings.DISABLE_SOUND_MOBILE === false || $.browser.mobile === false) {
+        if (settings.getIsAbleSound() === false || $.browser.mobile === false) {
             this._initSounds();
         }
         
@@ -138,53 +138,58 @@ function CMain(oData) {
     this._loadImages = () => {
         CSpriteLibrary.init( this._onImagesLoaded,this._onAllImagesLoaded, this );
 
-        CSpriteLibrary.addSprite("logo_game","/plinko/sprites/logo_game.png");
-        CSpriteLibrary.addSprite("logo_menu","/plinko/sprites/logo_menu.png");
+        CSpriteLibrary.addImage("logo_game","/plinko/sprites/logo_game.png");
+        CSpriteLibrary.addImage("logo_menu","/plinko/sprites/logo_menu.png");
         
-        CSpriteLibrary.addSprite("but_play","/plinko/sprites/but_play.png");
-        CSpriteLibrary.addSprite("msg_box","/plinko/sprites/msg_box.png");
-        CSpriteLibrary.addSprite("ctl_logo","/plinko/sprites/ctl_logo.png");
-        CSpriteLibrary.addSprite("but_credits","/plinko/sprites/but_credits.png");
-        CSpriteLibrary.addSprite("but_yes","/plinko/sprites/but_yes.png");
-        CSpriteLibrary.addSprite("but_no","/plinko/sprites/but_no.png");
+        CSpriteLibrary.addImage("but_play","/plinko/sprites/but_play.png");
+        CSpriteLibrary.addImage("msg_box","/plinko/sprites/msg_box.png");
+        CSpriteLibrary.addImage("ctl_logo","/plinko/sprites/ctl_logo.png");
+        CSpriteLibrary.addImage("but_credits","/plinko/sprites/but_credits.png");
+        CSpriteLibrary.addImage("but_yes","/plinko/sprites/but_yes.png");
+        CSpriteLibrary.addImage("but_no","/plinko/sprites/but_no.png");
         
-        CSpriteLibrary.addSprite("bg_menu","/plinko/sprites/bg_menu.jpg"); 
+        CSpriteLibrary.addImage("bg_menu","/plinko/sprites/bg_menu.jpg"); 
         // CSpriteLibrary.addSprite("bg_game","./sprites/game_background.svg");
-        CSpriteLibrary.addSprite("bg_game","/plinko/sprites/table_tennis_bg.svg");
+        CSpriteLibrary.addImage("bg_game","/plinko/sprites/table_tennis_bg.svg");
         // CSpriteLibrary.addSprite("table_tennis","./sprites/table_tennis.svg");
         // CSpriteLibrary.addSprite("table_tennis","./sprites/tabletennis_net.svg");
-        CSpriteLibrary.addSprite("table_tennis","/plinko/sprites/tennis_net.svg");
+        CSpriteLibrary.addImage("table_tennis","/plinko/sprites/tennis_net.svg");
         // CSpriteLibrary.addSprite("side_right","./sprites/side_right.png");
         // CSpriteLibrary.addSprite("side_left","./sprites/side_left.png");
         
-        CSpriteLibrary.addSprite("but_exit","/plinko/sprites/but_exit.png");
-        CSpriteLibrary.addSprite("audio_icon","/plinko/sprites/audio_icon.png");
-        CSpriteLibrary.addSprite("but_fullscreen","/plinko/sprites/but_fullscreen.png");
-        CSpriteLibrary.addSprite("but_restart","/plinko/sprites/but_restart.png"); 
-        CSpriteLibrary.addSprite("but_home","/plinko/sprites/but_home.png"); 
-        CSpriteLibrary.addSprite("but_settings","/plinko/sprites/but_settings.png");  
+        CSpriteLibrary.addImage("but_exit","/plinko/sprites/exit.svg");
+
+        CSpriteLibrary.addImage("sound_active","/plinko/sprites/sound_active.svg");
+        CSpriteLibrary.addImage("sound_noactive","/plinko/sprites/sound_noactive.svg");
+
+        CSpriteLibrary.addImage("but_fullscreen","/plinko/sprites/but_fullscreen.png");
+        CSpriteLibrary.addImage("but_restart","/plinko/sprites/but_restart.png"); 
+        CSpriteLibrary.addImage("but_home","/plinko/sprites/but_home.png"); 
+        CSpriteLibrary.addImage("but_settings","/plinko/sprites/but_settings.png");  
+
+        CSpriteLibrary.addImage("menu_noActive","/plinko/sprites/menu_white.svg");  
         
-        CSpriteLibrary.addSprite("ball_panel","/plinko/sprites/ball_panel.png");
+        CSpriteLibrary.addImage("ball_panel","/plinko/sprites/ball_panel.png");
         
-        CSpriteLibrary.addSprite("racket","/plinko/sprites/table_tennis_racket.svg");
-        CSpriteLibrary.addSprite("ball","/plinko/sprites/ball.svg");
+        CSpriteLibrary.addImage("racket","/plinko/sprites/table_tennis_racket.svg");
+        CSpriteLibrary.addImage("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
-        CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.svg");
-        CSpriteLibrary.addSprite("ball_generator","/plinko/sprites/ball_generator.png");
+        CSpriteLibrary.addImage("stake","/plinko/sprites/stake.svg");
+        CSpriteLibrary.addImage("ball_generator","/plinko/sprites/ball_generator.png");
         
-        CSpriteLibrary.addSprite("holes_occluder","/plinko/sprites/holes_occluder.png");
-        CSpriteLibrary.addSprite("hole_board_occluder","/plinko/sprites/hole_board_occluder.png");
+        CSpriteLibrary.addImage("holes_occluder","/plinko/sprites/holes_occluder.png");
+        CSpriteLibrary.addImage("hole_board_occluder","/plinko/sprites/hole_board_occluder.png");
         
-        CSpriteLibrary.addSprite("basket_display","/plinko/sprites/basket_display.jpg");
-        CSpriteLibrary.addSprite("hand_anim","./plinko/sprites/hand_anim.png");
+        CSpriteLibrary.addImage("basket_display","/plinko/sprites/basket_display.svg");
+        CSpriteLibrary.addImage("hand_anim","./plinko/sprites/hand_anim.png");
         
-        CSpriteLibrary.addSprite("basket_prize","/plinko/sprites/prize/prize.svg");
+        CSpriteLibrary.addImage("basket_prize","/plinko/sprites/prize/prize.svg");
         for(let i = 0; i < settings.getBasketImageNumber(); i += 1) {
-            CSpriteLibrary.addSprite("image_"+i,"/plinko/sprites/prize/image_"+i+".png");
+            CSpriteLibrary.addImage("image_"+i,"/plinko/sprites/prize/image_"+i+".png");
         }
         
         this.state.loadResources += CSpriteLibrary.getNumSprites();
-        CSpriteLibrary.loadSprites();
+        CSpriteLibrary.loadImages();
     };
     
     this._onImagesLoaded = () => {
