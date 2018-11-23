@@ -19,35 +19,38 @@ function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iH
     
     this.initBasket = function(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iHeight, prizeImage) {
         this.basketContainer = new createjs.Container();
-        this.basketContainer.y = yPosition;
+        // this.basketContainer.y = yPosition;
         this.basketContainer.x = xPosition;
         parentContainer.addChild(this.basketContainer);
         
-        const basketSprite = createSprite(oSpriteSheet,
-            "state_off",
-            iWidth / 2,
-            iHeight / 2,
-            iWidth,
-            iHeight);
+        const basketSprite = createSprite(
+            oSpriteSheet,
+            "state_off")
+            // iWidth / 2,
+            // iHeight / 2,
+            // // 0,
+            // // 0,
+            // iWidth,
+            // iHeight);
+        basketSprite.x = xPosition / 2
         this.basketContainer.addChild(basketSprite);
 
-        const iFrameOffset = 3;
-        console.log(`xPosition: ${xPosition}`)
-        if (prizeImage) {
-            const prizeSprite = CSpriteLibrary.getImage(prizeImage);
-            const bitMapPrize = createBitmap(prizeSprite);
-            bitMapPrize.regX = prizeSprite.width / 2;
-            bitMapPrize.regY = prizeSprite.height / 2;
-            bitMapPrize.cache(prizeSprite.width / 2 - iWidth / 2 + iFrameOffset, prizeSprite.height / 2 - iHeight / 2 + iFrameOffset, iWidth - iFrameOffset * 2, iHeight - (iFrameOffset * 2));
-            this.basketContainer.addChild(bitMapPrize);
+        // const iFrameOffset = 3;
+        // if (prizeImage) {
+        //     const prizeSprite = CSpriteLibrary.getImage(prizeImage);
+        //     const bitMapPrize = createBitmap(prizeSprite);
+        //     bitMapPrize.regX = prizeSprite.width / 2;
+        //     bitMapPrize.regY = prizeSprite.height / 2;
+        //     // bitMapPrize.cache(prizeSprite.width / 2 - iWidth / 2 + iFrameOffset, prizeSprite.height / 2 - iHeight / 2 + iFrameOffset, iWidth - iFrameOffset * 2, iHeight - (iFrameOffset * 2));
+        //     this.basketContainer.addChild(bitMapPrize);
 
-            // add text
-            // var oScoreText = new createjs.Text('test'," 20px "+ settings.PRIMARY_FONT, "#ffffff");
-            // oScoreText.textAlign = "center";
-            // oScoreText.textBaseline = "middle";
-            // oScoreText.lineWidth = 200;
-            // this.basketContainer.addChild(oScoreText);
-        }
+        //     // add text
+        //     // var oScoreText = new createjs.Text('test'," 20px "+ settings.PRIMARY_FONT, "#ffffff");
+        //     // oScoreText.textAlign = "center";
+        //     // oScoreText.textBaseline = "middle";
+        //     // oScoreText.lineWidth = 200;
+        //     // this.basketContainer.addChild(oScoreText);
+        // }
         
         this.hightLightBasket = createSprite(oSpriteSheet, "state_on", iWidth / 2, iHeight / 2, iWidth, iHeight);
         this.hightLightBasket.alpha = 0;

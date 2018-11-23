@@ -3,29 +3,39 @@ import settings from './settings.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CBasket from './CBasket.js'
 
-function CScoreBasketController(oParentContainer) {
+function CScoreBasketController(parentContainer) {
     this.state = {
         baskets: []
     }
 
-    this.initBasketController = function(oParentContainer) {
+    this.initBasketController = function(parentContainer) {
         const basketContainer = new createjs.Container();
+        // basketContainer.x = settings.get10PercentWidth();
+        // basketContainer.setBounds(settings.get10PercentWidth() , settings.get80PercentHeight(), settings.get80PercentWidth(), 50)
         basketContainer.x = settings.get10PercentWidth();
         basketContainer.y = settings.get80PercentHeight();
-        oParentContainer.addChild(basketContainer);
+        
+        // console.log(settings.get10PercentWidth())
+        // console.log(basketContainer.getBounds())
+        // console.log(basketContainer.x)
+        
+        parentContainer.addChild(basketContainer);
         
         const basketSprite = CSpriteLibrary.getImage('basket_display');
         const iWidth = basketSprite.width / 4;
         const iHeight = basketSprite.height;
 
+        
         const spriteSheet = new createjs.SpriteSheet({
-            images: [basketSprite], 
+            images: [ basketSprite ], 
             // width, height & registration point of each sprite
             frames: {
                 width: iWidth,
                 height: iHeight,
-                regX: iWidth / 2,
-                regY: iHeight / 2
+                // regX: iWidth / 2,
+                // regY: iHeight / 2
+                // regX: iWidth / 2,
+                // regY: iHeight / 2
             }, 
             animations: {
                 state_off: [0],
@@ -35,18 +45,21 @@ function CScoreBasketController(oParentContainer) {
             }
         });
         const gap = settings.getCellGapSize()
-        // const basketWidth = gap / 2
-        
+        // const gap = 50
+        // const gap = 50
+        const basketWidth = gap
+
         for (let i = 0; i < settings.getPrize().length; i += 1) {
-            // this.state.baskets.push(new CBasket(100 + i * 30, 0, container, spriteSheet, iWidth, iHeight, settings.getPrize()[i].background));
             this.state.baskets.push(
-                new CBasket(settings.get10PercentWidth() + (i * gap),
+                new CBasket(i * gap,
                 0,
                 basketContainer,
                 spriteSheet,
-                iWidth,
+                basketWidth,
                 iHeight,
-                settings.getPrize()[i].background));
+                // settings.getPrize()[i].background));
+                null)
+            );
         };
     };
     
@@ -60,7 +73,7 @@ function CScoreBasketController(oParentContainer) {
         this.state.baskets[iIndex].lit(bWin);
     };
     
-    this.initBasketController(oParentContainer);
+    this.initBasketController(parentContainer);
 }
 
 export default CScoreBasketController;

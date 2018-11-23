@@ -325,7 +325,7 @@ function createBitmap(sprite, width, height) {
 	return bitMap;
 }
 
-function createSprite(sprite, szState = null, iRegX, iRegY, iWidth, iHeight) {
+function createSprite(sprite, szState = null, regX, regY, width, height) {
     const touchArea = new createjs.Shape();
     if (!sprite) {
         return touchArea
@@ -339,8 +339,10 @@ function createSprite(sprite, szState = null, iRegX, iRegY, iWidth, iHeight) {
 	// }
 	
     touchArea.graphics
-        .beginFill("#000000")
-        .drawRect(-iRegX, -iRegY, iWidth, iHeight);  // drawRect(x, y, w, h)
+        // .beginFill("#000000")
+        // .beginFill("red")
+        // .drawRect(-iRegX, -iRegY, iWidth, iHeight);  // drawRect(x, y, w, h)
+        .drawRect(regX, regY, width, height);  // drawRect(x, y, w, h)
 	createdSprite.hitArea = touchArea;
 	return createdSprite;
 }

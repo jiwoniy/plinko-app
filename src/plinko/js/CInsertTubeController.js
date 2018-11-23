@@ -29,22 +29,24 @@ function CInsertTubeController(oParentContainer) {
         
         // const holesBoardOccluderSprite = CSpriteLibrary.getImage('hole_board_occluder');
         const slotArray = [];
+        const tubeBelowSlotPosition = 10 // TODO(jiwon)
         const slotStartPosition = {
             x: settings.get10PercentWidth(),
-            y: settings.get10PercentHeight()
+            y: settings.get10PercentHeight() + tubeBelowSlotPosition
         }
 
-        const tubeBelowSlotPosition = 100
-        const slotHeight = 50
+        const slotHeight = 50 // TODO(jiwon)
         const gap = settings.getCellGapSize()
-        const slotWidth = gap / 2
+        const slotWidth = gap
         
+        this.container.x = slotStartPosition.x
+        // this.container.setBounds(0, 0)
         for (let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
-            slotArray.push({ x: slotStartPosition.x + (i * gap), y: slotStartPosition.y });
+            slotArray.push({ x: i * gap, y: slotStartPosition.y });
         }
         
         for(let i = 0; i < slotArray.length; i += 1) {
-            const slot = new CSlot(slotArray[i].x, slotArray[i].y + tubeBelowSlotPosition, slotWidth, slotHeight, this.container, i);
+            const slot = new CSlot(slotArray[i].x, slotArray[i].y, slotWidth, slotHeight, this.container, i);
             slot.addEventListenerWithParams(settings.ON_MOUSE_UP, this.onSlot, this, i);
             this.slots.push(slot);
         }

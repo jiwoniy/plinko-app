@@ -36,7 +36,7 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         scaleFactor: 1
     }
     
-    this.initSlot = function(xPosition ,yPosition, parentContainer) {                
+    this.initSlot = function(xPosition, yPosition, parentContainer) {                
         _aCbCompleted = [];
         _aCbOwner = [];
         
@@ -50,19 +50,17 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
 
         this.clickShape = new createjs.Shape();
         const racketSprite = CSpriteLibrary.getImage('racket');
-        createBitmap(racketSprite);
 
         const racket = createBitmap(racketSprite, slotWidth, slotHeight)
-        
         racket.x = xPosition / 2
-        racket.y = -(yPosition / 2)
+        // racket.y = -(yPosition / 2)
         // racket.regX = slotWidth
 
         // TODO
         this.buttonContainer.addChild(racket);
     
         this.clickShape.graphics
-            .beginFill("rgba(255,255,255,0.01)")
+            .beginFill("rgba(255, 255, 255, 0.01)")
             // .beginFill("black")
             .drawRect(xPosition / 2, - (yPosition / 2), slotWidth, slotHeight);
         this.buttonContainer.addChild(this.clickShape);
