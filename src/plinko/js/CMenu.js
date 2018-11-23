@@ -93,7 +93,7 @@ function CMenu(mainInstance) {
         
         this.mainInstance.getStage().addChild(_oFade);
         
-        createjs.Tween.get(_oFade).to({alpha:0}, 1000).call(function(){_oFade.visible = false;});  
+        createjs.Tween.get(_oFade).to({ alpha: 0 }, 1000).call(function(){_oFade.visible = false;});  
         
         this.refreshButtonPos(s_iOffsetX,s_iOffsetY);
         

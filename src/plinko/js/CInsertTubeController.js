@@ -42,7 +42,7 @@ function CInsertTubeController(oParentContainer) {
         this.container.x = slotStartPosition.x
         // this.container.setBounds(0, 0)
         for (let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
-            slotArray.push({ x: i * gap, y: slotStartPosition.y });
+            slotArray.push({ x: (slotWidth / 2) + (i * gap), y: slotStartPosition.y });
         }
         
         for(let i = 0; i < slotArray.length; i += 1) {

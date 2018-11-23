@@ -110,16 +110,16 @@ function isIOS() {
     return false; 
  }
 
-function getIOSWindowHeight() {
-    // Get zoom level of mobile Safari
-    // Note, that such zoom detection might not work correctly in other browsers
-    // We use width, instead of height, because there are no vertical toolbars :)
-    var zoomLevel = document.documentElement.clientWidth / window.innerWidth;
+// function getIOSWindowHeight() {
+//     // Get zoom level of mobile Safari
+//     // Note, that such zoom detection might not work correctly in other browsers
+//     // We use width, instead of height, because there are no vertical toolbars :)
+//     var zoomLevel = document.documentElement.clientWidth / window.innerWidth;
 
-    // window.innerHeight returns height of the visible area. 
-    // We multiply it by zoom and get out real height.
-    return window.innerHeight * zoomLevel;
-};
+//     // window.innerHeight returns height of the visible area. 
+//     // We multiply it by zoom and get out real height.
+//     return window.innerHeight * zoomLevel;
+// };
 
 // You can also get height of the toolbars that are currently displayed
 // function getHeightOfIOSToolbars() {
@@ -131,15 +131,15 @@ function getIOSWindowHeight() {
 function sizeHandler() {
 	window.scrollTo(0, 1);
 
-	if ($("#canvas")) {
-        let h;
-        // var iOS = (navigator.xuserAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
+	// if ($("#canvas")) {
+    //     let h;
+    //     // var iOS = (navigator.xuserAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
 
-        if (isIOS()) {
-            h = getIOSWindowHeight();
-        } else { 
-            h = getSize('Height');
-        }
+    //     if (isIOS()) {
+    //         h = getIOSWindowHeight();
+    //     } else { 
+    //         h = getSize('Height');
+    //     }
         
         // const w = getSize('Width');
         // _checkOrientation(w, h);
@@ -240,30 +240,30 @@ function sizeHandler() {
         // }
 
         // fullscreenHandler();
-	}
+	// }
 };
 
-function _checkOrientation(width, height) {
-    if ($.browser.mobile && settings.getEnableCheckOrientation()) {
-        if (width > height) { 
-            if ($(".orientation-msg-container").attr("data-orientation") === "landscape") {
-                $(".orientation-msg-container").css("display","none");
-                mainInstance().startUpdate();
-            } else {
-                $(".orientation-msg-container").css("display","block");
-                mainInstance().stopUpdate();
-            }  
-        } else {
-            if($(".orientation-msg-container").attr("data-orientation") === "portrait") {
-                $(".orientation-msg-container").css("display","none");
-                mainInstance().startUpdate();
-            } else {
-                $(".orientation-msg-container").css("display","block");
-                mainInstance().stopUpdate();
-            }   
-        }
-    }
-}
+// function _checkOrientation(width, height) {
+//     if ($.browser.mobile && settings.getEnableCheckOrientation()) {
+//         if (width > height) { 
+//             if ($(".orientation-msg-container").attr("data-orientation") === "landscape") {
+//                 $(".orientation-msg-container").css("display","none");
+//                 mainInstance().startUpdate();
+//             } else {
+//                 $(".orientation-msg-container").css("display","block");
+//                 mainInstance().stopUpdate();
+//             }  
+//         } else {
+//             if($(".orientation-msg-container").attr("data-orientation") === "portrait") {
+//                 $(".orientation-msg-container").css("display","none");
+//                 mainInstance().startUpdate();
+//             } else {
+//                 $(".orientation-msg-container").css("display","block");
+//                 mainInstance().stopUpdate();
+//             }   
+//         }
+//     }
+// }
 
 function playSound(szSound,iVolume,bLoop) {
     if (settings.getIsAbleSound() === false || $.browser.mobile === false) {

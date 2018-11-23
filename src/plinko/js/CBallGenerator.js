@@ -50,7 +50,7 @@ function CBallGenerator(parentContainer) {
         // this.state.ball[iLastIndex] = new CBall(ballPosition, this.container);
         this.state.ball.push(new CBall(ballPosition, this.container));
         
-        for(let i = 0; i < BALL_IN_ANIMATION; i += 1) {
+        for (let i = 0; i < BALL_IN_ANIMATION; i += 1) {
             const innerBallPosition = { x: tubeStartPosition.x - (i * this.state.ballRadius), y: tubeStartPosition.y};
             createjs.Tween
                 .get(this.state.ball[i].getImage(), { override: true })

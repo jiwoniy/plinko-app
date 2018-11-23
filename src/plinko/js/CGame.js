@@ -32,7 +32,7 @@ function CGame(oData, mainInstance) {
         ballCount: 0,
         initData: oData || {},
         endPanel: null,
-        _aProbability: [],
+        probability: [],
         currentBall: null,
         currentBallIndex: null
     }
@@ -78,6 +78,9 @@ function CGame(oData, mainInstance) {
         const allRow = settings.getMatrixRow(); // 13
         const allCol = settings.getMatrixCol(); // 7
 
+        const widthGap = settings.getCellGapSize() * 1.3
+        const heightGap = settings.getCellGapSize()
+
         for (let currentRow = 0; currentRow < allRow; currentRow += 1) {
             // row
             this.state.board[currentRow] = [];
@@ -86,26 +89,26 @@ function CGame(oData, mainInstance) {
             for (let currentCol = 0; currentCol < allCol - ((currentRow + 1) % 2); currentCol += 1) {
                 let xPosition;
                 if (currentRow % 2 === 0) {
-                    xPosition = + (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
+                    xPosition = + (widthGap / 2) + (currentCol * widthGap);
                 } else {
-                    xPosition = currentCol * settings.getCellGapSize();
-                    // xPosition = - (settings.getCellGapSize() / 2) + (currentCol * settings.getCellGapSize());
+                    xPosition = currentCol * widthGap;
                 }
-                const yPosition = currentRow * settings.getCellGapSize() / 2;
+                const yPosition = currentRow * heightGap;
                 this.state.board[currentRow][currentCol] = new CCell(xPosition,
                     yPosition, this.boardContainer, currentRow, currentCol/*, _oActionContainer*/);
                 
-                // remove stake
-                // if(i === settings.getMatrixRow() - 1 || (i % 2 === 1 && (j===0 || j === settings.getMatrixCol() - 1))) {
-                //     this.state.board[i][j].removeStake();
-                // }
+                // remove stake // ㅁㅏ지막 애니메이션 및 자연스러움을 위해 지운듯...
+                if(currentRow === settings.getMatrixRow() - 1) {
+                    this.state.board[currentRow][currentCol].removeStake();
+                }
             }
         }
 
         settings.setInsertTubeNumber(this.state.board[0].length)
-        this.boardContainer.x = settings.getCanvasWidth() / 2 - this.boardContainer.getBounds().width / 2
-        this.boardContainer.y =  settings.getCanvasHeight() / 2 - this.boardContainer.getBounds().height / 2;
-
+        // this.boardContainer.x = settings.get10PercentWidth()
+        // this.boardContainer.x = settings.getCanvasWidth() / 2 - (this.boardContainer.getBounds().width / 2)
+        this.boardContainer.x = settings.getCanvasWidth() / 2 - (allCol * widthGap / 2)
+        this.boardContainer.y =  settings.getCanvasHeight() / 2 - (allRow * heightGap / 2);
         // const tabelTennisSprite = createBitmap(CSpriteLibrary.getImage('table_tennis'))
         // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
         // // tabelTennisSprite.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
@@ -117,25 +120,25 @@ function CGame(oData, mainInstance) {
     };
     
     this.initProbability = () => {
-        this.state._aProbability = [];
+        this.state.probability = [];
         for (let i = 0; i < settings.getPrize().length; i += 1) {
             const iProbability = settings.getPrize()[i].win_occurrence;
             for (let j = 0; j < iProbability; j += 1) {
-                this.state._aProbability.push(i);
+                this.state.probability.push(i);
             }            
         }
     };
     
-    this.launch = (startIndex) => {
-        this.state.currentBallIndex = startIndex;
+    this.launch = (startCol) => {
+        this.state.currentBallIndex = startCol;
         this.state.ballCount -= 1;
         
         this.setBall();
         this.insertTubeController.hideSlots();
         this.ballGenerator.shiftBallAnimation();
 
-        const oDestBall = this.getBallPivotCellPos(0, startIndex);
-        this.state.currentBall.launchAnim(oDestBall);
+        const startCellPoint = this.getBallPosition(0, startCol);
+        this.state.currentBall.launchAnim(startCellPoint);
         
         this.interfaceInstance.refreshBallNum(this.state.ballCount);
         // this.interfaceInstance.hideControls();
@@ -166,8 +169,7 @@ function CGame(oData, mainInstance) {
             this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
         }
         
-        const aNewPath = this.getPathCopy(ballPaths);
-        this.state.currentBall.startPathAnim(aNewPath, 500);
+        this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
 
         this.setCurrentBall(null)
     };
@@ -186,20 +188,20 @@ function CGame(oData, mainInstance) {
     };
     
     this.checkEndGame = function(iPrizeWin, bHasWin) {
-        if (bHasWin) {
-            this.gameOver(iPrizeWin, true);
-            return; 
-        }
+        // if (bHasWin) {
+        //     this.gameOver(iPrizeWin, true);
+        //     return; 
+        // }
         
-        if (this.state.ballCount === 0) {
-            this.gameOver(iPrizeWin, false);
-        }
+        // if (this.state.ballCount === 0) {
+        //     this.gameOver(iPrizeWin, false);
+        // }
     };
     
    
     this.setDestination = () => {
         // TODO connect with server
-        const iPrizeToChoose = this.state._aProbability[Math.floor(Math.random() * this.state._aProbability.length)];      
+        const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      
         return iPrizeToChoose;
     };
     
@@ -211,17 +213,17 @@ function CGame(oData, mainInstance) {
         return this.state.board;
     };
     
-    this.getBallPivotCellPos = (iRow, iCol) => {
-        return this.state.board[iRow][iCol].getCenterOfBallOnPivot();
+    this.getBallPosition = (row, col) => {
+        return this.state.board[row][col].getCellPosition();
     };
     
-    this.getPathCopy = (aPath) => {
-        const aNewPath = [];
-        for(let i = 0; i < aPath.length; i += 1) {
-            aNewPath.push(aPath[i])
+    this.getPathCopy = (path) => {
+        const returnPath = [];
+        for(let i = 0; i < path.length; i += 1) {
+            returnPath.push(path[i])
         }
         
-        return aNewPath;
+        return returnPath;
     };
    
     this.restartGame = () => {
@@ -233,6 +235,8 @@ function CGame(oData, mainInstance) {
         // _bStartGame = false;
         this.interfaceInstance.unload();
         this.scoreBasketController.unload();
+        //
+        this.boardContainer.removeAllChildren()
         
         createjs.Tween.removeAllTweens();
         this.mainInstance.getStage().removeAllChildren();

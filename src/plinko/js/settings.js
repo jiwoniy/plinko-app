@@ -123,6 +123,7 @@ const settings = () => {
     getCellGapSize: () => {
       const originCellSize = cellSize
       const origin = 375
+
       const value = (originCellSize * canvasWidth) / origin
       return value
     },

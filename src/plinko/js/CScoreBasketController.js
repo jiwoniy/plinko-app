@@ -48,7 +48,7 @@ function CScoreBasketController(parentContainer) {
 
         for (let i = 0; i < settings.getPrize().length; i += 1) {
             this.state.baskets.push(
-                new CBasket(i * gap,
+                new CBasket((basketWidth / 2) + (i * gap),
                 0,
                 basketContainer,
                 spriteSheet,

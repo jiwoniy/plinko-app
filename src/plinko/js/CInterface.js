@@ -12,7 +12,7 @@ import CAreYouSurePanel from './CAreYouSurePanel.js'
 import CGUIExpandible from './CGUIExpandible.js'
 import {
     createBitmap,
-    createSprite,
+    // createSprite,
     sizeHandler,
     s_iOffsetX,
     s_iOffsetY,

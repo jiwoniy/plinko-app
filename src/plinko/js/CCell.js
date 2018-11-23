@@ -4,58 +4,63 @@ import {
     createBitmap,
  } from './ctl_utils.js'
 import CSpriteLibrary from './sprite_lib.js'
-import settings from './settings.js'
+// import settings from './settings.js'
 
-function CCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer) {
+function CCell(xPosition, yPosition, parentContainer, rows, cols) {
     this.container = null
     this.hightlightShape = null
     this.stakeSprite = null
 
-    this.initCell = function(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer) {
-        this.parentContainer = parentContainer
+    this.initCell = function(xPosition, yPosition, parentContainer, rows, cols) {
+        // this.parentContainer = parentContainer
         this.container = new createjs.Container();
         this.container.x = xPosition;
         this.container.y = yPosition;
         this.container.alpha = 0;
-        this.parentContainer.addChild(this.container);
+        parentContainer.addChild(this.container);
 
-        const stakeSprite = CSpriteLibrary.getImage('stake');
-        this.stakeSprite = createBitmap(stakeSprite);
-        // this.stakeSprite.regX = stakeSprite.width / 2;
-        // console.log(`xPosition: ${xPosition}`)
-        // console.log(`yPosition: ${yPosition}`)
+        const stakeImage = CSpriteLibrary.getImage('stake');
+        this.stakeSprite = createBitmap(stakeImage);
+        // stakeImage.width = 0
+        // stakeImage.height = 0
         this.stakeSprite.x = xPosition;
         this.stakeSprite.y = yPosition;
-        this.parentContainer.addChild(this.stakeSprite);
+        // this.container.addChild(this.stakeSprite)
+        // console.log(this.container.getBounds())
+        parentContainer.addChild(this.stakeSprite);
 
         // const iWidth = 100;
         // const iHeight = 100;
-        // this.hightlightShape = new createjs.Shape();
-        // this.hightlightShape.graphics
-        //     .beginFill("rgba(255,255,255,0.51)")
-        //     .drawRect(-iWidth / 2, -iHeight / 2, iWidth, iHeight);
-        // this.hightlightShape.visible = false;
-        // this.hightlightShape.rotation = 45;
-        // this.container.addChild(this.hightlightShape);
+        this.hightlightShape = new createjs.Shape();
+        this.hightlightShape.graphics
+            .beginFill("rgba(255,255,255,0.51)")
+            .drawRect(50, 50, 100, 100);
+        this.hightlightShape.visible = false;
+        this.hightlightShape.rotation = 45;
+        this.container.addChild(this.hightlightShape);
         
         /////////ACTIVATE THIS FUNCTION TO CHECK BALL PATH
         //this._debug();
     };
     
-    this.unload = () => {
-        this.parentContainer.removeChild(this.container);
-    };
+    // this.unload = () => {
+    //     parentContainer.removeChild(this.container);
+    // };
     
-    this.getCenterPos = () => {
-        return { x: xPosition, y: yPosition };
-    };
+    // this.getCenterPos = () => {
+    //     return { x: xPosition, y: yPosition };
+    // };
     
     // this.getPivotPos = () => {
     //     return { x: xPosition, y: yPosition + settings.CELL_PIVOT_FROM_CENTER} ;
     // };
     
-    this.getCenterOfBallOnPivot = () => {
-        return { x: xPosition, y: yPosition + settings.getCellPivotFronCenter() - settings.getBallRadius() };
+    // getCenterOfBallOnPivot
+    this.getCellPosition = () => {
+        return { x: xPosition,
+            // y: yPosition + settings.getCellPivotFronCenter() - settings.getBallRadius()
+            y: yPosition
+        };
     };
     
     // this.checkBallOverlap = (oPos) => {
@@ -98,7 +103,7 @@ function CCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContaine
     // };
     
     // _oParent = this;
-    this.initCell(xPosition, yPosition, parentContainer, rows, cols, oStakeContainer);
+    this.initCell(xPosition, yPosition, parentContainer, rows, cols);
 }
 
 export default CCell;
