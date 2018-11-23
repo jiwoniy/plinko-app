@@ -2,6 +2,7 @@ import createjs from './createjs.js'
 import {
     createBitmap,
     playSound,
+    createSprite
  } from './ctl_utils.js'
 import CSpriteLibrary from './sprite_lib.js'
 import {
@@ -9,23 +10,40 @@ import {
 } from './CGame.js'
 import settings from './settings.js'
 
-function CBall(ballPosition, oParentContainer) {
+function CBall(ballPosition, parentContainer) {
     this.container = null
     this.state = {
+        isWating: false,
         ballSpriteHeight: 0,
         ballSpriteBitmap: null
     }
     
-    this.initBall = function(ballPosition, oParentContainer) {
+    this.initBall = function(ballPosition, parentContainer) {
         this.container = new createjs.Container();
         this.container.x = ballPosition.x;
         this.container.y = ballPosition.y;
-
-        oParentContainer.addChild(this.container);
+        parentContainer.addChild(this.container);
         
         const ballSprite = CSpriteLibrary.getImage('ball');
         const ballWidth = settings.getDeviceWidthRatio(ballSprite.width)
-        this.state.ballSpriteBitmap = createBitmap(ballSprite);
+        
+
+        const spriteSheet = new createjs.SpriteSheet({
+            images: [ ballSprite ], 
+            // width, height & registration point of each sprite
+            frames: {
+                width: ballSprite.width,
+                height: ballSprite.height,
+            }, 
+            animations: {
+                state_on: [0, 1],
+            }
+        });
+
+        this.state.ballSpriteBitmap = createSprite(
+            spriteSheet,
+            "state_on")
+        this.state.ballSpriteBitmap.gotoAndStop()
 
         this.state.ballSpriteBitmap.regX = ballWidth / 2;
         this.state.ballSpriteBitmap.regY = ballWidth / 2;
@@ -55,6 +73,11 @@ function CBall(ballPosition, oParentContainer) {
         this.container.x = oPos.x;
         this.container.y = oPos.y;
     };
+
+    this.setWaiting = (value) => {
+        this.state.isWating = value
+        this.state.ballSpriteBitmap.gotoAndPlay()
+    }
     
     // this.setPosToPivot = () => {
     //     this.container.regY = this.ballSpriteBitmap / 2;
@@ -62,6 +85,10 @@ function CBall(ballPosition, oParentContainer) {
     
     this.launchAnim = (oPos) => {
         const iTime = 1000;
+
+        if (this.state.isWating) {
+            this.state.ballSpriteBitmap.gotoAndStop()
+        }
         
         createjs.Tween
             .get(this.container)
@@ -187,7 +214,7 @@ function CBall(ballPosition, oParentContainer) {
     };
     
     // _oParent = this;
-    this.initBall(ballPosition, oParentContainer);
+    this.initBall(ballPosition, parentContainer);
 }
 
 export default CBall;

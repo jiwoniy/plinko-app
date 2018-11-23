@@ -138,7 +138,7 @@ function CGame(oData, mainInstance) {
         this.state.currentBall.launchAnim(oDestBall);
         
         this.interfaceInstance.refreshBallNum(this.state.ballCount);
-        this.interfaceInstance.hideControls();
+        // this.interfaceInstance.hideControls();
     };
 
     this.setCurrentBall = (ball) => {
@@ -179,7 +179,7 @@ function CGame(oData, mainInstance) {
         $(this.mainInstance).trigger("save_score",[iDestCol]);
 
         this.insertTubeController.showSlots();
-        this.interfaceInstance.showControls();
+        // this.interfaceInstance.showControls();
         this.scoreBasketController.litBasket(iDestCol, bHasWin);
         
         this.checkEndGame(iDestCol, bHasWin);
@@ -226,7 +226,7 @@ function CGame(oData, mainInstance) {
    
     this.restartGame = () => {
         $(this.mainInstance).trigger("show_interlevel_ad");
-        this.interfaceInstance.showControls();
+        // this.interfaceInstance.showControls();
     };        
     
     this.unload = () => {
@@ -249,12 +249,12 @@ function CGame(oData, mainInstance) {
         this.mainInstance.gotoGame();
     };
     
-    this._onExitHelp = () => {
-        //  _bStartGame = true;
-    };
+    // this._onExitHelp = () => {
+    //     //  _bStartGame = true;
+    // };
     
     this.gameOver = (iPrizeWin, bHasWin) => {
-        this.interfaceInstance.hideControls();
+        // this.interfaceInstance.hideControls();
         this.state.endPanel = new CEndPanel(iPrizeWin, bHasWin);
     };
 

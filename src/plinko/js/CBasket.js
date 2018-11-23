@@ -1,9 +1,9 @@
 import createjs from './createjs.js'
 import {
-    createBitmap,
+    // createBitmap,
     createSprite,
  } from './ctl_utils.js'
- import CSpriteLibrary from './sprite_lib.js'
+//  import CSpriteLibrary from './sprite_lib.js'
  import settings from './settings.js'
 
 function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iHeight, prizeSprite) {
@@ -28,8 +28,6 @@ function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iH
             "state_off")
             // iWidth / 2,
             // iHeight / 2,
-            // // 0,
-            // // 0,
             // iWidth,
             // iHeight);
         basketSprite.x = xPosition / 2

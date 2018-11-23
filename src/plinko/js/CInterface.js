@@ -42,51 +42,51 @@ function CInterface(oBgContainer, gameInstance) {
     this.cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
     
     this.initInterface = (oBgContainer) => {
-        const handAnimSprite = CSpriteLibrary.getImage('hand_anim');
-        const iWidth = handAnimSprite.width / 6;
-        const iHeight = handAnimSprite.height / 4;
-        const spriteSheet = new createjs.SpriteSheet({
-            framerate: 20,
-            images: [handAnimSprite], 
-            // width, height & registration point of each sprite
-            frames: [
-                    [1, 1, 256, 230, 0, 0, 0],
-                    [259, 1, 256, 230, 0, 0, 0],
-                    [517, 1, 256, 230, 0, 0, 0],
-                    [775, 1, 256, 230, 0, 0, 0],
-                    [1033, 1, 256, 230, 0, 0, 0],
-                    [1291, 1, 256, 230, 0, 0, 0],
-                    [1, 233, 256, 230, 0, 0, 0],
-                    [259, 233, 256, 230, 0, 0, 0],
-                    [517, 233, 256, 230, 0, 0, 0],
-                    [775, 233, 256, 230, 0, 0, 0],
-                    [1033, 233, 256, 230, 0, 0, 0],
-                    [1291, 233, 256, 230, 0, 0, 0],
-                    [1, 465, 256, 230, 0, 0, 0],
-                    [259, 465, 256, 230, 0, 0, 0],
-                    [517, 465, 256, 230, 0, 0, 0],
-                    [775, 465, 256, 230, 0, 0, 0],
-                    [1033, 465, 256, 230, 0, 0, 0],
-                    [1291, 465, 256, 230, 0, 0, 0],
-                    [1, 697, 256, 230, 0, 0, 0],
-                    [259, 697, 256, 230, 0, 0, 0],
-                    [517, 697, 256, 230, 0, 0, 0],
-                    [775, 697, 256, 230, 0, 0, 0]
-                ],
-            animations: { 'idle': [0, 21] }
-       });
+    //     const handAnimSprite = CSpriteLibrary.getImage('hand_anim');
+    //     const iWidth = handAnimSprite.width / 6;
+    //     const iHeight = handAnimSprite.height / 4;
+    //     const spriteSheet = new createjs.SpriteSheet({
+    //         framerate: 20,
+    //         images: [handAnimSprite], 
+    //         // width, height & registration point of each sprite
+    //         frames: [
+    //                 [1, 1, 256, 230, 0, 0, 0],
+    //                 // [259, 1, 256, 230, 0, 0, 0],
+    //                 // [517, 1, 256, 230, 0, 0, 0],
+    //                 // [775, 1, 256, 230, 0, 0, 0],
+    //                 // [1033, 1, 256, 230, 0, 0, 0],
+    //                 // [1291, 1, 256, 230, 0, 0, 0],
+    //                 // [1, 233, 256, 230, 0, 0, 0],
+    //                 // [259, 233, 256, 230, 0, 0, 0],
+    //                 // [517, 233, 256, 230, 0, 0, 0],
+    //                 // [775, 233, 256, 230, 0, 0, 0],
+    //                 // [1033, 233, 256, 230, 0, 0, 0],
+    //                 // [1291, 233, 256, 230, 0, 0, 0],
+    //                 // [1, 465, 256, 230, 0, 0, 0],
+    //                 // [259, 465, 256, 230, 0, 0, 0],
+    //                 // [517, 465, 256, 230, 0, 0, 0],
+    //                 // [775, 465, 256, 230, 0, 0, 0],
+    //                 // [1033, 465, 256, 230, 0, 0, 0],
+    //                 // [1291, 465, 256, 230, 0, 0, 0],
+    //                 // [1, 697, 256, 230, 0, 0, 0],
+    //                 // [259, 697, 256, 230, 0, 0, 0],
+    //                 // [517, 697, 256, 230, 0, 0, 0],
+    //                 // [775, 697, 256, 230, 0, 0, 0]
+    //             ],
+    //         animations: { 'idle': [0, 1] }
+    //    });
 
     //    const ballSprite = CSpriteLibrary.getImage('ball');
     //    this.state.handAim = createBitmap(ballSprite);
-        this.state.handAim = createSprite(spriteSheet, 'idle', iWidth / 2, iHeight / 2, iWidth, iHeight);
+        // this.state.handAim = createSprite(spriteSheet, 'idle', iWidth / 2, iHeight / 2, iWidth, iHeight);
 
-        const oPos = gameInstance.getSlotPosition(this.state.currentHandPosition);
-        this.state.handAim.x = oPos.x;
-        this.state.handAim.y = oPos.y;
-        this.state.handAim.regX = (iWidth / 2) - 30;
-        this.state.handAim.regY = iHeight / 2;
+        // const oPos = gameInstance.getSlotPosition(this.state.currentHandPosition);
+        // this.state.handAim.x = oPos.x;
+        // this.state.handAim.y = oPos.y;
+        // this.state.handAim.regX = (iWidth / 2) - 30;
+        // this.state.handAim.regY = iHeight / 2;
         // this.state.handAim.on('animationend', this._moveHand);
-        mainInstance().getStage().addChild(this.state.handAim);
+        // mainInstance().getStage().addChild(this.state.handAim);
                
         const exitButtonSprite = CSpriteLibrary.getImage('but_exit');
         this.exitButtonPos = { x: settings.get10PercentWidth(), y: settings.get5PercentHeight() };

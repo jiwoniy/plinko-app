@@ -25,7 +25,6 @@ function CScoreBasketController(parentContainer) {
         const iWidth = basketSprite.width / 4;
         const iHeight = basketSprite.height;
 
-        
         const spriteSheet = new createjs.SpriteSheet({
             images: [ basketSprite ], 
             // width, height & registration point of each sprite
@@ -45,8 +44,6 @@ function CScoreBasketController(parentContainer) {
             }
         });
         const gap = settings.getCellGapSize()
-        // const gap = 50
-        // const gap = 50
         const basketWidth = gap
 
         for (let i = 0; i < settings.getPrize().length; i += 1) {

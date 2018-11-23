@@ -56,8 +56,11 @@ function CTextButton(iXPos, iYPos, oSprite, szText, szFont, szColor, iFontSize, 
             const spriteSheet = new createjs.SpriteSheet({   
                 images: [pSprite], 
                 // width, height & registration point of each sprite
-                frames: {width: pSprite.width/2, height: pSprite.height, regX:(pSprite.width / 2 ) /2, regY:pSprite.height / 2}, 
-                animations: {state_true:[0],state_false:[1]}
+                frames: {width: pSprite.width / 2, height: pSprite.height, regX:(pSprite.width / 2 ) /2, regY:pSprite.height / 2}, 
+                animations: {
+                    state_true:[0],
+                    state_false:[1]
+                }
            });         
             _oButtonBg = createSprite(spriteSheet, "state_false", (pSprite.width / 2) / 2, pSprite.height / 2, pSprite.width / 2, pSprite.height);
             

@@ -40,7 +40,10 @@ function CToggle(xPosition, yPosition, spriteImage, isActive, parentContainer) {
                 [0 , 0, spriteImage[0].width, spriteImage[0].height, 0, spriteImage[0].width / 2],
                 [0 , 0, spriteImage[1].width, spriteImage[1].height, 1, spriteImage[1].width / 2],
             ],
-            animations: {state_true:[0], state_false:[1]}
+            animations: {
+                state_true:[0],
+                state_false:[1]
+                }
             });
             
         this.state.isActive = isActive
