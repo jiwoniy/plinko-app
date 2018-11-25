@@ -3,7 +3,7 @@ import CssModules from 'react-css-modules'
 import { connect } from 'react-redux';
 
 import SignIn_styles from './signIn.scss'
-import { selector as authSelector } from 'redux/auth';
+import { selector as authSelector, actions as authActions } from 'redux/auth';
 
 const mapStateToProps = state => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setAuthFlag: (payload) => dispatch({ type: "SET_AUTH_AUTHENTICATION", payload }),
+    setAuthFlag: (payload) => dispatch(authActions.setAuth(payload)),
   };
 };
 

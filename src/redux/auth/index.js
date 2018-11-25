@@ -1,25 +1,26 @@
+import { handleActions } from 'redux-actions';
 import * as selector from './selectors.js';
-
-export const SET_AUTH_AUTHENTICATION = 'SET_AUTH_AUTHENTICATION';
+import * as actions from './actions.js';
+import * as types from './types'
 
 const initialState = {
-  authentication: true,
+  authentication: false,
   token: {}
 };
 
-export default function(state = initialState, action) {
-  switch (action.type) {
-    case SET_AUTH_AUTHENTICATION: {
-      return {
-        ...state,
-        authentication: action.payload,
-      };
-    }
-    default:
-      return state;
+const reducer = handleActions({
+  [types.SET_AUTH]:  (state, action) => {
+    console.log(action.payload)
+    return {
+      ...state,
+      authentication: action.payload,
+    };
   }
-}
+}, initialState);
+
+export default reducer
 
 export {
+  actions,
   selector
 }
