@@ -52,7 +52,7 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         const racketSprite = CSpriteLibrary.getImage('racket');
 
         const racket = createBitmap(racketSprite, slotWidth, slotHeight)
-        racket.x = xPosition / 2
+        // racket.x = xPosition / 2
         // racket.y = -(yPosition / 2)
         // racket.regX = slotWidth
 

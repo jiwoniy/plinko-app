@@ -167,6 +167,7 @@ function CMain(oData) {
         CSpriteLibrary.addImage("ball_panel","/plinko/sprites/ball_panel.png");
         
         CSpriteLibrary.addImage("racket","/plinko/sprites/table_tennis_racket.svg");
+        CSpriteLibrary.addImage("racket_purple","/plinko/sprites/table_tennis_racket_purple.svg");
         CSpriteLibrary.addImage("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
         CSpriteLibrary.addImage("stake","/plinko/sprites/stake.svg");

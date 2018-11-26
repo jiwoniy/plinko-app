@@ -4,11 +4,10 @@ import axiosInstance from './axios'
 
 const baseUrl = '/plinko'
 export default {
-  getPlinkoProbalblity (start_index, p_length = 42) {
+  getPlinkoProbalblity (start_index) {
     return axiosInstance.get(`${baseUrl}/getProbablity`, {
       params: {
-        start_index,
-        p_length
+        start_index
       }
     })
   },

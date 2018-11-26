@@ -26,11 +26,12 @@ function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iH
         const basketSprite = createSprite(
             oSpriteSheet,
             "state_off")
-            // iWidth / 2,
-            // iHeight / 2,
+            // iWidth / 3,
+            // iHeight / 3,
             // iWidth,
             // iHeight);
-        basketSprite.x = xPosition / 2
+        // basketSprite.x = xPosition
+        // basketSprite.x = xPosition / 2
         this.basketContainer.addChild(basketSprite);
 
         // const iFrameOffset = 3;

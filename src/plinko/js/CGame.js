@@ -33,7 +33,7 @@ function CGame(oData, mainInstance) {
         ballCount: 0,
         initData: oData || {},
         endPanel: null,
-        probability: [],
+        // probability: [],
         currentBall: null,
         currentBallIndex: null
     }
@@ -68,7 +68,7 @@ function CGame(oData, mainInstance) {
         this.insertTubeController = new CInsertTubeController(this.midContainer);
         this.scoreBasketController = new CScoreBasketController(this.backgroundContainer);
         
-        this.initProbability();
+        // this.initProbability();
         this.interfaceInstance = new CInterface(true, this.backgroundContainer, this);
         this.insertTubeController.showSlots();
 
@@ -120,15 +120,15 @@ function CGame(oData, mainInstance) {
         this.gridInstance = new CGridMapping(true, this.state.board);
     };
     
-    this.initProbability = () => {
-        this.state.probability = [];
-        for (let i = 0; i < settings.getPrize().length; i += 1) {
-            const iProbability = settings.getPrize()[i].win_occurrence;
-            for (let j = 0; j < iProbability; j += 1) {
-                this.state.probability.push(i);
-            }            
-        }
-    };
+    // this.initProbability = () => {
+    //     this.state.probability = [];
+    //     for (let i = 0; i < settings.getPrize().length; i += 1) {
+    //         const iProbability = settings.getPrize()[i].win_occurrence;
+    //         for (let j = 0; j < iProbability; j += 1) {
+    //             this.state.probability.push(i);
+    //         }            
+    //     }
+    // };
     
     this.launch = (startCol) => {
         this.state.currentBallIndex = startCol;
@@ -163,17 +163,21 @@ function CGame(oData, mainInstance) {
     };
     
     this.getFallPath = async () => {
-        const result = await this.setDestination()
-        const { fall_path } = result
-
-        // const test = 3
-        // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
-        for (let i = 0; i < fall_path.length; i += 1) {
-            this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+        // local
+        const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, 5);
+        for (let i = 0; i < ballPaths.length; i += 1) {
+            this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
         }
-        
-        this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
+        this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
 
+        // const result = await this.getDestination()
+        // const { fall_path } = result
+        // remote
+        // for (let i = 0; i < fall_path.length; i += 1) {
+        //     this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+        // }
+        // this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
+        
         this.setCurrentBall(null)
     };
     
@@ -202,9 +206,9 @@ function CGame(oData, mainInstance) {
     };
     
    
-    this.setDestination = async () => {
+    this.getDestination = async () => {
     //     // TODO Exception handle
-        const result = await plinkoApi.getPlinkoProbalblity(this.state.currentBallIndex, this.state.probability.length)
+        const result = await plinkoApi.getPlinkoProbalblity(this.state.currentBallIndex)
         if (result && result.data) {
             return result.data
     //         // const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      

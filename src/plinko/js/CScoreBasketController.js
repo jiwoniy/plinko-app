@@ -21,21 +21,23 @@ function CScoreBasketController(parentContainer) {
         
         parentContainer.addChild(basketContainer);
         
-        const basketSprite = CSpriteLibrary.getImage('basket_display');
-        const iWidth = basketSprite.width / 4;
-        const iHeight = basketSprite.height;
+        // const basketSprite = CSpriteLibrary.getImage('basket_display');
+        const basketSprite = CSpriteLibrary.getImage('racket_purple');
+        // const racket = CSpriteLibrary.getImage('racket');
+        // const basketSprite = CSpriteLibrary.getImage('basket_display');
+        // const iWidth = basketSprite.width / 4;
+        // const iWidth = basketSprite.width;
+        const height = basketSprite.height;
 
         const spriteSheet = new createjs.SpriteSheet({
-            images: [ basketSprite ], 
+            images: [ basketSprite, basketSprite, basketSprite, basketSprite ], 
             // width, height & registration point of each sprite
-            frames: {
-                width: iWidth,
-                height: iHeight,
-                // regX: iWidth / 2,
-                // regY: iHeight / 2
-                // regX: iWidth / 2,
-                // regY: iHeight / 2
-            }, 
+            frames: [
+                [0 , 0, basketSprite.width, basketSprite.height, 0, 0, 0],
+                [0 , 0, basketSprite.width, basketSprite.height, 1, 0, 0],
+                [0 , 0, basketSprite.width, basketSprite.height, 2, 0, 0],
+                [0 , 0, basketSprite.width, basketSprite.height, 3, 0, 0],
+            ],
             animations: {
                 state_off: [0],
                 state_green: [1],
@@ -43,17 +45,18 @@ function CScoreBasketController(parentContainer) {
                 state_red: [3]
             }
         });
-        const gap = settings.getCellGapSize()
+        const gap = settings.getCellGapSize() + 15 // TODO
         const basketWidth = gap
 
         for (let i = 0; i < settings.getPrize().length; i += 1) {
             this.state.baskets.push(
-                new CBasket((basketWidth / 2) + (i * gap),
+                // new CBasket((basketWidth / 2) + (i * gap),
+                new CBasket(i * gap,
                 0,
                 basketContainer,
                 spriteSheet,
                 basketWidth,
-                iHeight,
+                height,
                 // settings.getPrize()[i].background));
                 null)
             );
