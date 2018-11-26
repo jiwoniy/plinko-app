@@ -7,6 +7,7 @@ import {
     s_iScaleFactor,
  } from './ctl_utils.js'
 
+import plinkoApi from '../../api/plinko.js'
 import CGridMapping from './CGridMapping.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CCell from './CCell.js'
@@ -161,15 +162,17 @@ function CGame(oData, mainInstance) {
         this.state.currentBall.setPos(movePos);
     };
     
-    this.getFallPath = () => {
-        const destIndex = this.setDestination();
-        const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
-        
-        for (let i = 0; i < ballPaths.length; i += 1) {
-            this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
+    this.getFallPath = async () => {
+        const result = await this.setDestination()
+        const { fall_path } = result
+
+        // const test = 3
+        // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
+        for (let i = 0; i < fall_path.length; i += 1) {
+            this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
         }
         
-        this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
+        this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
 
         this.setCurrentBall(null)
     };
@@ -199,10 +202,17 @@ function CGame(oData, mainInstance) {
     };
     
    
-    this.setDestination = () => {
-        // TODO connect with server
-        const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      
-        return iPrizeToChoose;
+    this.setDestination = async () => {
+    //     // TODO Exception handle
+        const result = await plinkoApi.getPlinkoProbalblity(this.state.currentBallIndex, this.state.probability.length)
+        if (result && result.data) {
+            return result.data
+    //         // const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      
+    //         // const iPrizeToChoose = this.state.probability[destination];     
+    //         return iPrizeToChoose;
+
+    //         // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
+        }        
     };
     
     // this.getBall = () => {

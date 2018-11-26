@@ -9,31 +9,32 @@ var DIR_SELF = "DIR_SELF";
 function CGridMapping(boardMatrix) {
     this.state = {
         row: settings.getMatrixRow(),
-        col: settings.getMatrixCol()
+        col: settings.getMatrixCol(),
+        boardMatrix: boardMatrix || []
     }
 
     this.precomputedStartPath = []
     this.radiusMap = []
     this.matrixMap = []
 
-    this.initGridMapping = (boardMatrix) => {
-        // initialize matrixMap
-        for(let i = 0; i < boardMatrix.length; i += 1) {
-            this.matrixMap[i] = [];
-            for(let j = 0; j < boardMatrix[i].length; j += 1) {
-                this.matrixMap[i][j] = [];
-            }
-        }
-        
+    this.initGridMapping = () => {
         this.buildPathMap();
-        for (let i = 0; i < boardMatrix[0].length; i += 1) {
+        for (let i = 0; i < this.state.boardMatrix[0].length; i += 1) {
             this.precomputedStartPath[i] = this.getAllPathFrom({ row: 0, col: i });
         }
     };
     
     this.buildPathMap = () => {
-        for (let i = 0; i < boardMatrix.length; i += 1) {
-            for (let j = 0; j < boardMatrix[i].length; j += 1) {
+        // initialize matrixMap
+        for (let i = 0; i < this.state.boardMatrix.length; i += 1) {
+            this.matrixMap[i] = [];
+            for (let j = 0; j < this.state.boardMatrix[i].length; j += 1) {
+                this.matrixMap[i][j] = [];
+            }
+        }
+
+        for (let i = 0; i < this.state.boardMatrix.length; i += 1) {
+            for (let j = 0; j < this.state.boardMatrix[i].length; j += 1) {
                 this.matrixMap[i][j][DIR_BOTRIGHT] = this.setNeighbor(i, j, DIR_BOTRIGHT);
                 this.matrixMap[i][j][DIR_BOTLEFT] = this.setNeighbor(i, j, DIR_BOTLEFT);
                 this.matrixMap[i][j][DIR_SELF] = this.setNeighbor(i, j, DIR_SELF);
@@ -42,42 +43,42 @@ function CGridMapping(boardMatrix) {
     };
     
     this.setNeighbor = (r, c, direction) => {
-        var oNextDir = null;
+        let nextDir = null;
         switch (direction) {
             ////r%2 IS USED TO DETECT INDEX COLUMN FOR AN "ODD-ROW" HORIZONTAL LAYOUT HEX GRID. FOR EXAMPLE, IF ROW IS ODD, THE TOPRIGHT NEIGHBOR IS = COL+1. IF ROW IS EVEN, THE TOPRIGHT NEIGHBOR IS = COL. 
             case DIR_TOPRIGHT: {
                 if (r > 0 && c < this.state.col - (r % 2)) {
-                    oNextDir = { row: r - 1, col: c + ((r + 1) % 2) };
+                    nextDir = { row: r - 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_BOTRIGHT: {
                 if (r < this.state.row - 1 && c + (r % 2) < this.state.col) {
-                    oNextDir = { row: r + 1, col: c + ((r + 1) % 2) };
+                    nextDir = { row: r + 1, col: c + ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_TOPLEFT: {
                 if (r > 0 && c - ((r - 1) % 2) >= 0) {
-                    oNextDir = { row: r - 1, col: c - ((r + 1) % 2) };
+                    nextDir = { row: r - 1, col: c - ((r + 1) % 2) };
                 }
                 break;
             }
             case DIR_BOTLEFT: {
                 if (r < this.state.row - 1 && c >= r % 2) {
-                    oNextDir = { row: r + 1, col: c - (r % 2) };
+                    nextDir = { row: r + 1, col: c - (r % 2) };
                 }
                 break;
             } 
             case DIR_SELF: {
-                oNextDir = { row: r, col: c };
+                nextDir = { row: r, col: c };
                 break;
             }
             default:
                 break;
         }
         
-        return oNextDir;
+        return nextDir;
     };
     
     // this._getNeighborByDir = (iRow, iCol, iDir) => {
@@ -265,30 +266,30 @@ function CGridMapping(boardMatrix) {
     //     return aRandomPath;
     // };
     
-    this.getRandomPathFrom = function(startIndex, destIndex) {    
-        const aAllPath = [];
+    this.getRandomPathFrom = function(startIndex, destinationIndex) {    
+        const availablePath = [];
         const lastIndex = this.matrixMap.length - 1;
         
         for(let i = 0; i < this.precomputedStartPath[startIndex].length; i += 1) {
             const aPath = this.precomputedStartPath[startIndex][i];
-            if (aPath[lastIndex].col === destIndex){
-                aAllPath.push(aPath);
+            if (aPath[lastIndex].col === destinationIndex) {
+                availablePath.push(aPath);
             }
         }
 
-        let aRandomPath = [];
-        if (aAllPath.length > 0) {
-            const iRandomIndex = Math.floor(Math.random() * (aAllPath.length - 1));
-            aRandomPath = aAllPath[iRandomIndex];
+        let randomPath = [];
+        if (availablePath.length > 0) {
+            const iRandomIndex = Math.floor(Math.random() * (availablePath.length - 1));
+            randomPath = availablePath[iRandomIndex];
         }
 
-        return aRandomPath;
+        return randomPath;
     };
 
     this.findAllPathDFS = (branch, path, basket) => {
-        var fork = path.slice(0);
-        var chld = this.getChildren(branch);
-        var len = chld.length;
+        const fork = path.slice(0);
+        const chld = this.getChildren(branch);
+        const len = chld.length;
         fork.push(branch[DIR_SELF]);    ////SET THE INFO YOU WANT TO GET FROM THE NODES
         if (len === 0) { 
           basket.push(fork);
@@ -315,7 +316,7 @@ function CGridMapping(boardMatrix) {
         return child;
     };
     
-    this.initGridMapping(boardMatrix);
+    this.initGridMapping();
     // s_oGridMapping = this;
 }
 

@@ -1,7 +1,16 @@
-import axios from 'axios'
+import axiosInstance from './axios'
 
-const instance = axios.create({
-  baseURL: 'http://localhost:8000'
-});
+// import apiHandler from '@/helper/apiHandler'
 
-export default instance
+const baseUrl = '/plinko'
+export default {
+  getPlinkoProbalblity (start_index, p_length = 42) {
+    return axiosInstance.get(`${baseUrl}/getProbablity`, {
+      params: {
+        start_index,
+        p_length
+      }
+    })
+  },
+}
+

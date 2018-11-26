@@ -108,14 +108,14 @@ function CBall(ballPosition, parentContainer) {
     
     this.jumpBall = (path, iTime) => {
         playSound('ball_collision', 1, false);
-        const aCurCell = path.splice(0, 1);
+        const currentCell = path.splice(0, 1);
         
-        if(path.length === 1) {
+        if (path.length === 1) {
             this.lastJumpBallAnim(path, iTime);
             return;
         }
         
-        const curPos = gameInstance().getBallPosition(aCurCell[0].row, aCurCell[0].col);
+        const curPos = gameInstance().getBallPosition(currentCell[0].row, currentCell[0].col);
         const nextPos = gameInstance().getBallPosition(path[0].row, path[0].col);
         
         createjs.Tween

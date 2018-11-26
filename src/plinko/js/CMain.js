@@ -59,13 +59,8 @@ function CMain(oData) {
             if(navigator.userAgent.match(/Windows Phone/i)) {
                 settings.setIsAbleSound(true)
             }
-            
-            // s_oSpriteLibrary  = new CSpriteLibrary(true);
-            //ADD PRELOADER
-            
-            // _oPreloader = new CPreloader();
-            this.preloader = new CPreloader({ parentMainInstance: this });
 
+            this.preloader = new CPreloader({ parentMainInstance: this });
             checkGameState()
         }
     };

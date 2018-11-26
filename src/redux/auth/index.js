@@ -4,7 +4,7 @@ import * as actions from './actions.js';
 import * as types from './types'
 
 const initialState = {
-  authentication: false,
+  authentication: true,
   token: {}
 };
 

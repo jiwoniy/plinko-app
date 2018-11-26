@@ -45,7 +45,7 @@ function CInsertTubeController(oParentContainer) {
             slotArray.push({ x: (slotWidth / 2) + (i * gap), y: slotStartPosition.y });
         }
         
-        for(let i = 0; i < slotArray.length; i += 1) {
+        for (let i = 0; i < slotArray.length; i += 1) {
             const slot = new CSlot(slotArray[i].x, slotArray[i].y, slotWidth, slotHeight, this.container, i);
             slot.addEventListenerWithParams(settings.ON_MOUSE_UP, this.onSlot, this, i);
             this.slots.push(slot);
@@ -84,8 +84,8 @@ function CInsertTubeController(oParentContainer) {
         }
     };
     
-    this.onSlot = (iIndex) => {
-        gameInstance().launch(iIndex)
+    this.onSlot = (ballIndex) => {
+        gameInstance().launch(ballIndex)
     };
     
     this.initInsertTubeController(oParentContainer);
