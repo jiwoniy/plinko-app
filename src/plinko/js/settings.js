@@ -113,6 +113,9 @@ const settings = () => {
     getGameHeight: () => {
       return canvasHeight * 0.8
     },
+    getGame10Height: () => {
+      return canvasHeight * 0.8 * 0.1
+    },
     getGame80Height: () => {
       return canvasHeight * 0.8 * 0.8
     },
@@ -141,6 +144,13 @@ const settings = () => {
 
       const value = (originCellSize * canvasHeight) / origin
       return value
+    },
+
+    getSlotHeightPosition: () => {
+      return canvasHeight * 0.8 * 0.15
+    },
+    getBasketHeightPosition: () => {
+      return canvasHeight * 0.8 * 0.75
     },
 
     // getTubeStartPosition: () => {

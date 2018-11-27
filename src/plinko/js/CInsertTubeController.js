@@ -19,20 +19,11 @@ function CInsertTubeController(oParentContainer) {
         this.container = new createjs.Container();
         oParentContainer.addChild(this.container);
         
-        // const holesOccluderSprite = CSpriteLibrary.getImage('holes_occluder');
-        // const oBaseBoard = createBitmap(holesOccluderSprite);
-        // oBaseBoard.regX = holesOccluderSprite.width / 2;
-        // oBaseBoard.regY = holesOccluderSprite.height / 2;
-        // oBaseBoard.x = settings.getCanvasWidth() / 2;
-        // oBaseBoard.y = 408;
-        // this.container.addChild(oBaseBoard);
-        
         // const holesBoardOccluderSprite = CSpriteLibrary.getImage('hole_board_occluder');
         const slotArray = [];
-        const tubeBelowSlotPosition = 10 // TODO(jiwon)
         const slotStartPosition = {
             x: settings.get10PercentWidth(),
-            y: settings.get10PercentHeight() + tubeBelowSlotPosition
+            y: settings.getSlotHeightPosition()
         }
 
         const slotHeight = 50 // TODO(jiwon)

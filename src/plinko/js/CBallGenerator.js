@@ -4,16 +4,17 @@ import settings from './settings.js'
 //     createBitmap,
 //  } from './ctl_utils.js'
 import CBall from './CBall.js'
-// import CSpriteLibrary from './sprite_lib.js'
+import CSpriteLibrary from './sprite_lib.js'
 
 function CBallGenerator(parentContainer) {
     const BALL_IN_TUBE = 2
     const BALL_IN_ANIMATION = 2
     // _pStartPoint = {x: 182, y: 264};
     // const tubeStartPosition = settings.getTubeStartPosition()
+    const ballSprite = CSpriteLibrary.getImage('ball');
     const tubeStartPosition = {
         x: settings.get80PercentWidth(),
-        y: settings.get5PercentHeight()
+        y: settings.get10PercentHeight() - ballSprite.height
     }
     // const ballStartPoint = { x: tubeStartPosition.x, y: tubeStartPosition.y }
     this.container = null

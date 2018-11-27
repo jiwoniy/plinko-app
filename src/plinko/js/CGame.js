@@ -4,7 +4,7 @@ import createjs from './createjs.js'
 import {
     createBitmap,
     setVolume,
-    s_iScaleFactor,
+    // s_iScaleFactor,
  } from './ctl_utils.js'
 
 import plinkoApi from '../../api/plinko.js'
@@ -120,16 +120,6 @@ function CGame(oData, mainInstance) {
         this.gridInstance = new CGridMapping(true, this.state.board);
     };
     
-    // this.initProbability = () => {
-    //     this.state.probability = [];
-    //     for (let i = 0; i < settings.getPrize().length; i += 1) {
-    //         const iProbability = settings.getPrize()[i].win_occurrence;
-    //         for (let j = 0; j < iProbability; j += 1) {
-    //             this.state.probability.push(i);
-    //         }            
-    //     }
-    // };
-    
     this.launch = (startCol) => {
         this.state.currentBallIndex = startCol;
         this.state.ballCount -= 1;
@@ -155,8 +145,8 @@ function CGame(oData, mainInstance) {
 
         const startBallPos = this.state.currentBall.getPos();
         const movePos = this.boardContainer.globalToLocal(
-            startBallPos.x * s_iScaleFactor,
-            startBallPos.y * s_iScaleFactor);
+            startBallPos.x,
+            startBallPos.y);
 
         this.boardContainer.addChild(this.state.currentBall.getImage());
         this.state.currentBall.setPos(movePos);
@@ -164,7 +154,7 @@ function CGame(oData, mainInstance) {
     
     this.getFallPath = async () => {
         // local
-        const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, 5);
+        const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, 2);
         for (let i = 0; i < ballPaths.length; i += 1) {
             this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
         }
@@ -195,14 +185,14 @@ function CGame(oData, mainInstance) {
     };
     
     this.checkEndGame = function(iPrizeWin, bHasWin) {
-        // if (bHasWin) {
-        //     this.gameOver(iPrizeWin, true);
-        //     return; 
-        // }
+        if (bHasWin) {
+            this.gameOver(iPrizeWin, true);
+            return; 
+        }
         
-        // if (this.state.ballCount === 0) {
-        //     this.gameOver(iPrizeWin, false);
-        // }
+        if (this.state.ballCount === 0) {
+            this.gameOver(iPrizeWin, false);
+        }
     };
     
    

@@ -13,7 +13,7 @@ function CScoreBasketController(parentContainer) {
         // basketContainer.x = settings.get10PercentWidth();
         // basketContainer.setBounds(settings.get10PercentWidth() , settings.get80PercentHeight(), settings.get80PercentWidth(), 50)
         basketContainer.x = settings.get10PercentWidth();
-        basketContainer.y = settings.getGame80Height();
+        basketContainer.y = settings.getBasketHeightPosition();
 
         parentContainer.addChild(basketContainer);
         

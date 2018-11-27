@@ -9,7 +9,7 @@ import {
  } from './ctl_utils.js'
 import CPreloader from './CPreloader.js'
 import CSpriteLibrary from './sprite_lib.js'
-import CMenu from './CMenu.js'
+// import CMenu from './CMenu.js'
 import CGame from './CGame.js'
 import settings from './settings.js'
 
@@ -172,7 +172,7 @@ function CMain(oData) {
         
         CSpriteLibrary.addImage("ball_panel","/plinko/sprites/ball_panel.png");
         
-        CSpriteLibrary.addImage("racket","/plinko/sprites/table_tennis_racket.svg");
+        CSpriteLibrary.addImage("racket","/plinko/sprites/table_tennis_racket_small.svg");
         CSpriteLibrary.addImage("racket_purple","/plinko/sprites/table_tennis_racket_purple.svg");
         CSpriteLibrary.addImage("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");

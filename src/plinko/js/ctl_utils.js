@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-import Plinko from 'plinko/Plinko';
+// import Plinko from 'plinko/Plinko';
 import createjs from './createjs.js'
 import screenfull from './screenfull.js'
 import settings from './settings.js'

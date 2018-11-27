@@ -13,6 +13,7 @@ import settings from './settings.js'
 function CBall(ballPosition, parentContainer) {
     this.container = null
     this.state = {
+        ballWidth: 0,
         isWating: false,
         ballSpriteHeight: 0,
         ballSpriteBitmap: null
@@ -25,8 +26,7 @@ function CBall(ballPosition, parentContainer) {
         parentContainer.addChild(this.container);
         
         const ballSprite = CSpriteLibrary.getImage('ball');
-        const ballWidth = settings.getDeviceWidthRatio(ballSprite.width)
-        
+        this.state.ballWidth = settings.getDeviceWidthRatio(ballSprite.width)        
 
         const spriteSheet = new createjs.SpriteSheet({
             images: [ ballSprite ], 
@@ -45,8 +45,8 @@ function CBall(ballPosition, parentContainer) {
             "state_on")
         this.state.ballSpriteBitmap.gotoAndStop()
 
-        this.state.ballSpriteBitmap.regX = ballWidth / 2;
-        this.state.ballSpriteBitmap.regY = ballWidth / 2;
+        // this.state.ballSpriteBitmap.regX = this.state.ballWidth / 2;
+        this.state.ballSpriteBitmap.regY = this.state.ballWidth / 2;
         this.container.addChild(this.state.ballSpriteBitmap);
 
         this.ballSpriteBitmap = settings.getDeviceHeightRatio(ballSprite.height)
@@ -84,7 +84,7 @@ function CBall(ballPosition, parentContainer) {
     // };
     
     this.launchAnim = (oPos) => {
-        const iTime = 1000;
+        const animationTime = 1000;
 
         // if (this.state.isWating) {
         //     this.state.ballSpriteBitmap.gotoAndStop()
@@ -92,11 +92,11 @@ function CBall(ballPosition, parentContainer) {
         
         createjs.Tween
             .get(this.container)
-            .to({ x: oPos.x }, iTime, createjs.Ease.sineOut);
+            .to({ x: oPos.x }, animationTime, createjs.Ease.sineOut);
         createjs.Tween
             .get(this.container)
-            .to({ y: oPos.y - 400 }, iTime / 2, createjs.Ease.cubicOut)
-            .to({ y: oPos.y }, iTime / 2, createjs.Ease.cubicIn).call(() => {
+            .to({ y: oPos.y - 400 }, animationTime / 2, createjs.Ease.cubicOut)
+            .to({ y: oPos.y }, animationTime / 2, createjs.Ease.cubicIn).call(() => {
                 gameInstance().getFallPath();
             });
     };
@@ -185,7 +185,13 @@ function CBall(ballPosition, parentContainer) {
     // TODO animation detail
     this.lastJumpBallAnim = (path, iTime) => {
         const lastPos = gameInstance().getBallPosition(path[0].row, path[0].col);
-        const floor = lastPos.y + 50; // TODO
+
+        const basketSprite = CSpriteLibrary.getImage('racket_purple');
+        
+        const floor = {
+            x: lastPos.x,
+            y: settings.getBasketHeightPosition() - (basketSprite.height / 2)
+        }
 
     //     createjs.Tween
     //     .get(this.container)
@@ -201,18 +207,18 @@ function CBall(ballPosition, parentContainer) {
         
         createjs.Tween
             .get(this.container, { override: true })
-            .to({ x: lastPos.x }, iTime, createjs.Ease.sineIn)
+            .to({ x: floor.x }, iTime, createjs.Ease.sineIn)
     
         createjs.Tween
             .get(this.container)
             .to({ y: this.container.y - 10 }, iTime / 4, createjs.Ease.cubicOut)
-            .to({ y: floor }, (iTime * 3 / 4), createjs.Ease.cubicIn)
+            .to({ y: floor.y }, (iTime * 3 / 4), createjs.Ease.cubicIn)
             .call(() => {
                 gameInstance().ballArrived(path[0].col);
                 createjs.Tween
                     .get(this.container)
-                    .to({ y: floor + 20 }, iTime / 2, createjs.Ease.cubicOut)
-                    .to({ y: floor }, iTime, createjs.Ease.bounceOut)
+                    .to({ y: floor.y + 20 }, iTime / 2, createjs.Ease.cubicOut)
+                    .to({ y: floor.y }, iTime, createjs.Ease.bounceOut)
                     .call(() => {
                         createjs.Tween
                             .get(this.container)
@@ -224,7 +230,6 @@ function CBall(ballPosition, parentContainer) {
             });
     };
     
-    // _oParent = this;
     this.initBall(ballPosition, parentContainer);
 }
 
