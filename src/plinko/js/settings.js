@@ -108,7 +108,7 @@ const settings = () => {
       const canvasElement = document.getElementById("canvas");
       const height = getSize('Height')
       canvasElement.height = height * ratio
-      canvasHeight = height * ratio
+      canvasHeight = height * ratio      
     },
     getGameHeight: () => {
       return canvasHeight * 0.8

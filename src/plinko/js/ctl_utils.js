@@ -30,7 +30,7 @@ var s_iOffsetY;
 
 function getSize(Name) {
     var size;
-    var name = Name.toLowerCase();
+    const name = Name.toLowerCase();
     var document = window.document;
     var documentElement = document.documentElement;
     if (window["inner" + Name] === undefined) {
@@ -64,6 +64,17 @@ function getSize(Name) {
         // Default to use window["inner" + Name]
         size = window["inner" + Name];
     }
+    
+    // if (name === 'width') {
+    //     if (size > 375) {
+    //         return 375
+    //     }
+    // } else if (name === 'height') {
+    //     if (size > 667) {
+    //         return 667
+    //     }
+    // }
+    
     return size;
 };
 
