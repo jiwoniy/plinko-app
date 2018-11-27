@@ -1,25 +1,23 @@
-import * as selector from './selectors.js';
+import { handleActions } from 'redux-actions';
 
-export const ADD_TODO = 'ADD_TODO';
-// export const TOGGLE_TODO = "TOGGLE_TODO";
-// export const SET_FILTER = "SET_FILTER";
+import * as selector from './selectors.js';
+import * as types from './types'
 
 const initialState = {
-  test: []
+  width: null,
+  height: null
 };
 
-export default function(state = initialState, action) {
-  switch (action.type) {
-    case ADD_TODO: {
-      // const { id, content } = action.payload;
-      return {
-        ...state,
-      };
-    }
-    default:
-      return state;
+const reducer = handleActions({
+  [types.SET_WIDTH]:  (state, action) => {
+    return {
+      ...state,
+      width: action.payload,
+    };
   }
-}
+}, initialState);
+
+export default reducer
 
 export {
   selector

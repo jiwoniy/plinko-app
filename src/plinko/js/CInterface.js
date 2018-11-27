@@ -160,9 +160,9 @@ function CInterface(oBgContainer, gameInstance) {
         }
 
         this.exitButtonContainer.unload();
-        if (settings.getEnableFullScreen() && screenfull.enabled) {
-            this.fullscreenContainer.unload();
-        }        
+        // if (settings.getEnableFullScreen() && screenfull.enabled) {
+        //     this.fullscreenContainer.unload();
+        // }        
 
         this.guiExpandibleContainer.unload();
     };

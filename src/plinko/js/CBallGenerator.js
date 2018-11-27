@@ -12,8 +12,8 @@ function CBallGenerator(parentContainer) {
     // _pStartPoint = {x: 182, y: 264};
     // const tubeStartPosition = settings.getTubeStartPosition()
     const tubeStartPosition = {
-        x: settings.get10PercentWidth(),
-        y: settings.get10PercentHeight()
+        x: settings.get80PercentWidth(),
+        y: settings.get5PercentHeight()
     }
     // const ballStartPoint = { x: tubeStartPosition.x, y: tubeStartPosition.y }
     this.container = null
@@ -60,7 +60,7 @@ function CBallGenerator(parentContainer) {
     };
     
     this.getNextBall = () => {
-        this.state.ball[1].setWaiting(true)
+        // this.state.ball[1].setWaiting(true)
         return this.state.ball[0];
     };
     

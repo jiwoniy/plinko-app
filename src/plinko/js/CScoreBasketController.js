@@ -13,48 +13,25 @@ function CScoreBasketController(parentContainer) {
         // basketContainer.x = settings.get10PercentWidth();
         // basketContainer.setBounds(settings.get10PercentWidth() , settings.get80PercentHeight(), settings.get80PercentWidth(), 50)
         basketContainer.x = settings.get10PercentWidth();
-        basketContainer.y = settings.get80PercentHeight();
-        
-        // console.log(settings.get10PercentWidth())
-        // console.log(basketContainer.getBounds())
-        // console.log(basketContainer.x)
-        
+        basketContainer.y = settings.getGame80Height();
+
         parentContainer.addChild(basketContainer);
         
         // const basketSprite = CSpriteLibrary.getImage('basket_display');
         const basketSprite = CSpriteLibrary.getImage('racket_purple');
-        // const racket = CSpriteLibrary.getImage('racket');
-        // const basketSprite = CSpriteLibrary.getImage('basket_display');
-        // const iWidth = basketSprite.width / 4;
-        // const iWidth = basketSprite.width;
         const height = basketSprite.height;
+        const images = [ basketSprite, basketSprite, basketSprite, basketSprite ];
 
-        const spriteSheet = new createjs.SpriteSheet({
-            images: [ basketSprite, basketSprite, basketSprite, basketSprite ], 
-            // width, height & registration point of each sprite
-            frames: [
-                [0 , 0, basketSprite.width, basketSprite.height, 0, 0, 0],
-                [0 , 0, basketSprite.width, basketSprite.height, 1, 0, 0],
-                [0 , 0, basketSprite.width, basketSprite.height, 2, 0, 0],
-                [0 , 0, basketSprite.width, basketSprite.height, 3, 0, 0],
-            ],
-            animations: {
-                state_off: [0],
-                state_green: [1],
-                state_yellow: [2],
-                state_red: [3]
-            }
-        });
-        const gap = settings.getCellGapSize() + 15 // TODO
+        const gap = settings.getCellGapSize() // TOD        
         const basketWidth = gap
 
         for (let i = 0; i < settings.getPrize().length; i += 1) {
             this.state.baskets.push(
-                // new CBasket((basketWidth / 2) + (i * gap),
-                new CBasket(i * gap,
+                new CBasket((gap / 2) + (i * gap),
                 0,
                 basketContainer,
-                spriteSheet,
+                images,
+                // spriteSheet,
                 basketWidth,
                 height,
                 // settings.getPrize()[i].background));

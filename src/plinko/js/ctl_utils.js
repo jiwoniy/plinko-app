@@ -1,5 +1,6 @@
 import $ from 'jquery'
 
+import Plinko from 'plinko/Plinko';
 import createjs from './createjs.js'
 import screenfull from './screenfull.js'
 import settings from './settings.js'
@@ -18,9 +19,10 @@ var s_iOffsetX;
 var s_iOffsetY;
 // var s_bIsIphone = false;
 
-$(window).resize(function() {
-	// sizeHandler();
-});
+// $(window).resize(() => {
+//     resize()
+// 	// sizeHandler();
+// });
 
 // function trace(szMsg){
 //     console.log(szMsg);
@@ -310,7 +312,6 @@ function setVolume(szSound, iVolume){
 function createBitmap(sprite, width, height) {
 	const bitMap = new createjs.Bitmap(sprite);
 	const hitObject = new createjs.Shape();
-	
 	if (width && height) {
         hitObject.graphics
             .beginFill("#fff")

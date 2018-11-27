@@ -36,14 +36,14 @@ function CInsertTubeController(oParentContainer) {
         }
 
         const slotHeight = 50 // TODO(jiwon)
-        const gap = settings.getCellGapSize() + 15// TODO
+        const gap = settings.getCellGapSize()// TODO
         const slotWidth = gap
         
         this.container.x = slotStartPosition.x
         // this.container.setBounds(0, 0)
         for (let i = 0; i < settings.getInsertTubeNumber(); i += 1) {
             // slotArray.push({ x: (slotWidth / 2) + (i * gap), y: slotStartPosition.y });
-            slotArray.push({ x: i * gap, y: slotStartPosition.y });
+            slotArray.push({ x: (gap / 2) + (i * gap), y: slotStartPosition.y });
         }
 
         for (let i = 0; i < slotArray.length; i += 1) {

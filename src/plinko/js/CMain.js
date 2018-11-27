@@ -32,7 +32,7 @@ function CMain(oData) {
         menu: null,
         // soundsLoadedCnt: 0,
         // imagesLoadedCnt: 0,
-        game: null,
+        gameInstance: null,
     }
 
     this.initContainer = () => {
@@ -40,6 +40,7 @@ function CMain(oData) {
         if (canvasElement) {
             settings.setCanvasHeight()
             settings.setCanvasWidth()
+
             this.stage = new createjs.Stage(canvasElement);
 
             this.stage.preventSelection = true;
@@ -48,7 +49,8 @@ function CMain(oData) {
             // s_bMobile = $.browser.mobile;
             if($.browser.mobile === false) {
                 this.stage.enableMouseOver(settings.FPS);  
-                $('body').on('contextmenu', '#canvas', function(e){ return false; });
+                $('body')
+                .on('contextmenu', '#canvas', (e) => { return false; });
             }
             
             // s_iPrevTime = new Date().getTime();
@@ -87,6 +89,10 @@ function CMain(oData) {
 
     this.getSounds = () => {
         return this.state.sounds;
+    }
+
+    this.setCanvasHeight = () => {
+        settings.setCanvasHeight(0.8)
     }
     
     this.preloaderReady = () => {
@@ -170,7 +176,7 @@ function CMain(oData) {
         CSpriteLibrary.addImage("racket_purple","/plinko/sprites/table_tennis_racket_purple.svg");
         CSpriteLibrary.addImage("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
-        CSpriteLibrary.addImage("stake","/plinko/sprites/stake.svg");
+        CSpriteLibrary.addImage("stake","/plinko/sprites/stake_small.svg");
         CSpriteLibrary.addImage("ball_generator","/plinko/sprites/ball_generator.png");
         
         CSpriteLibrary.addImage("holes_occluder","/plinko/sprites/holes_occluder.png");
@@ -187,6 +193,10 @@ function CMain(oData) {
         this.state.loadResources += CSpriteLibrary.getNumSprites();
         CSpriteLibrary.loadImages();
     };
+
+    this.changeGameStatus = (gameStatus) => {
+        this.state.gameStatus = gameStatus
+    }
     
     this._onImagesLoaded = () => {
         this.state.loadResourcesCounter += 1;
@@ -211,20 +221,23 @@ function CMain(oData) {
         this._loadImages();
     };
     
-    this.gotoMenu = () => {
-        this.state.menu = new CMenu(true, this);
-        this.state.gameStatus = settings.STATE_MENU;
-    };
+    // this.gotoMenu = () => {
+    //     this.state.menu = new CMenu(true, this);
+    //     this.state.gameStatus = settings.STATE_MENU;
+    // };
 
     this.gotoGame = () => {
-        this.state.game = new CGame(true, this.state.initData, this);   						
-        this.state.gameStatus = settings.STATE_GAME;
+        this.state.gameInstance = new CGame(true, this.state.initData, this);   						
+        this.changeGameStatus(settings.STATE_GAME)
+        $(this).trigger("start_game");
     };
+
+    this.endGame = () => {
+        this.stage.removeAllChildren();
+        this.changeGameStatus(settings.STATE_LOADING)
+        $(this).trigger("end_game");
+    }
     
-    // this.gotoHelp = function() {
-    //     _oHelp = new CHelp();
-    //     _iState = settings.STATE_HELP;
-    // };
 	
     this.stopUpdate = () => {
         this.state.bUpdate = false
@@ -262,11 +275,16 @@ function CMain(oData) {
         // }
                 
         if (this.state.gameStatus === settings.STATE_GAME) {
-            this.state.game.update();
+            this.state.gameInstance.update();
         }
         
         this.stage.update(event);
     };
+
+    this.sizeHandler = () => {
+        settings.setCanvasHeight()
+        settings.setCanvasWidth()
+    }
     
     // s_oMain = this;
     

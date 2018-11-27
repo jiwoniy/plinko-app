@@ -25,9 +25,17 @@ function CCell(xPosition, yPosition, parentContainer, rows, cols) {
         // stakeImage.height = 0
         this.stakeSprite.x = xPosition;
         this.stakeSprite.y = yPosition;
-        // this.container.addChild(this.stakeSprite)
-        // console.log(this.container.getBounds())
+        this.stakeSprite.regX = - (stakeImage.width / 2)
         parentContainer.addChild(this.stakeSprite);
+
+        // const hitObject = new createjs.Shape();
+        // hitObject.graphics
+        //     .beginFill("black")
+        //     .drawRect(0, 0, 20, 10);
+        // hitObject.x = xPosition;
+        // hitObject.y = yPosition;
+        // parentContainer.addChild(hitObject);
+        // parentContainer.addChild(this.stakeSprite);
 
         // const iWidth = 100;
         // const iHeight = 100;

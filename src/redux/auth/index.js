@@ -10,7 +10,6 @@ const initialState = {
 
 const reducer = handleActions({
   [types.SET_AUTH]:  (state, action) => {
-    console.log(action.payload)
     return {
       ...state,
       authentication: action.payload,

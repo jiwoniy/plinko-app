@@ -52,7 +52,8 @@ const settings = () => {
   let ANIMATION_SPEED;
 
   // const CELL_SIZE = 140;
-  let cellSize = 31 // base 375 widht 
+  let cellSize = 35 // base 375 widht 
+  let cellHeight = 15
   // const CELL_PIVOT_FROM_CENTER = 90;
   // const CELL_PIVOT_FROM_CENTER = 30;
   const cellPivotFronCenter = 30;
@@ -103,11 +104,17 @@ const settings = () => {
       canvasWidth = width
     },
     getCanvasHeight: () => canvasHeight,
-    setCanvasHeight: () => {
+    setCanvasHeight: (ratio = 1) => {
       const canvasElement = document.getElementById("canvas");
       const height = getSize('Height')
-      canvasElement.height = height
-      canvasHeight = height
+      canvasElement.height = height * ratio
+      canvasHeight = height * ratio
+    },
+    getGameHeight: () => {
+      return canvasHeight * 0.8
+    },
+    getGame80Height: () => {
+      return canvasHeight * 0.8 * 0.8
     },
 
     getDeviceWidthRatio: (imageWidth) => {
@@ -125,6 +132,14 @@ const settings = () => {
       const origin = 375
 
       const value = (originCellSize * canvasWidth) / origin
+      return value
+    },
+
+    getCellHeightGapSize: () => {
+      const originCellSize = cellHeight
+      const origin = 533
+
+      const value = (originCellSize * canvasHeight) / origin
       return value
     },
 

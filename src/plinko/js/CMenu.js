@@ -162,7 +162,7 @@ function CMenu(mainInstance) {
     this._onButPlayRelease = function() {
         this.unload();
 
-        $(this.mainInstance).trigger("start_session");
+        $(this.mainInstance).trigger("start_game");
         this.mainInstance.gotoGame();
     };
 	

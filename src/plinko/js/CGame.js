@@ -79,8 +79,8 @@ function CGame(oData, mainInstance) {
         const allRow = settings.getMatrixRow(); // 13
         const allCol = settings.getMatrixCol(); // 7
 
-        const widthGap = settings.getCellGapSize() * 1.3
-        const heightGap = settings.getCellGapSize()
+        const widthGap = settings.getCellGapSize()
+        const heightGap = settings.getCellHeightGapSize()
 
         for (let currentRow = 0; currentRow < allRow; currentRow += 1) {
             // row
@@ -98,8 +98,8 @@ function CGame(oData, mainInstance) {
                 this.state.board[currentRow][currentCol] = new CCell(xPosition,
                     yPosition, this.boardContainer, currentRow, currentCol/*, _oActionContainer*/);
                 
-                // remove stake // ㅁㅏ지막 애니메이션 및 자연스러움을 위해 지운듯...
-                if(currentRow === settings.getMatrixRow() - 1) {
+                // remove stake // 마지막 애니메이션 및 자연스러움을 위해 지운듯...
+                if (currentRow === settings.getMatrixRow() - 1) {
                     this.state.board[currentRow][currentCol].removeStake();
                 }
             }
@@ -109,7 +109,7 @@ function CGame(oData, mainInstance) {
         // this.boardContainer.x = settings.get10PercentWidth()
         // this.boardContainer.x = settings.getCanvasWidth() / 2 - (this.boardContainer.getBounds().width / 2)
         this.boardContainer.x = settings.getCanvasWidth() / 2 - (allCol * widthGap / 2)
-        this.boardContainer.y =  settings.getCanvasHeight() / 2 - (allRow * heightGap / 2);
+        this.boardContainer.y =  settings.getGameHeight() / 2 - (allRow * heightGap / 2);
         // const tabelTennisSprite = createBitmap(CSpriteLibrary.getImage('table_tennis'))
         // // tabelTennisSprite.regX = (this.boardContainer.getBounds().x) + this.boardContainer.getBounds().width / 2;
         // // tabelTennisSprite.regY = (this.boardContainer.getBounds().y) + this.boardContainer.getBounds().height / 2;
@@ -253,18 +253,19 @@ function CGame(oData, mainInstance) {
         this.boardContainer.removeAllChildren()
         
         createjs.Tween.removeAllTweens();
-        this.mainInstance.getStage().removeAllChildren();
+        this.mainInstance.endGame()
+        // this.mainInstance.getStage().removeAllChildren();
     };
  
     this.onExit = () => {
         setVolume('soundtrack', 1);
-        
-        $(this).trigger('end_session');
-        $(this).trigger('end_level', 1);
+        console.log('---exit--')
+        // $(this.mainInstance).trigger('end_game');
+        // $(this).trigger('end_level', 1);
         
         this.unload();
         // this.mainInstance.gotoMenu();
-        this.mainInstance.gotoGame();
+        // this.mainInstance.gotoGame();
     };
     
     // this._onExitHelp = () => {

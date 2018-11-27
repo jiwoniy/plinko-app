@@ -5,7 +5,10 @@ import {
     playSound,
     createBitmap
  } from './ctl_utils.js'
- import CSpriteLibrary from './sprite_lib.js'
+ import {
+    gameInstance
+} from './CGame.js'
+//  import CSpriteLibrary from './sprite_lib.js'
  import settings from './settings.js'
 
 function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, index) {
@@ -44,26 +47,22 @@ function CSlot(xPosition, yPosition, slotWidth, slotHeight, parentContainer, ind
         this.buttonContainer = new createjs.Container();
         this.buttonContainer.x = xPosition;
         this.buttonContainer.y = yPosition; 
-        this.buttonContainer.scaleX = this.state.scaleFactor; 
-        this.buttonContainer.scaleY = this.state.scaleFactor;
         parentContainer.addChild(this.buttonContainer);
 
+        const racketImage = new Image()
+        racketImage.src = '/plinko/sprites/table_tennis_racket_small.svg'
+        const racket = createBitmap(racketImage, racketImage.width, racketImage.height)
+        racket.regX = - (slotWidth / 2)
+ 
         this.clickShape = new createjs.Shape();
-        const racketSprite = CSpriteLibrary.getImage('racket');
-
-        const racket = createBitmap(racketSprite, slotWidth, slotHeight)
-        // racket.x = xPosition / 2
-        // racket.y = -(yPosition / 2)
-        // racket.regX = slotWidth
-
-        // TODO
-        this.buttonContainer.addChild(racket);
-    
         this.clickShape.graphics
             .beginFill("rgba(255, 255, 255, 0.01)")
             // .beginFill("black")
-            .drawRect(xPosition / 2, - (yPosition / 2), slotWidth, slotHeight);
+            .drawRect(0, 0, slotWidth, slotHeight);
+        this.clickShape.regX = - (slotWidth / 2)
+
         this.buttonContainer.addChild(this.clickShape);
+        this.buttonContainer.addChild(racket)
         
         this.initListener();
     };

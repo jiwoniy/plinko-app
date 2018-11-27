@@ -76,7 +76,7 @@ function CBall(ballPosition, parentContainer) {
 
     this.setWaiting = (value) => {
         this.state.isWating = value
-        this.state.ballSpriteBitmap.gotoAndPlay()
+        // this.state.ballSpriteBitmap.gotoAndPlay()
     }
     
     // this.setPosToPivot = () => {
@@ -86,9 +86,9 @@ function CBall(ballPosition, parentContainer) {
     this.launchAnim = (oPos) => {
         const iTime = 1000;
 
-        if (this.state.isWating) {
-            this.state.ballSpriteBitmap.gotoAndStop()
-        }
+        // if (this.state.isWating) {
+        //     this.state.ballSpriteBitmap.gotoAndStop()
+        // }
         
         createjs.Tween
             .get(this.container)

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import SignIn from 'components/SignIn/SignIn'
+import SignIn from 'components/SignIn'
 import Plinko from 'plinko/Plinko';
 import { selector as authSelector } from 'redux/auth';
 

@@ -6,52 +6,41 @@ import {
 //  import CSpriteLibrary from './sprite_lib.js'
  import settings from './settings.js'
 
-function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iHeight, prizeSprite) {
-    // var _iStartSize;
-    // var _oParent;
-    // var _oText;
-    // var _oBasket;
-    // var _oHighlight;
-
+function CBasket(xPosition, yPosition, parentContainer, images, iWidth, iHeight, prizeSprite) {
     this.basketContainer = null
     this.hightLightBasket = null
     this.basketText = null
     
-    this.initBasket = function(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iHeight, prizeImage) {
+    this.initBasket = function(xPosition, yPosition, parentContainer, images, width, height, prizeImage) {
         this.basketContainer = new createjs.Container();
-        // this.basketContainer.y = yPosition;
+        this.basketContainer.y = yPosition;
         this.basketContainer.x = xPosition;
         parentContainer.addChild(this.basketContainer);
+
+        const spriteSheet = new createjs.SpriteSheet({
+            images: [ ...images ], 
+            // width, height & registration point of each sprite
+            frames: [
+                [0 , 0, images[0].width, images[0].height, 0, 0, 0],
+                [0 , 0, images[0].width, images[0].height, 1, - (width / 2), 0],
+                [0 , 0, images[0].width, images[0].height, 2, - (width / 2), 0],
+                [0 , 0, images[0].width, images[0].height, 3, - (width / 2), 0],
+            ],
+            animations: {
+                state_off: [0],
+                state_green: [1],
+                state_yellow: [2],
+                state_red: [3]
+            }
+        });
         
         const basketSprite = createSprite(
-            oSpriteSheet,
+            spriteSheet,
             "state_off")
-            // iWidth / 3,
-            // iHeight / 3,
-            // iWidth,
-            // iHeight);
-        // basketSprite.x = xPosition
-        // basketSprite.x = xPosition / 2
+        basketSprite.regX = - (width / 2)
         this.basketContainer.addChild(basketSprite);
-
-        // const iFrameOffset = 3;
-        // if (prizeImage) {
-        //     const prizeSprite = CSpriteLibrary.getImage(prizeImage);
-        //     const bitMapPrize = createBitmap(prizeSprite);
-        //     bitMapPrize.regX = prizeSprite.width / 2;
-        //     bitMapPrize.regY = prizeSprite.height / 2;
-        //     // bitMapPrize.cache(prizeSprite.width / 2 - iWidth / 2 + iFrameOffset, prizeSprite.height / 2 - iHeight / 2 + iFrameOffset, iWidth - iFrameOffset * 2, iHeight - (iFrameOffset * 2));
-        //     this.basketContainer.addChild(bitMapPrize);
-
-        //     // add text
-        //     // var oScoreText = new createjs.Text('test'," 20px "+ settings.PRIMARY_FONT, "#ffffff");
-        //     // oScoreText.textAlign = "center";
-        //     // oScoreText.textBaseline = "middle";
-        //     // oScoreText.lineWidth = 200;
-        //     // this.basketContainer.addChild(oScoreText);
-        // }
         
-        this.hightLightBasket = createSprite(oSpriteSheet, "state_on", iWidth / 2, iHeight / 2, iWidth, iHeight);
+        this.hightLightBasket = createSprite(spriteSheet, "state_on", width / 2, height / 2, width, height);
         this.hightLightBasket.alpha = 0;
         this.basketContainer.addChild(this.hightLightBasket);
     };
@@ -112,7 +101,7 @@ function CBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iH
     };
     
     // _oParent = this;
-    this.initBasket(xPosition, yPosition, parentContainer, oSpriteSheet, iWidth, iHeight, prizeSprite);
+    this.initBasket(xPosition, yPosition, parentContainer, images, iWidth, iHeight, prizeSprite);
 }
 
 export default CBasket;
