@@ -1,25 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import CssModules from 'react-css-modules'
+import { connect } from 'react-redux'
 import Odometer from 'odometer'
-import PropTypes from 'prop-types';
-
-// import { connect } from 'react-redux';
-// import './odometer-theme-car.css'
+import PropTypes from 'prop-types'
 
 import './odometer-theme-digital.css'
 import Wallet_styles from './wallet.scss'
-// import { selector as authSelector, actions as authActions } from 'redux/auth';
+import { selector as walletSelector, actions as walletActions } from 'redux/wallet';
 
-// const mapStateToProps = state => {
-//   return {
-//     isAuthentication: () => authSelector.isAuthentication(state)
-//   };
-// };
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     setAuthFlag: (payload) => dispatch(authActions.setAuth(payload)),
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    myBalance: walletSelector.getBalance(state)
+  };
+};
+const mapDispatchToProps = (dispatch, getState) => {
+  return {
+    getWallet: payload => dispatch(walletActions.getWallet(payload, getState)),
+  };
+};
 
 
 class Wallet extends Component {
@@ -30,9 +28,19 @@ class Wallet extends Component {
     this.balanceInstance =  null
 
     this.state = {
-      balance_amount: 999,
-      bet_amount: 9900
+      balance_amount: 100,
+      bet_amount: null
     };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.myBalance !== prevState.balance_amount) {
+      return { balance_amount: nextProps.myBalance };
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
   }
 
   bettingAmountHandler =  (event) => {
@@ -89,6 +97,8 @@ class Wallet extends Component {
   }
   componentDidMount() {
     this.makeWallet()
+    const { getWallet } = this.props
+    getWallet()
   }
 
   // https://github.com/facebook/react/issues/14224#issuecomment-440011268
@@ -129,5 +139,4 @@ Wallet.propTypes = {
   isPlaying: PropTypes.bool
 };
 
-export default CssModules(Wallet, Wallet_styles)
-// export default connect(mapStateToProps, mapDispatchToProps)(CssModules(SignIn, SignIn_styles))
+export default connect(mapStateToProps, mapDispatchToProps)(CssModules(Wallet, Wallet_styles))

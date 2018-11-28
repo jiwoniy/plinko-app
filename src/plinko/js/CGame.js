@@ -297,7 +297,6 @@ function CGame(oData, mainInstance) {
 
     // s_oGame=this;
     settings.setNumBall(this.state.initData.num_ball)
-    console.log(this.state.initData.prize_settings)
     settings.setPrize(this.state.initData.prize_settings)
     // settings.setAdShowCounter(this.state.initData.ad_show_counter)
     // settings.PRIZE = o;
