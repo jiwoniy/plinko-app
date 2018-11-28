@@ -75,8 +75,8 @@ function CBasket(xPosition, yPosition, parentContainer, images, iWidth, iHeight,
     //     return szNewText;
     // };
     
-    this.lit = (bWin) => {
-        if (bWin) {
+    this.highlight = (isWin) => {
+        if (isWin) {
             this.hightLightBasket.gotoAndPlay("state_green");
         } else {
             this.hightLightBasket.gotoAndPlay("state_red");

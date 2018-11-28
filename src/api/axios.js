@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const instance = axios.create({
   baseURL: 'http://localhost:8000',
+  timeout: 1000,
   headers: { 'content-type': 'application/json' },
 });
 
@@ -15,12 +16,27 @@ const instance = axios.create({
 // });
 
 // // Add a response interceptor
-// instance.response.use(function (response) {
-//   // Do something with response data
-//   return response;
-// }, function (error) {
-//   // Do something with response error
-//   return Promise.reject(error);
-// });
+instance.interceptors.response.use((response => {
+  return {
+    ...response,
+    isSuccess: true
+  }
+}),
+  (error => {
+  // console.log(error)
+  // console.log(error.response)
+  // console.log(error.response.data)
+  // console.log(error.response.status)
+  // console.log(error.response.headers)
+  // console.log(error.request)
+  // Do something with response error
+  return {
+    status: error.response.status,
+    request: error.request,
+    data: error.response.data,
+    isSuccess: false
+  }
+  // return Promise.reject(error);
+}));
 
 export default instance

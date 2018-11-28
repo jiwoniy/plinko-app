@@ -48,8 +48,8 @@ function CScoreBasketController(parentContainer) {
         };
     };
     
-    this.litBasket = (iIndex, bWin) => {
-        this.state.baskets[iIndex].lit(bWin);
+    this.litBasket = (destIndex, isWin) => {
+        this.state.baskets[destIndex].highlight(isWin);
     };
     
     this.initBasketController(parentContainer);

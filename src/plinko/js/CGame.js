@@ -35,6 +35,7 @@ function CGame(oData, mainInstance) {
         endPanel: null,
         // probability: [],
         currentBall: null,
+        currentPayout: null,
         currentBallIndex: null
     }
     
@@ -129,6 +130,7 @@ function CGame(oData, mainInstance) {
         this.ballGenerator.shiftBallAnimation();
 
         const startCellPoint = this.getBallPosition(0, startCol);
+        // TODO(jiwoniy) check exception
         this.state.currentBall.launchAnim(startCellPoint);
         
         this.interfaceInstance.refreshBallNum(this.state.ballCount);
@@ -160,53 +162,65 @@ function CGame(oData, mainInstance) {
         // }
         // this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
 
-        const result = await this.getDestination()
-        const { fall_path } = result
         // remote
-        for (let i = 0; i < fall_path.length; i += 1) {
-            this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+        const result = await this.getDestination()
+        if (result && result.isSuccess) {
+            const { fall_path, /* destination, */ payout_value } = result.data
+            for (let i = 0; i < fall_path.length; i += 1) {
+                this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+            }
+            this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
+            this.state.currentPayout = payout_value
+            this.setCurrentBall(null)
+        } else {
+            // TODO
         }
-        this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
-        
-        this.setCurrentBall(null)
     };
     
-    this.ballArrived = (iDestCol) => {
-        // var iPrizeWin = iDestCol;
-        const bHasWin = settings.getPrize()[iDestCol].prizewinning;
+    this.ballArrived = (destCol) => {
+        console.log('-------ball Arrived----')
+        console.log(`destCol: ${destCol}`)
+        console.log(this.state.currentPayout)
+        let hasWin = false
+        // const bHasWin = settings.getPrize()[destCol].prizewinning;
+        if (this.state.currentPayout && this.state.currentPayout > 0) {
+            hasWin = true
+        }
 
-        $(this.mainInstance).trigger("save_score",[iDestCol]);
+        $(this.mainInstance).trigger("save_score", [destCol]);
 
         this.insertTubeController.showSlots();
         // this.interfaceInstance.showControls();
-        this.scoreBasketController.litBasket(iDestCol, bHasWin);
+        this.scoreBasketController.litBasket(destCol, hasWin);
         
-        this.checkEndGame(iDestCol, bHasWin);
+        this.state.currentPayout = null
+        this.checkEndGame(destCol, hasWin);
     };
     
     this.checkEndGame = function(iPrizeWin, bHasWin) {
-        if (bHasWin) {
-            this.gameOver(iPrizeWin, true);
-            return; 
-        }
+        console.log('---check end game--')
+        // if (bHasWin) {
+        //     this.gameOver(iPrizeWin, true);
+        //     return; 
+        // }
         
-        if (this.state.ballCount === 0) {
-            this.gameOver(iPrizeWin, false);
-        }
+        // if (this.state.ballCount === 0) {
+        //     this.gameOver(iPrizeWin, false);
+        // }
     };
     
    
     this.getDestination = async () => {
-    //     // TODO Exception handle
+        // remote
         const result = await plinkoApi.getPlinkoProbalblity(this.state.currentBallIndex)
-        if (result && result.data) {
-            return result.data
-    //         // const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      
-    //         // const iPrizeToChoose = this.state.probability[destination];     
-    //         return iPrizeToChoose;
+        return result
 
-    //         // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
-        }        
+        // local
+        // const iPrizeToChoose = this.state.probability[Math.floor(Math.random() * this.state.probability.length)];      
+        // const iPrizeToChoose = this.state.probability[destination];     
+        // return iPrizeToChoose;
+
+        // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, destIndex);
     };
     
     // this.getBall = () => {
@@ -283,6 +297,7 @@ function CGame(oData, mainInstance) {
 
     // s_oGame=this;
     settings.setNumBall(this.state.initData.num_ball)
+    console.log(this.state.initData.prize_settings)
     settings.setPrize(this.state.initData.prize_settings)
     // settings.setAdShowCounter(this.state.initData.ad_show_counter)
     // settings.PRIZE = o;
