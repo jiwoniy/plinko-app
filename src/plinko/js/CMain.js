@@ -174,6 +174,10 @@ function CMain(oData) {
         
         CSpriteLibrary.addImage("racket","/plinko/sprites/table_tennis_racket_small.svg");
         CSpriteLibrary.addImage("racket_purple","/plinko/sprites/table_tennis_racket_purple.svg");
+
+        CSpriteLibrary.addImage("racket_green","/plinko/sprites/tabletennis_racket_green.svg");
+        CSpriteLibrary.addImage("racket_yellow","/plinko/sprites/tabletennis_racket_yellow.svg");
+
         CSpriteLibrary.addImage("ball","/plinko/sprites/ball.svg");
         // CSpriteLibrary.addSprite("stake","/plinko/sprites/stake.png");
         CSpriteLibrary.addImage("stake","/plinko/sprites/stake_small.svg");

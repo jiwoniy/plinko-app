@@ -8,7 +8,7 @@ import {
  } from './ctl_utils.js'
 
 import plinkoApi from '../../api/plinko.js'
-import CGridMapping from './CGridMapping.js'
+// import CGridMapping from './CGridMapping.js'
 import CSpriteLibrary from './sprite_lib.js'
 import CCell from './CCell.js'
 import CBallGenerator from './CBallGenerator.js'
@@ -24,7 +24,7 @@ function CGame(oData, mainInstance) {
     this.insertTubeController = null
     this.ballGenerator = null
     this.scoreBasketController = null
-    this.gridInstance = null
+    // this.gridInstance = null
     this.backgroundContainer = null
     this.midContainer = null
 
@@ -117,7 +117,7 @@ function CGame(oData, mainInstance) {
         // tabelTennisSprite.y = (settings.getCanvasHeight() / 2) - 29;
         // this.mainInstance.getStage().addChild(tabelTennisSprite);
 
-        this.gridInstance = new CGridMapping(true, this.state.board);
+        // this.gridInstance = new CGridMapping(true, this.state.board);
     };
     
     this.launch = (startCol) => {
@@ -154,19 +154,19 @@ function CGame(oData, mainInstance) {
     
     this.getFallPath = async () => {
         // local
-        const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, 2);
-        for (let i = 0; i < ballPaths.length; i += 1) {
-            this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
-        }
-        this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
-
-        // const result = await this.getDestination()
-        // const { fall_path } = result
-        // remote
-        // for (let i = 0; i < fall_path.length; i += 1) {
-        //     this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+        // const ballPaths = this.gridInstance.getRandomPathFrom(this.state.currentBallIndex, 2);
+        // for (let i = 0; i < ballPaths.length; i += 1) {
+        //     this.state.board[ballPaths[i].row][ballPaths[i].col].highlight(true);
         // }
-        // this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
+        // this.state.currentBall.startPathAnim(this.getPathCopy(ballPaths), 500);
+
+        const result = await this.getDestination()
+        const { fall_path } = result
+        // remote
+        for (let i = 0; i < fall_path.length; i += 1) {
+            this.state.board[fall_path[i].row][fall_path[i].col].highlight(true);
+        }
+        this.state.currentBall.startPathAnim(this.getPathCopy(fall_path), 500);
         
         this.setCurrentBall(null)
     };

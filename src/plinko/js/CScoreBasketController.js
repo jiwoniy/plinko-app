@@ -18,9 +18,11 @@ function CScoreBasketController(parentContainer) {
         parentContainer.addChild(basketContainer);
         
         // const basketSprite = CSpriteLibrary.getImage('basket_display');
-        const basketSprite = CSpriteLibrary.getImage('racket_purple');
-        const height = basketSprite.height;
-        const images = [ basketSprite, basketSprite, basketSprite, basketSprite ];
+        const racket_purple = CSpriteLibrary.getImage('racket_purple');
+        const racket_green = CSpriteLibrary.getImage('racket_green');
+        const racket_yellow = CSpriteLibrary.getImage('racket_yellow');
+        const height = racket_purple.height;
+        const images = [ racket_purple, racket_green, racket_yellow, racket_yellow ];
 
         const gap = settings.getCellGapSize() // TOD        
         const basketWidth = gap

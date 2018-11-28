@@ -12,7 +12,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    setAuthFlag: (payload) => dispatch(authActions.setAuth(payload)),
+    // setAuthFlag: (payload) => dispatch(authActions.setAuth(payload)),
+    handleSignin: (payload) => dispatch(authActions.handleSignin(payload))
   };
 };
 
@@ -21,7 +22,7 @@ class SignIn extends Component {
     super(props);
 
     this.state = {
-      name: '',
+      email: '',
       password: '',
       autosign: false
     };
@@ -46,8 +47,12 @@ class SignIn extends Component {
   }
   
   handleSignIn = (e) => {
-    const { setAuthFlag } = this.props
-    setAuthFlag(true)
+    const { /* setAuthFlag, */ handleSignin } = this.props
+    handleSignin({
+      email: this.state.email,
+      password: this.state.password
+    })
+    // setAuthFlag(true)
   }
 
   render () {
@@ -58,9 +63,9 @@ class SignIn extends Component {
       <div className="input_container">
         <input
           type="text"
-          name="name"
-          placeholder="username"
-          value={this.state.name}
+          name="email"
+          placeholder="email"
+          value={this.state.email}
           onChange={this.handleInputChange}
         />
         <input
